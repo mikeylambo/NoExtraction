@@ -1,0 +1,10 @@
+import { LINES as ch1 } from './ch1';
+import { LINES as ch2 } from './ch2';
+import { LINES as ch3 } from './ch3';
+import { LINES as ch4 } from './ch4';
+import { LINES as ch5 } from './ch5';
+import { LINES as ch6 } from './ch6';
+import { LINES as sable } from './sable';
+export { SPEAKERS, P } from './lines';
+export const LINES_BY_CHAPTER = { ch1, ch2, ch3, ch4, ch5, ch6, sable };
+export const ALL_LINES = [...ch1, ...ch2, ...ch3, ...ch4, ...ch5, ...ch6, ...sable];

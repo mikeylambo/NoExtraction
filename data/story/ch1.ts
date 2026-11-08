@@ -1,0 +1,30 @@
+import { L, P } from './lines';
+
+/** Chapter 1 — The Job (72%). Wren live on the radio: the only time we hear her in real time. */
+export const LINES = [
+  L('c1.halcyon.core72', 'halcyon', 'Halcyon Resource Group. Core Stability: seventy-two percent. All personnel proceed to assigned extraction points. Thank you for your service.', P.broadcast, 'Calm, polite, corporate. Slight PA reverb.'),
+  L('c1.wren.open1', 'wren', "That's the broadcast. Seventy-two and falling. I'm holding the pad until oh-four-forty.", P.story, 'Live radio. Brisk, warm under the professionalism.'),
+  L('c1.ballast.open1', 'ballast', 'Not a minute after.', P.reply, 'Dry. An old joke between them.'),
+  L('c1.wren.open2', 'wren', 'Not a second after. Policy. Patrol below the ridge — keep your head down.', P.story),
+  L('c1.wren.firstPatrol', 'wren', 'One trooper on the path. Get behind him.', P.story, 'Quiet, focused.'),
+  L('c1.wren.clean', 'wren', 'Clean. Like always.', P.story, 'Approving. A little proud. GDD-mandated line.'),
+  L('c1.wren.pair', 'wren', "Two of them, close together. Drop the first and keep moving — you'll have a second before the other one knows.", P.story),
+  L('c1.wren.chainDone', 'wren', 'Two for two. Show-off.', P.story, 'Smiling.'),
+  L('c1.wren.visor', 'wren', 'Courtyard ahead. Pulse your visor — their sightlines paint on the ground.', P.story),
+  L('c1.wren.fastGate', 'wren', "Cyan gate's the fast way in. It stays open as long as nobody knows you're there.", P.story),
+  L('c1.wren.longRoute', 'wren', 'Or go around through the service yard. Slower. Safer. Your call.', P.story),
+  L('c1.wren.spotter', 'wren', "Spotter on the tower. Forty metres of eyes. Break his line, or take him off it.", P.story),
+  L('c1.wren.seen', 'wren', "They've got you. Break contact.", P.critical, 'Sharp. Worried, not panicked.'),
+  L('c1.wren.lockdown', 'wren', "Lockdown. Fast gate's sealed — hack the console or take the long way.", P.critical),
+  L('c1.wren.hangar1', 'wren', 'There she is. AEGIS-07.', P.story, 'A little awed.'),
+  L('c1.ballast.hangar1', 'ballast', 'Big.', P.reply, 'Deadpan.'),
+  L('c1.wren.hangar2', 'wren', "Sable's planetary defense prototype. Pull the flight governor and it's the most expensive statue on Ilvane.", P.story),
+  L('c1.ballast.sabotage', 'ballast', 'Sorry, big guy.', P.reply, 'Genuinely a little sorry. GDD-mandated line.'),
+  L('c1.wren.tube', 'wren', 'Governor goes in the cargo tube. Policy: the part rides separate from the operative.', P.story),
+  L('c1.ballast.tube', 'ballast', 'Policy says a lot of things.', P.reply),
+  L('c1.wren.window', 'wren', "Extraction window's open. Eight minutes. Pad's on the cliff. Don't make me wait.", P.story, 'The clock appears on this line.'),
+  L('c1.ballast.window', 'ballast', "You've never waited for anyone in your life.", P.reply),
+  L('c1.wren.window2', 'wren', "And I'm not starting tonight. Go.", P.story),
+  L('c1.halcyon.tremor', 'halcyon', 'Seismic advisory. Personnel are reminded that extraction schedules are final.', P.broadcast),
+  L('c1.wren.exit', 'wren', 'Through the outer gate and you are out of their house. Keep going.', P.story),
+];
