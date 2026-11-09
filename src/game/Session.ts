@@ -248,6 +248,8 @@ export class Session {
   // ------------------------------------------------------------------ checkpoints
   saveCheckpoint(id: string, spawnOverride?: SpawnPoint): SavePayload {
     const w = this.w;
+    // never checkpoint a dead body: keep the last good save
+    if (this.lastPayload && ((w.inMech && w.aegis!.armor <= 0) || (w.player && w.player.mode === 'dead'))) return this.lastPayload;
     let spawn: SpawnPoint = spawnOverride ?? this.level!.checkpoints[id] ?? (w.inMech ? { pos: w.aegis!.frame.pos.toArray() as [number, number, number], yaw: w.aegis!.frame.yaw, mech: true } : { pos: (w.player?.pos.toArray() ?? this.level!.spawn.pos) as [number, number, number], yaw: w.player?.cam.yaw ?? 0 });
     if (w.inMech) spawn = { ...spawn, mech: true };
     w.inventory.health = w.player?.health ?? w.inventory.health;

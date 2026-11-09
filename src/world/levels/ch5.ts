@@ -75,6 +75,8 @@ export const CH5: LevelDef = {
     for (const [x, z, sw, sd] of [[cx, cz - (inner + R) / 2, R * 2, R - inner], [cx, cz + (inner + R) / 2, R * 2, R - inner], [cx - (inner + R) / 2, cz, R - inner, inner * 2], [cx + (inner + R) / 2, cz, R - inner, inner * 2]] as const) b.at(x, z, sw, sd, 4, -4, { mat: 'concrete', kind: 'floor', surface: 'metal', dynamic: true, tag: 'c5.ring', solid: { block: false } });
     // gantries ring the platform
     for (let i = 0; i < 12; i++) { const a = (i / 12) * Math.PI * 2; b.at(cx + Math.cos(a) * (R - 30), cz + Math.sin(a) * (R - 30), 14, 14, 70, 0, { mat: 'metalDark', kind: 'mech', dynamic: true, tag: 'c5.ring' }); }
+    // catwalk from the platform to the cradle (survives the ring collapse)
+    b.at(cx, cz - (inner + R + 40) / 2, 40, R + 40 - inner, 4, -4, { mat: 'grate', kind: 'floor', surface: 'metal', solid: { block: false } });
     // the last launch cradle (north edge)
     b.at(cx, cz - R - 60, 60, 60, 140, -4, { mat: 'sable', kind: 'mech' });
     b.at(cx, cz - R - 60, 26, 26, 30, 136, { mat: 'glowWhite', kind: 'mech' });

@@ -278,7 +278,8 @@ export const CH5_SCRIPT: ChapterScript = {
       if (w.state.num('marshal.phase', 1) >= 2) { w.collapse.solidsByTag('c5.ring').forEach((s) => { s.active = false; if (s.mesh) s.mesh.visible = false; }); const r = MARSHAL.arenaRadius * (1 - MARSHAL.phase2.arenaShrink); w.onStep('c5.restoreBounds', () => { const m = w.mechHostiles.find((x) => x instanceof Marshal); if (m && a.bounds) { a.bounds.radius = r - 12; m.bounds = { center: V(...MARSHAL_CENTER), radius: r - 20 }; w.offStep('c5.restoreBounds'); } }); }
     }
     // board the cradle → Chapter 6
-    ctx.trigger('c5.cradle', [MARSHAL_CENTER[0] - 30, -5, MARSHAL_CENTER[2] - MARSHAL.arenaRadius - 45], [MARSHAL_CENTER[0] + 30, 200, MARSHAL_CENTER[2] - MARSHAL.arenaRadius + 5], () => { ctx.play('c5.end'); }, 'c5.marshalDown');
+    w.onStep('c5.cradleNear', () => { if (w.state.has('c5.marshalDown') && a.active && Math.hypot(a.frame.pos.x - MARSHAL_CENTER[0], a.frame.pos.z - (MARSHAL_CENTER[2] - MARSHAL.arenaRadius - 20)) < 40 && ctx.once('c5.cradleBoarded')) { w.offStep('c5.cradleNear'); ctx.play('c5.end'); } });
+    ctx.trigger('c5.cradle', [MARSHAL_CENTER[0] - 30, -5, MARSHAL_CENTER[2] - MARSHAL.arenaRadius - 45], [MARSHAL_CENTER[0] + 30, 200, MARSHAL_CENTER[2] - MARSHAL.arenaRadius + 5], () => { if (ctx.once('c5.cradleBoarded')) ctx.play('c5.end'); }, 'c5.marshalDown');
     w.onStep('c5.cradleBounds', () => { if (w.state.has('c5.marshalDown') && a.bounds) { a.bounds = null; w.offStep('c5.cradleBounds'); } });
     void SHELF;
   },
