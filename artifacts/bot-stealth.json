@@ -1,21 +1,27 @@
 [
   {
-    "chapter": "ch3",
-    "ok": true,
+    "chapter": "ch5",
+    "ok": false,
     "mode": "stealth",
-    "simSeconds": 244,
-    "deaths": 6,
-    "lockdowns": 1,
-    "takedowns": 2,
-    "failed": null,
+    "simSeconds": 500,
+    "deaths": 0,
+    "lockdowns": 0,
+    "takedowns": 0,
+    "failed": "23:mechFight mechFight c5.ambushDone timeout",
     "errors": [],
     "lastLog": [
-      "[183.1] c3.leverA done",
-      "[192.1] at -8,-16,-184",
-      "[208.6] at 2,-16,-230",
-      "[218.7] at 34,-16,-238",
-      "[221.6] c3.leverB done",
-      "[236.8] at 0,-16,-272"
+      "[90.7] mech at 0,0,-3240",
+      "[95.5] mech at 0,0,-3640",
+      "[97.5] mech at 0,0,-4040",
+      "[99.5] mech at 0,0,-4440",
+      "[104.3] mech at 0,0,-4840",
+      "[106.3] mech at 0,0,-5240",
+      "[108.3] mech at 0,0,-5640",
+      "[108.7] checkpoint storm hp 100 armor 2400 at 0,0,-6200",
+      "[111.6] mech at 0,0,-6300",
+      "[181.5] fight done (c5.stormDone)",
+      "[187.1] mech at 0,0,-7400",
+      "[487.1] FAIL mechFight c5.ambushDone timeout"
     ]
   }
 ]

@@ -179,7 +179,8 @@ export class MechFrame {
       this.grounded = true;
       if (wasAir) this.events.onLand?.(impact);
     }
-    if (this.pos.y > g + T.ceiling) { this.pos.y = g + T.ceiling; this.vel.y = Math.min(0, this.vel.y); }
+    // altitude cap is relative to the ground; over a bottomless void (consumer returns ≤ -1000) there is no cap
+    if (g > -1000 && this.pos.y > g + T.ceiling) { this.pos.y = g + T.ceiling; this.vel.y = Math.min(0, this.vel.y); }
     this.env.confine(this.pos, 0);
   }
 

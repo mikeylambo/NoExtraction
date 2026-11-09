@@ -33,6 +33,7 @@ export class Marshal extends MechHostile {
   constructor(w: World, at: THREE.Vector3, yaw: number) {
     super(w, at, yaw, MARSHAL.armor * w.difficulty.bossArmor, true);
     this.name = 'SOVEREIGN';
+    this.evasion = 0.65;
     this.speed = MARSHAL.speed;
     this.band = [70, 180];
     this.blade = glowSprite(PALETTE.red, 10, 0);

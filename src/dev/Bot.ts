@@ -57,7 +57,7 @@ export class Bot {
     st.seconds = this.app.session.chapterTime;
     // checkpoint-aware: on death, rewind to the step we were on when that checkpoint was saved
     const cp = this.app.session.lastCheckpoint;
-    if (cp && !this.cpStep.has(cp)) this.cpStep.set(cp, this.i);
+    if (cp && !this.cpStep.has(cp)) { this.cpStep.set(cp, this.i); this.log(`checkpoint ${cp.checkpointId} hp ${Math.round(cp.inventory.health)} armor ${cp.extra.aegis ? Math.round(cp.extra.aegis.armor) : '-'} at ${cp.extra.spawn.pos.map(Math.round)}`); }
     if (w.counters.deaths > this.deaths) { this.deaths = w.counters.deaths; if (cp && this.cpStep.has(cp)) { this.i = this.cpStep.get(cp)!; this.t = 0; this.log(`respawned; rewinding to step ${this.i}`); } }
     this.down.clear(); this.look[0] = 0; this.look[1] = 0; this.move[0] = 0; this.move[1] = 0;
     this.tdCool = Math.max(0, this.tdCool - dt);
@@ -258,8 +258,10 @@ export class Bot {
     const rel = wrap(Math.atan2(-d.x, -d.z) - a.frame.yaw);
     this.move[0] = -Math.sin(rel); this.move[1] = Math.cos(rel);
     if (assault && a.frame.energy > 25) this.down.add('m_boost');
-    const ground = w.collision.mechGroundAt(a.frame.pos.x - Math.sin(a.frame.yaw) * 30, a.frame.pos.z - Math.cos(a.frame.yaw) * 30, a.frame.pos.y + 10);
-    if (fly || ground === -Infinity || ground > a.frame.pos.y + 3) this.down.add('m_jets');
+    let gapAhead = false;
+    const sp = Math.max(30, a.frame.speed);
+    for (const k of [0.15, 0.3, 0.45]) { const d2 = sp * k + 8; const g = w.collision.mechGroundAt(a.frame.pos.x - Math.sin(a.frame.yaw) * d2, a.frame.pos.z - Math.cos(a.frame.yaw) * d2, a.frame.pos.y + 10); if (g === -Infinity || g > a.frame.pos.y + 3) gapAhead = true; }
+    if (fly || gapAhead || (!a.frame.grounded && a.frame.caps.sustainedFlight && w.collision.mechGroundAt(a.frame.pos.x, a.frame.pos.z, a.frame.pos.y + 10) === -Infinity)) this.down.add('m_jets');
     const moved = a.frame.pos.distanceTo(this.lastPos); this.lastPos.copy(a.frame.pos);
     if (moved < 0.05) { this.stuckT += w.step; if (this.stuckT > 0.6) this.down.add('m_jets'); } else this.stuckT = 0;
   }

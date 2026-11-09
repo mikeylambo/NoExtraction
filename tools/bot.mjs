@@ -24,7 +24,7 @@ for (const ch of chapters) {
     if (st.mode === 'results' || st.mode === 'credits' || st.bot?.done || st.bot?.failed || (Date.now() - t0) / 1000 > limitS) break;
   }
   const ok = (st.mode === 'results' || st.mode === 'credits' || st.bot?.done) && !st.bot?.failed;
-  results.push({ chapter: ch, ok, mode, simSeconds: Math.round(st.s.time), deaths: st.s.deaths, lockdowns: st.s.lockdowns, takedowns: st.s.takedowns, failed: st.bot?.failed ?? null, errors: errors.slice(0, 5), lastLog: st.bot?.log.slice(-6) });
+  results.push({ chapter: ch, ok, mode, simSeconds: Math.round(st.s.time), deaths: st.s.deaths, lockdowns: st.s.lockdowns, takedowns: st.s.takedowns, failed: st.bot?.failed ?? null, errors: errors.slice(0, 5), lastLog: st.bot?.log.slice(-12) });
   console.log(JSON.stringify(results.at(-1)));
   await browser.close();
 }

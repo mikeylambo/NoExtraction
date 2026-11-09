@@ -53,7 +53,7 @@ export class Aegis {
 
   constructor(private readonly w: World) {
     const env = {
-      groundAt: (x: number, z: number) => { const g = w.collision.mechGroundAt(x, z, this.frame.pos.y + 4); return g === -Infinity ? -300 : g; },
+      groundAt: (x: number, z: number) => { const g = w.collision.mechGroundAt(x, z, this.frame.pos.y + 4); return g === -Infinity ? -10000 : g; },
       confine: (pos: THREE.Vector3) => {
         w.collision.resolveCylinder(pos, 4.5, 10, 4, true);
         if (this.bounds) { const d = pos.clone().sub(this.bounds.center).setY(0); const l = d.length(); if (l > this.bounds.radius) { d.multiplyScalar(this.bounds.radius / l); pos.x = this.bounds.center.x + d.x; pos.z = this.bounds.center.z + d.z; return true; } }
@@ -118,7 +118,7 @@ export class Aegis {
   stormStatic(seconds: number): void { this.stormT = Math.max(this.stormT, Math.min(seconds, 2)); }
 
   damage(amount: number, from?: THREE.Vector3): void {
-    if (!this.active || this.w.dev.god || this.invuln > 0) return;
+    if (!this.active || this.w.dev.god || this.invuln > 0 || this.armor <= 0) return;
     const d = amount * this.w.difficulty.enemyDamage;
     this.armor = Math.max(0, this.armor - d);
     this.w.addShake(d > 150 ? FEEL.shake.mechHeavyHit : FEEL.shake.mechHit);
@@ -155,6 +155,7 @@ export class Aegis {
     // lock
     const hs = this.hostiles();
     this.lock.prune();
+    if (this.lock.hard && !this.lock.primary) this.lock.release(); // target died: drop to soft lock
     if (control && f.pressed.has('m_lock')) {
       if (this.hardLockOnline) { const on = this.lock.toggleHard(hs, fr.pos, fr.forward()); w.audio?.sfx(on ? 'mech.lock' : 'ui.back', null, 0.6); }
       else w.audio?.sfx('mech.systemloss', null, 0.4);
@@ -221,7 +222,7 @@ export class Aegis {
     const jitter = () => (w.rng.next() - 0.5) * spread * 2;
     if (t) {
       end = t.aimPoint().add(new THREE.Vector3(jitter() * 60, jitter() * 60, jitter() * 60));
-      if (!w.collision.blocked(m, end, 'mech') && !(t.evading && w.rng.chance(0.65))) {
+      if (!w.collision.blocked(m, end, 'mech') && !(t.evading && w.rng.chance(t.evasion))) {
         const killed = t.damage(AEGIS.rifle.damage * w.difficulty.playerDamage, this.frame.pos, AEGIS.rifle.impact);
         w.fx.burst(end, { count: 4, speed: 8, life: 0.25, size: 0.6, color: 0xffd0a0 });
         if (killed) w.hitstop(FEEL.hitstop.mechRifleKill);

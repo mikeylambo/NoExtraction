@@ -56,6 +56,8 @@ export class MechHostile implements Lockable {
 
   /** Boost-strafing: hard to hit. */
   get evading(): boolean { return this.dashT > 0; }
+  /** Miss chance against this frame while it evades. */
+  evasion = 0.4;
 
   aimPoint(): THREE.Vector3 { return this.pos.clone().setY(this.pos.y + 7); }
 

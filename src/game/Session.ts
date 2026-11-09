@@ -113,6 +113,7 @@ export class Session {
         this.audio.voDuck(false);
         if (line.channel === 'recording' && !w.dialogue.busy) this.ambientMusic();
       }
+      if (line.channel !== 'bark' && line.elapsedMs >= line.durationMs - 1) w.state.set(`line.${line.line.id}`);
       w.emit('line:end', line.line.id);
     });
   }

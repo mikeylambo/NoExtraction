@@ -29,11 +29,11 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeDef> = {
   heavy: { id: 'heavy', name: 'Heavy', hp: 260, frontArmor: 0.25, walk: 1.1, run: 2.4, perception: human({ sight: { ...HUMAN_SIGHT, range: 22, fovDeg: 90 } }), weapon: { damage: 5, burst: 12, interval: 0.08, burstGap: 1.8, range: 38, accuracy: 0.4, telegraph: 0.7 }, takedown: 'rear', canAlarm: true, lesson: "Flank, don't trade" },
   drone: { id: 'drone', name: 'Seeker Drone', hp: 40, frontArmor: 1, walk: 3.2, run: 3.2, perception: { sight: { range: 14, fovDeg: 34, pitchDeg: 62, closeRange: 4, fillClose: 0.35, fillFar: 0.6, eyeHeight: 0, maxAwareness: 'suspicious' }, hearing: null, investigateTime: 6, huntMemory: 6, radioRange: 90 }, weapon: { damage: 0, burst: 0, interval: 1, burstGap: 1, range: 0, accuracy: 0, telegraph: 0 }, takedown: 'none', canAlarm: false, lesson: 'Time your movement; shoot it only if quiet is gone' },
   hound: { id: 'hound', name: 'Hound', hp: 120, frontArmor: 1, walk: 2.6, run: 9.5, perception: { sight: { range: 5, fovDeg: 120, closeRange: 2, fillClose: 0.5, fillFar: 0.7, eyeHeight: 0.6 }, hearing: { multiplier: 2.2, quietMax: 'hunted' }, investigateTime: 12, huntMemory: 10, radioRange: 40 }, weapon: { damage: 18, burst: 1, interval: 1, burstGap: 1.1, range: 2.2, accuracy: 1, telegraph: 0.35 }, takedown: 'rear', canAlarm: false, lesson: "Don't sprint; use decoys" },
-  warden: { id: 'warden', name: 'Warden Frame', hp: 1400, frontArmor: 1, walk: 40, run: 120, perception: { sight: { range: 900, fovDeg: 360, closeRange: 100, fillClose: 0.1, fillFar: 0.3, eyeHeight: 8 }, hearing: { multiplier: 1 }, investigateTime: 5, huntMemory: 30, radioRange: 2000 }, weapon: { damage: 26, burst: 4, interval: 0.14, burstGap: 1.6, range: 700, accuracy: 0.45, telegraph: 0.5 }, takedown: 'none', canAlarm: false, lesson: 'The mech-scale threat you hid from on foot — now prey' },
+  warden: { id: 'warden', name: 'Warden Frame', hp: 1400, frontArmor: 1, walk: 40, run: 120, perception: { sight: { range: 900, fovDeg: 360, closeRange: 100, fillClose: 0.1, fillFar: 0.3, eyeHeight: 8 }, hearing: { multiplier: 1 }, investigateTime: 5, huntMemory: 30, radioRange: 2000 }, weapon: { damage: 12, burst: 4, interval: 0.14, burstGap: 2.0, range: 700, accuracy: 0.35, telegraph: 0.5 }, takedown: 'none', canAlarm: false, lesson: 'The mech-scale threat you hid from on foot — now prey' },
 };
 
 /** Warden rockets (mech scale). */
-export const WARDEN_ROCKETS = { damage: 70, count: 2, cooldown: 7, telegraph: 1.0, speed: 120 };
+export const WARDEN_ROCKETS = { damage: 45, count: 2, cooldown: 9, telegraph: 1.0, speed: 120 };
 
 /** Difficulty scales information and execution first (telegraph, accuracy), damage last. */
 export const DIFFICULTY = {
