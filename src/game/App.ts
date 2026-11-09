@@ -20,6 +20,7 @@ import { PLAYER } from '../../data/player';
 import { installDevHooks } from '../dev/Hooks';
 import { DevPanel } from '../dev/DevPanel';
 import { Overlay } from '../dev/Overlay';
+import { loadModelOverrides } from '../world/ModelOverrides';
 
 export interface SlotData { chapterId: string; payload: SavePayload; difficulty: DifficultyId; savedAt: string; playSeconds: number }
 export interface Profile { unlocked: string[]; grades: Record<string, Grade>; endingSeen: boolean; lastSlot: number }
@@ -80,7 +81,7 @@ export class App {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.05;
+    this.renderer.toneMappingExposure = 1.25;
     this.renderer.info.autoReset = false;
   }
 
@@ -103,6 +104,8 @@ export class App {
     const prof = await this.profileSave.loadWithRecovery();
     if (prof.data) this.profile = { ...this.profile, ...prof.data };
 
+    const overrides = await loadModelOverrides();
+    if (overrides.length) console.info('model overrides:', overrides.join(', '));
     const opts = this.settings.snapshot();
     this.input = new GameInput(this.canvas, opts);
     this.hud = new Hud(this.root);

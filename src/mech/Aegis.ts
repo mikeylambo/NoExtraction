@@ -6,6 +6,7 @@ import { PALETTE } from '../../data/palette';
 import type { World } from '../game/World';
 import type { InputFrame } from '../game/Input';
 import type { MechHostile } from '../ai/MechHostile';
+import { applyOverride } from '../world/ModelOverrides';
 
 /** Aegis wears signal white; its HUD shifts to red as systems fail. */
 export const AEGIS_PALETTE: MechPalette = { armor: 0xe9edf2, armor2: 0x2a3036, dark: 0x15191d, metal: 0x7a838c, joint: 0x23272b, accent: 0xb9c6d2, glow: 0xf4f7ff };
@@ -71,8 +72,10 @@ export class Aegis {
     this.cam.shakeCap = FEEL.shakeCap.mech;
     this.lock.range = AEGIS.lock.range;
     this.rig = buildPlayerMech(AEGIS_PALETTE);
+    this.rig.mats.glow.emissiveIntensity = 1.4; // signal white under bloom: readable, not a flare
     this.driver = new RigDriver(this.rig);
     this.rig.root.traverse((o) => { if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).castShadow = true; });
+    applyOverride(this.rig.root, 'aegis');
     w.scene.add(this.rig.root);
     this.applyComponents();
   }

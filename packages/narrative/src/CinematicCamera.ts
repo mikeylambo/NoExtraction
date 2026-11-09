@@ -106,8 +106,9 @@ export class CinematicCamera {
         this.index++;
         this.shotStart = this.last;
         if (this.index >= this.shots.length) {
+          const leftover = this.t;
           this.beginBlendOut();
-          return (this.phase as string) === 'idle' ? null : this.blend(dt, gameplay);
+          return (this.phase as string) === 'idle' ? null : this.blend(leftover, gameplay);
         }
         shot = this.shots[this.index]!;
       }

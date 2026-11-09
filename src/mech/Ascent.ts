@@ -156,7 +156,7 @@ export class Ascent {
         const s = h.mesh as THREE.Sprite; s.material.opacity = h.t < 1.2 ? 0.4 + 0.5 * Math.abs(Math.sin(h.t * 12)) : 0;
         if (!h.hit && h.t >= 1.2) { h.hit = true; w.fx.explosion(h.p, 3, 0xff8060); if (Math.hypot(h.p.x - fr.pos.x, h.p.y - fr.pos.y, h.p.z - fr.pos.z) < h.r) this.damage(ASCENT.aaDamage * 3); }
       } else if (!h.hit && this.phase === 'climb' && Math.hypot(h.p.x - fr.pos.x, h.p.y - (fr.pos.y + 5), h.p.z - fr.pos.z) < h.r + 4) {
-        h.hit = true; this.damage(ASCENT.debrisDamage * 2); w.fx.explosion(h.p, 1.5, 0xd7c7ff); w.audio.sfx('ascent.debris', null, 1);
+        h.hit = true; this.damage(ASCENT.debrisDamage * 2); w.fx.explosion(h.p, 1.5, PALETTE.violet); w.audio.sfx('ascent.debris', null, 1);
       }
     }
     this.hazards = this.hazards.filter((h) => { const keep = h.p.y > fr.pos.y - 300 && h.t < 8; if (!keep) w.scene.remove(h.mesh); return keep; });

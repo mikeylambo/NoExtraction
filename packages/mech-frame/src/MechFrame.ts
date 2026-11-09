@@ -154,7 +154,8 @@ export class MechFrame {
       this.vel.y = damp(this.vel.y, -T.descentSpeed, 10, dt);
       this.state = 'DESCENT';
     } else if (!this.caps.sustainedFlight && this.pos.y > ground + 0.05) {
-      // jump jets only: no held altitude, gravity takes over
+      // jump jets only: no held altitude, gravity takes over; the hop ends at its cap (no coasting past it)
+      if (!this.hopSpent) this.vel.y = Math.min(this.vel.y, 6);
       this.hopSpent = true;
       this.vel.y -= T.gravity * dt;
     } else {

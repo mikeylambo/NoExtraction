@@ -111,7 +111,7 @@ export const CH1: LevelDef = {
     b.at(0, -125, 16, 12, 0.5, 0, { mat: 'hazard', kind: 'floor', solid: { block: false } }); // cradle plate
     for (const x of [-9, 9]) b.at(x, -125, 1, 12, 12, 0, { mat: 'metalDark', kind: 'wall' }); // gantry legs
     b.at(0, -125, 19, 12, 0.6, 12, { mat: 'metalDark', kind: 'wall', solid: { walk: true } });
-    ctx.light([0, 14, -120], 0xdfe8ff, 14, 40, 1);
+    ctx.light([0, 14, -120], 0xdfe8ff, 26, 46, 1); ctx.light([-18, 10, -105], 0xdfe8ff, 12, 30, 1); ctx.light([18, 10, -140], 0xdfe8ff, 12, 30, 1);
     ctx.light([-24, 5, -140], 0xdfe8ff, 6, 14);
     ctx.area({ id: 'hangar', min: [-32, -150], max: [32, -90], fastGates: [], panels: [{ id: 'c1.panelC', at: [30.5, 0, -132] }] });
     ctx.enemy({ id: 'c1-techA', type: 'trooper', at: [-14, 0, -112], area: 'hangar', patrol: [{ p: [-14, 0, -112], wait: 4, look: -Math.PI / 2 }, { p: [-14, 0, -140], wait: 3 }, { p: [12, 0, -142], wait: 4, look: Math.PI }] });
@@ -122,6 +122,7 @@ export const CH1: LevelDef = {
 
     // AEGIS-07, parked in its cradle
     const aegis = buildPlayerMech(AEGIS_PALETTE);
+    aegis.mats.glow.emissiveIntensity = 1.2;
     aegis.root.position.set(0, 0.5, -125); aegis.root.rotation.y = 0;
     aegis.root.traverse((o) => { o.castShadow = true; });
     ctx.w.scene.add(aegis.root);

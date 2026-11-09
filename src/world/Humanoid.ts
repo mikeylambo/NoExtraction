@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { PALETTE } from '../../data/palette';
+import { applyOverride } from './ModelOverrides';
 
 export type HumanStyle = 'ballast' | 'trooper' | 'spotter' | 'heavy';
 
@@ -22,10 +23,10 @@ export interface HumanRig {
 }
 
 const STYLES: Record<HumanStyle, { armor: number; under: number; visor: number; visorI: number; scale: number; bulk: number }> = {
-  ballast: { armor: 0x4a5560, under: 0x1b2026, visor: PALETTE.cyan, visorI: 2.4, scale: 1, bulk: 1 },
-  trooper: { armor: 0x8b929a, under: 0x262a2f, visor: PALETTE.red, visorI: 2.6, scale: 1, bulk: 1 },
+  ballast: { armor: 0x8d99a6, under: 0x3c4650, visor: PALETTE.cyan, visorI: 2.4, scale: 1, bulk: 1 },
+  trooper: { armor: 0xa7adb3, under: 0x3a3f45, visor: PALETTE.red, visorI: 2.6, scale: 1, bulk: 1 },
   spotter: { armor: 0x6f777f, under: 0x23272b, visor: PALETTE.red, visorI: 3.2, scale: 1, bulk: 0.92 },
-  heavy: { armor: 0x50565c, under: 0x1c1f22, visor: PALETTE.red, visorI: 2.8, scale: 1.14, bulk: 1.45 },
+  heavy: { armor: 0x6e757c, under: 0x2c3035, visor: PALETTE.red, visorI: 2.8, scale: 1.14, bulk: 1.45 },
 };
 
 function part(w: number, h: number, d: number, m: THREE.Material, y = -h / 2): THREE.Mesh {
@@ -80,6 +81,7 @@ export function buildHumanoid(style: HumanStyle): HumanRig {
   const muzzle = new THREE.Object3D(); muzzle.position.set(0, 0, longGun ? -0.62 : -0.24); gun.add(muzzle);
   if (style === 'heavy') { const drum = part(0.16, 0.16, 0.16, gunM, 0); drum.position.set(0, -0.1, -0.1); gun.add(drum); }
   if (style === 'spotter') { const scope = part(0.05, 0.05, 0.22, visorM, 0); scope.position.set(0, 0.08, -0.2); gun.add(scope); }
+  applyOverride(root, style);
   return { root, body, hips, torso, head, armL, foreL, armR, foreR, legL, shinL, legR, shinR, gun, visor, muzzle, mats: { armor, under, visor: visorM }, headOffset: 1.62 * S.scale };
 }
 

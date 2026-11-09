@@ -140,7 +140,7 @@ export class Atmosphere {
     this.fog.color.setHex(L.fog).multiplyScalar(1 - dark * 0.7);
     this.fog.near = L.fogNear; this.fog.far = L.fogFar * (1 - dark * 0.4);
     this.sun.intensity = (L.sun * 1.25 + this.flare * 0.8) * (1 - dark * 0.92);
-    this.hemi.intensity = (L.ambient * 0.9 + this.flare * 0.4) * (1 - dark * 0.75);
+    this.hemi.intensity = (L.ambient * 1.3 + 0.15 + this.flare * 0.4) * (1 - dark * 0.75);
     this.sun.position.copy(focus).add(new THREE.Vector3(-50, 110, 35));
     this.sun.target.position.copy(focus);
     this.sky.position.copy(camPos);

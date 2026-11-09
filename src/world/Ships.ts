@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { PALETTE } from '../../data/palette';
 import { glowSprite } from './Materials';
+import { applyOverride } from './ModelOverrides';
 
 const box = (w: number, h: number, d: number, m: THREE.Material, x = 0, y = 0, z = 0) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); b.position.set(x, y, z); b.castShadow = true; return b; };
 
@@ -26,5 +27,6 @@ export function buildWrenShip(): { root: THREE.Group; engines: THREE.Sprite[]; l
   for (const s of [-1, 1]) { const e = glowSprite(0xbfe6ff, 7, 0.9); e.position.set(s * 4.5, -0.4, 11.5); root.add(e); engines.push(e); }
   const lights: THREE.Sprite[] = [];
   for (const [x, y, z] of [[-14, -0.2, 3], [14, -0.2, 3], [0, 6, 11], [0, -1.8, -10]] as const) { const l = glowSprite(PALETTE.amber, 2.6, 1); l.position.set(x, y, z); root.add(l); lights.push(l); }
+  applyOverride(root, 'wrenShip');
   return { root, engines, lights };
 }

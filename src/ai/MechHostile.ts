@@ -4,9 +4,10 @@ import { ARCHETYPES, WARDEN_ROCKETS } from '../../data/enemies';
 import { PALETTE } from '../../data/palette';
 import { glowSprite } from '../world/Materials';
 import type { World } from '../game/World';
+import { applyOverride } from '../world/ModelOverrides';
 
-export const SABLE_FRAME_PALETTE: MechPalette = { armor: 0x4a5058, armor2: 0x22262b, dark: 0x14171a, metal: 0x6c747c, joint: 0x23262a, accent: 0x8a0f18, glow: 0xff2a3a };
-export const SOVEREIGN_PALETTE: MechPalette = { armor: 0x2e3238, armor2: 0x17191c, dark: 0x0c0d0f, metal: 0x5e656c, joint: 0x1c1e21, accent: 0xff2a3a, glow: 0xff2a3a };
+export const SABLE_FRAME_PALETTE: MechPalette = { armor: 0x4a5058, armor2: 0x22262b, dark: 0x14171a, metal: 0x6c747c, joint: 0x23262a, accent: PALETTE.redDeep, glow: PALETTE.red };
+export const SOVEREIGN_PALETTE: MechPalette = { armor: 0x2e3238, armor2: 0x17191c, dark: 0x0c0d0f, metal: 0x5e656c, joint: 0x1c1e21, accent: PALETTE.red, glow: PALETTE.red };
 
 export interface Projectile { p: THREE.Vector3; v: THREE.Vector3; life: number; dmg: number; homing: number; mesh: THREE.Object3D; radius: number }
 
@@ -45,6 +46,7 @@ export class MechHostile implements Lockable {
     this.pos.copy(at); this.yaw = yaw;
     this.rig = heavy ? buildHeavyMech(SOVEREIGN_PALETTE) : buildStandardMech(SABLE_FRAME_PALETTE, 'gun');
     this.rig.root.traverse((o) => { if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).castShadow = true; });
+    applyOverride(this.rig.root, heavy ? 'sovereign' : 'warden');
     this.driver = new RigDriver(this.rig);
     this.glint = glowSprite(PALETTE.red, 6, 0);
     this.rig.root.add(this.glint);
