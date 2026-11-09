@@ -1,21 +1,21 @@
 [
   {
-    "chapter": "ch1",
+    "chapter": "ch3",
     "ok": true,
     "mode": "stealth",
-    "simSeconds": 307,
-    "deaths": 0,
-    "lockdowns": 2,
-    "takedowns": 3,
+    "simSeconds": 244,
+    "deaths": 6,
+    "lockdowns": 1,
+    "takedowns": 2,
     "failed": null,
     "errors": [],
     "lastLog": [
-      "[290.1] c1.tube done",
-      "[290.1] flag c1.window",
-      "[297.3] at 0,0,-148",
-      "[306.5] at 0,0,-198",
-      "[306.7] flag chapter.done",
-      "[306.7] critical path complete"
+      "[183.1] c3.leverA done",
+      "[192.1] at -8,-16,-184",
+      "[208.6] at 2,-16,-230",
+      "[218.7] at 34,-16,-238",
+      "[221.6] c3.leverB done",
+      "[236.8] at 0,-16,-272"
     ]
   }
 ]

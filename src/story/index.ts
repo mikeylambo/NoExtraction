@@ -1,3 +1,5 @@
 import type { ChapterScript } from './Script';
 import { CH1_SCRIPT } from './ch1';
-export const SCRIPTS: Record<string, ChapterScript> = { ch1: CH1_SCRIPT };
+import { CH2_SCRIPT } from './ch2';
+import { CH3_SCRIPT } from './ch3';
+export const SCRIPTS: Record<string, ChapterScript> = { ch1: CH1_SCRIPT, ch2: CH2_SCRIPT, ch3: CH3_SCRIPT };

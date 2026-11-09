@@ -20,8 +20,9 @@ export type BotStep =
   | { do: 'interact'; id: string; hold?: boolean }
   | { do: 'wait'; s: number }
   | { do: 'passGate'; gate: string }
+  | { do: 'breach'; door: string; at: Vec3T }
   | { do: 'waitFlag'; flag: string; timeout?: number }
-  | { do: 'takedowns'; radius: number; area?: string }
+  | { do: 'takedowns'; radius: number; area?: string; ids?: string[] }
   | { do: 'clearArea'; area: string; loud?: boolean }
   | { do: 'mechFight'; until: string; timeout?: number }
   | { do: 'mechGoto'; to: Vec3T; assault?: boolean; fly?: boolean; tol?: number; timeout?: number }

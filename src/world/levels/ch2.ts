@@ -21,7 +21,7 @@ export const CH2: LevelDef = {
     const b = ctx.b, w = ctx.w;
     // ground up to the cliff edge at z = -200 (chasm beyond)
     b.floor(0, -70, 260, 270, 0);
-    rocks(ctx, -130, -205, -60, 60, 26, 21, 8, 20);
+    rocks(ctx, -140, -205, -97, 60, 20, 21, 8, 20);
     rocks(ctx, 100, -205, 130, 60, 18, 22, 8, 20);
     b.at(-6, 52, 1, 18, 6, 0, { mat: 'rock', kind: 'wall' }); b.at(6, 52, 1, 18, 6, 0, { mat: 'rock', kind: 'wall' }); b.at(0, 52, 13, 18, 1, 6, { mat: 'rock', kind: 'wall' });
     b.at(0, 61, 13, 1, 6, 0, { mat: 'rock', kind: 'wall' });
@@ -31,7 +31,9 @@ export const CH2: LevelDef = {
     wallLine(ctx, -55, 34, 55, 34, 5, [{ at: 0, width: 12 }]);
     wallLine(ctx, -55, 34, -55, -80, 5, [{ at: -20, width: 3 }]);
     wallLine(ctx, 55, 34, 55, -80, 5, [{ at: -36, width: 3 }]);
-    wallLine(ctx, -55, -80, 55, -80, 5, [{ at: 0, width: 4.4 }, { at: -46, width: 3 }]);
+    wallLine(ctx, -55, -80, 55, -80, 5, [{ at: 0, width: 4.4 }]);
+    wallLine(ctx, -96, 34, -55, 34, 5); wallLine(ctx, 55, 34, 100, 34, 5); wallLine(ctx, 55, -80, 100, -80, 5);
+    wallLine(ctx, -96, 34, -96, -196, 5, [], 'rock', 2); wallLine(ctx, 100, 34, 100, -80, 5, [], 'rock', 2);
     ctx.gate({ id: 'c2.fast', min: [-2.2, 0, -80.4], max: [2.2, 4.2, -79.6], area: 'motorpool', fast: true, console: [5, 0, -77] });
     routeSigns(ctx, [0, 4.6, -79.4], 0);
     for (const [x, z, al] of [[-30, 14, false], [-14, -4, true], [18, 10, false], [30, -30, true], [-28, -46, false], [8, -54, true]] as const) truck(ctx, x, z, al);
@@ -51,9 +53,8 @@ export const CH2: LevelDef = {
     // long route: west sheds (always open, slower)
     b.building(-78, -24, 30, 40, 7, { mat: 'sable', doors: [{ side: 'e', at: 4, width: 3, height: 3 }, { side: 'n', at: 0, width: 4, height: 3.5 }], floorMat: 'concrete' });
     crates(ctx, -86, -20, 6, 36); pipes(ctx, -72, -30, 10, true);
-    b.at(-78, -66, 30, 1, 5, 0, { mat: 'concrete', kind: 'wall' });
-    b.at(-63, -60, 1, 12, 5, 0, { mat: 'concrete', kind: 'wall' });
-    ctx.area({ id: 'sheds', min: [-95, -80], max: [-55, 0], fastGates: [], panels: [] });
+    crates(ctx, -88, -60, 4, 38); pipes(ctx, -70, -70, 14, true); b.berm(-80, -52, 8, 2);
+    ctx.area({ id: 'sheds', min: [-96, -80], max: [-55, 0], fastGates: [], panels: [] });
     ctx.enemy({ id: 'c2-shed', type: 'trooper', at: [-82, 0, -30], area: 'sheds', patrol: [{ p: [-82, 0, -30], wait: 4 }, { p: [-72, 0, -14], wait: 4 }] });
 
     // ------------------------------------------------ armory (optional, east)
@@ -68,10 +69,10 @@ export const CH2: LevelDef = {
     ctx.enemy({ id: 'c2-armSpot', type: 'spotter', at: [64, 6, -6.5], yaw: Math.PI * 0.85, area: 'armory', post: true });
 
     // ------------------------------------------------ cliff road
-    wallLine(ctx, -55, -80, -55, -196, 4, [], 'rock', 2);
+    wallLine(ctx, -96, -80, -55, -80, 1.2, [{ at: -76, width: 10 }], 'rock', 1); // low rock lip between sheds yard and road
     wallLine(ctx, 40, -80, 40, -196, 4, [], 'rock', 2);
     for (const z of [-100, -128, -156, -182]) { crates(ctx, -30 + (z % 3) * 6, z, 3, Math.abs(z)); truck(ctx, 20, z - 8, true); }
-    ctx.area({ id: 'road', min: [-55, -196], max: [40, -80], fastGates: [], panels: [] });
+    ctx.area({ id: 'road', min: [-96, -196], max: [40, -80], fastGates: [], panels: [] });
     ctx.enemy({ id: 'c2-roadA', type: 'trooper', at: [-10, 0, -120], area: 'road', patrol: [{ p: [-10, 0, -120], wait: 4 }, { p: [-30, 0, -150], wait: 3 }] });
     ctx.enemy({ id: 'c2-roadB', type: 'trooper', at: [14, 0, -168], yaw: Math.PI, area: 'road', post: true });
     lamp(ctx, -20, -190, 6); lamp(ctx, 20, -190, 6);
@@ -125,17 +126,17 @@ export const CH2: LevelDef = {
     { do: 'goto', to: [-68, 0, -20], crouch: true },
     { do: 'goto', to: [-78, 0, -36], crouch: true },
     { do: 'goto', to: [-78, 0, -46], crouch: true },
-    { do: 'goto', to: [-70, 0, -60], crouch: true },
-    { do: 'goto', to: [-50, 0, -82] },
-    { do: 'goto', to: [-46, 0, -86] },
+    { do: 'goto', to: [-76, 0, -64], crouch: true },
+    { do: 'goto', to: [-76, 0, -90] },
     { do: 'goto', to: [-20, 0, -110] },
-    { do: 'goto', to: [-6, 0, -192] },
+    { do: 'goto', to: [0, 0, -190] },
+    { do: 'goto', to: [0, 0, -197] },
     { do: 'waitFlag', flag: 'c2.zoneStarted', timeout: 20 },
     { do: 'goto', to: [0, 0, -240], sprint: true },
     { do: 'goto', to: [0, 0, -246], sprint: true },
     { do: 'goto', to: [0, 0, -252], sprint: true, jump: true },
     { do: 'goto', to: [3, 0, -278], sprint: true },
-    { do: 'goto', to: [0, 0, -345], sprint: true },
+    { do: 'goto', to: [0, 0, -351], sprint: true },
     { do: 'waitFlag', flag: 'c2.atPad', timeout: 30 },
     { do: 'interact', id: 'cache:sc1' },
     { do: 'waitFlag', flag: 'chapter.done', timeout: 90 },

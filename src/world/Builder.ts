@@ -94,7 +94,7 @@ export class LevelBuilder {
   rock(x: number, z: number, w: number, d: number, h: number, y = 0, o: BoxOpts = {}) { return this.at(x, z, w, d, h, y, { mat: 'rock', kind: 'wall', surface: 'rock', jitter: 0.2, ...o }); }
 
   /** Hollow building with door gaps. Doors: side + offset along side (from centre) + width. */
-  building(x: number, z: number, w: number, d: number, h: number, o: { y?: number; mat?: MatKey; doors?: { side: 'n' | 's' | 'e' | 'w'; at?: number; width?: number; height?: number }[]; roof?: boolean; thick?: number; floorMat?: MatKey } = {}) {
+  building(x: number, z: number, w: number, d: number, h: number, o: { y?: number; mat?: MatKey; doors?: { side: 'n' | 's' | 'e' | 'w'; at?: number; width?: number; height?: number }[]; roof?: boolean; thick?: number; floorMat?: MatKey; floor?: boolean } = {}) {
     const y = o.y ?? 0, t = o.thick ?? 0.4, mat = o.mat ?? 'concrete';
     const sides: Record<'n' | 's' | 'e' | 'w', { cx: number; cz: number; len: number; alongX: boolean }> = {
       n: { cx: x, cz: z - d / 2 + t / 2, len: w, alongX: true },
@@ -120,7 +120,7 @@ export class LevelBuilder {
       seg(cursor, sd.len / 2, y, h);
     }
     if (o.roof !== false) this.at(x, z, w, d, 0.4, y + h, { mat, kind: 'wall', solid: { walk: true } });
-    this.floor(x, z, w - 2 * t, d - 2 * t, y + 0.02, { mat: o.floorMat ?? 'grate', surface: 'metal', kind: 'platform' });
+    if (o.floor !== false) this.floor(x, z, w - 2 * t, d - 2 * t, y + 0.02, { mat: o.floorMat ?? 'grate', surface: 'metal', kind: 'platform' });
   }
 
   /** Stairs climbing along +dir from (x,z). */

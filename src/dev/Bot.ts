@@ -29,6 +29,9 @@ export class Bot {
   private lockT = 0;
   mode: 'stealth' | 'loud' = 'stealth';
   private cpStep = new Map<unknown, number>();
+  private skipped = new Set<string>();
+  private target = '';
+  private targetT = 0;
   private deaths = 0;
 
   constructor(private readonly app: App) {}
@@ -72,6 +75,19 @@ export class Bot {
 
     switch (step.do) {
       case 'wait': if (this.t >= step.s) next(`waited ${step.s}s`); break;
+      case 'breach': {
+        const p = w.player!;
+        if (w.state.applied(`breach.${step.door}`)) { next(`breached ${step.door}`); break; }
+        const sg = w.inventory.weapons.indexOf('shotgun');
+        if (sg < 0) { fail('no shotgun'); break; }
+        if (w.inventory.current !== sg) this.down.add(`weapon${sg + 1}`);
+        const at = new THREE.Vector3(...step.at);
+        this.aimAt(at); this.down.add('aim');
+        if (this.aimedAt(at) && this.t % 0.9 < 0.05) this.down.add('fire');
+        void p;
+        if (this.t > 30) fail(`breach ${step.door} timeout`);
+        break;
+      }
       case 'passGate': {
         if (!w.gates.isSealed(step.gate)) { next(`gate ${step.gate} open`); break; }
         const it = w.interact.get(`hack:${step.gate}`);
@@ -82,7 +98,7 @@ export class Bot {
       }
       case 'skipCinematic': next('no cinematic'); break;
       case 'waitFlag': if (w.state.has(step.flag)) next(`flag ${step.flag}`); else if (this.t > (step.timeout ?? 60)) fail(`flag ${step.flag} timeout`); break;
-      case 'call': (this.app.session.script?.hooks?.[step.fn] as ((c: unknown) => void) | undefined)?.(null); next(`call ${step.fn}`); break;
+      case 'call': this.app.session.callHook(step.fn); next(`call ${step.fn}`); break;
       case 'goto': {
         const to = new THREE.Vector3(...step.to);
         if (this.steer(to, step.tol ?? 1.2, !!step.crouch, !!step.sprint && this.mode === 'stealth' ? true : !!step.sprint, !!step.jump)) next(`at ${step.to.map(Math.round).join(',')}`);
@@ -102,11 +118,14 @@ export class Bot {
       }
       case 'takedowns': {
         const p = w.player!;
-        const targets = w.enemies.filter((e) => e.alive && e.def.takedown !== 'none' && (step.area ? e.spawn.area === step.area : e.pos.distanceTo(p.pos) < step.radius) && e.awareness !== 'hunted' && (step.area ? Math.abs(e.pos.y - p.pos.y) < 1.5 : true));
+        const targets = w.enemies.filter((e) => e.alive && e.def.takedown !== 'none' && !this.skipped.has(e.key) && (!step.ids || step.ids.includes(e.key)) && (step.area ? e.spawn.area === step.area : e.pos.distanceTo(p.pos) < step.radius) && e.awareness !== 'hunted' && (step.area ? Math.abs(e.pos.y - p.pos.y) < 1.5 : true));
         if (!targets.length) { next('area clear'); break; }
         const e = targets.sort((a, b) => a.pos.distanceTo(p.pos) - b.pos.distanceTo(p.pos))[0]!;
+        if (this.target !== e.key) { this.target = e.key; this.targetT = 0; }
+        this.targetT += w.step;
+        if (this.targetT > 30) { this.skipped.add(e.key); this.log(`skip unreachable ${e.key}`); break; }
         this.approachBehind(e);
-        if (this.t > 150) fail('takedowns timeout');
+        if (this.t > 200) fail('takedowns timeout');
         break;
       }
       case 'clearArea': {

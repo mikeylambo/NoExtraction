@@ -204,6 +204,12 @@ export class Session {
     if (!payload) w.graph.startChapter(chapterId);
     script.setup(this.ctx);
     this.loaded = true;
+    // restoring into a Timed Zone restarts its clock from the zone checkpoint
+    if (payload && payload.checkpointId.startsWith('zone:')) {
+      const id = payload.checkpointId.slice(5);
+      this.zonePayload = payload;
+      w.zones.start(id, payload.checkpointId);
+    }
     if (opts.replay) { this.replayOnly = true; w.sequences.play(opts.replay, { replay: true }); }
     else {
       this.replayOnly = false;
@@ -429,6 +435,8 @@ export class Session {
     this.audio.update(dt);
     this.hud.update(dt, w);
   }
+
+  callHook(fn: string, arg?: unknown): void { this.script?.hooks?.[fn]?.(this.ctx, arg); }
 
   /** Dev/bot: jump to a beat by id (fires its sequence hook if the script names one). */
   devBeat(id: string): void { this.w.graph.goto(id, true); this.w.emit('dev:beat', id); }
