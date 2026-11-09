@@ -192,7 +192,8 @@ export class Session {
     if (spawn.mech || level.mech) {
       w.aegis = new Aegis(w);
       w.aegis.active = !!spawn.mech;
-      if (payload?.extra.aegis) { w.aegis.armor = payload.extra.aegis.armor; for (const s of payload.extra.aegis.lost) w.aegis.lost.add(s as never); w.aegis.applyComponents(); }
+      // restore grace: never resume a checkpoint below half armor
+      if (payload?.extra.aegis) { w.aegis.armor = Math.max(payload.extra.aegis.armor, w.aegis.armorMax * 0.5); for (const s of payload.extra.aegis.lost) w.aegis.lost.add(s as never); w.aegis.applyComponents(); }
       if (spawn.mech) w.aegis.spawn(new THREE.Vector3(...spawn.pos), spawn.yaw);
     }
     if (!spawn.mech) {

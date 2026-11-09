@@ -42,7 +42,7 @@ export const CH5: LevelDef = {
     wallLine(ctx, -450, -70, -450, -770, 40, [], 'rock', 30); wallLine(ctx, 450, -70, 450, -770, 40, [], 'rock', 30);
     wallLine(ctx, -450, -70, -40, -70, 30, [], 'rock', 20); wallLine(ctx, 40, -70, 450, -70, 30, [], 'rock', 20);
     b.at(0, -720, 30, 30, 2, 0, { mat: 'halcyon', kind: 'mech' }); // repair station pad
-    b.at(0, -720, 8, 8, 18, 2, { mat: 'glowWhite', kind: 'mech' });
+    b.at(0, -720, 8, 8, 18, 2, { mat: 'glowWhite', decor: true });
 
     // ------------------------------------------------ the shelf (Shelf Run)
     for (let i = 0; i < SHELF.segs; i++) {
@@ -66,11 +66,11 @@ export const CH5: LevelDef = {
     b.floor(0, -7600, 240, 1000, 0, { mat: 'snow' }); // canyon z -7100 .. -8100
     wallLine(ctx, -120, -7100, -120, -8100, 90, [], 'rock', 40); wallLine(ctx, 120, -7100, 120, -8100, 90, [], 'rock', 40);
     wallLine(ctx, -450, -7100, -120, -7100, 60, [], 'rock', 30); wallLine(ctx, 120, -7100, 450, -7100, 60, [], 'rock', 30);
-    b.at(0, -8050, 30, 30, 2, 0, { mat: 'halcyon', kind: 'mech' }); b.at(0, -8050, 8, 8, 18, 2, { mat: 'glowWhite', kind: 'mech' });
+    b.at(0, -8050, 30, 30, 2, 0, { mat: 'halcyon', kind: 'mech' }); b.at(0, -8050, 8, 8, 18, 2, { mat: 'glowWhite', decor: true });
 
     // ------------------------------------------------ launch platform (The Marshal)
     const [cx, , cz] = MARSHAL_CENTER, R = MARSHAL.arenaRadius, inner = R * (1 - MARSHAL.phase2.arenaShrink);
-    b.floor(0, -8500, 240, 800, 0, { mat: 'snow' }); // canyon mouth → platform
+    b.floor(0, -8590, 240, 980, 0, { mat: 'snow' }); // canyon mouth → platform (z -8100 .. -9080)
     b.at(cx, cz, inner * 2, inner * 2, 4, -4, { mat: 'concrete', kind: 'floor', surface: 'metal', solid: { block: false } });
     for (const [x, z, sw, sd] of [[cx, cz - (inner + R) / 2, R * 2, R - inner], [cx, cz + (inner + R) / 2, R * 2, R - inner], [cx - (inner + R) / 2, cz, R - inner, inner * 2], [cx + (inner + R) / 2, cz, R - inner, inner * 2]] as const) b.at(x, z, sw, sd, 4, -4, { mat: 'concrete', kind: 'floor', surface: 'metal', dynamic: true, tag: 'c5.ring', solid: { block: false } });
     // gantries ring the platform
@@ -96,8 +96,10 @@ export const CH5: LevelDef = {
     { do: 'mechGoto', to: [0, 0, -7470], assault: true, tol: 20 },
     { do: 'mechFight', until: 'c5.ambushDone', timeout: 300 },
     { do: 'mechGoto', to: [0, 0, -8050], tol: 25 },
-    { do: 'mechGoto', to: [0, 0, -8950], assault: true, tol: 60 },
+    { do: 'mechGoto', to: [0, 0, -9030], assault: true, tol: 20 },
     { do: 'mechFight', until: 'c5.marshalDown', timeout: 900 },
+    { do: 'waitFlag', flag: 'line.c5.aegis.cradle', timeout: 40 },
+    { do: 'mechGoto', to: [0, 0, -9785], tol: 12, timeout: 60 },
     { do: 'waitFlag', flag: 'chapter.done', timeout: 90 },
   ],
 };

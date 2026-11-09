@@ -90,6 +90,10 @@ export class Marshal extends MechHostile {
   }
 
   /** Evasion while boosting: the rifle has to lead a moving duelist. */
+  /** Seconds left on the current telegraph (null if none) — the window to sidestep. */
+  get telegraphLeft(): number | null { return this.pending ? this.pending.t : null; }
+  get telegraphKind(): string | null { return this.pending?.kind ?? null; }
+
   override get evading(): boolean { return this.dashT > 0 || this.lungeT > 0; }
 
   private chooseAttack(tgt: THREE.Vector3, dist: number): void {

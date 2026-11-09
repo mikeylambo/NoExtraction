@@ -1,27 +1,27 @@
 [
   {
     "chapter": "ch5",
-    "ok": false,
+    "ok": true,
     "mode": "stealth",
-    "simSeconds": 500,
-    "deaths": 0,
+    "simSeconds": 480,
+    "deaths": 9,
     "lockdowns": 0,
     "takedowns": 0,
-    "failed": "23:mechFight mechFight c5.ambushDone timeout",
+    "failed": null,
     "errors": [],
     "lastLog": [
-      "[90.7] mech at 0,0,-3240",
-      "[95.5] mech at 0,0,-3640",
-      "[97.5] mech at 0,0,-4040",
-      "[99.5] mech at 0,0,-4440",
-      "[104.3] mech at 0,0,-4840",
-      "[106.3] mech at 0,0,-5240",
-      "[108.3] mech at 0,0,-5640",
-      "[108.7] checkpoint storm hp 100 armor 2400 at 0,0,-6200",
-      "[111.6] mech at 0,0,-6300",
-      "[181.5] fight done (c5.stormDone)",
-      "[187.1] mech at 0,0,-7400",
-      "[487.1] FAIL mechFight c5.ambushDone timeout"
+      "[440.3] respawned; rewinding to step 26",
+      "[425.4] respawned; rewinding to step 26",
+      "[437.1] respawned; rewinding to step 26",
+      "[427.6] respawned; rewinding to step 26",
+      "[426.1] respawned; rewinding to step 26",
+      "[436.3] respawned; rewinding to step 26",
+      "[449.2] respawned; rewinding to step 26",
+      "[471.1] fight done (c5.marshalDown)",
+      "[473.1] flag line.c5.aegis.cradle",
+      "[477.4] mech at 0,0,-9785",
+      "[480.1] flag chapter.done",
+      "[480.1] critical path complete"
     ]
   }
 ]

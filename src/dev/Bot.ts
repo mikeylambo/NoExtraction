@@ -27,6 +27,8 @@ export class Bot {
   private tdCool = 0;
   private boostT = 0;
   private lockT = 0;
+  private tapBoost = false;
+  private tapT = 0;
   mode: 'stealth' | 'loud' = 'stealth';
   private cpStep = new Map<unknown, number>();
   private skipped = new Set<string>();
@@ -143,7 +145,8 @@ export class Bot {
         const d = Math.hypot(to.x - a.frame.pos.x, to.z - a.frame.pos.z);
         this.mechSteer(to, !!step.assault || d > 160, !!step.fly);
         this.mechCombat(dt);
-        if (d < (step.tol ?? 20)) next(`mech at ${step.to.map(Math.round).join(',')}`);
+        const outOfArena = !!a.bounds && Math.hypot(to.x - a.bounds.center.x, to.z - a.bounds.center.z) > a.bounds.radius;
+        if (d < (step.tol ?? 20) || outOfArena) next(`mech at ${step.to.map(Math.round).join(',')}${outOfArena ? ' (arena-bounded)' : ''}`);
         else if (this.t > (step.timeout ?? 120)) fail(`mechGoto timeout (${Math.round(d)}m left)`);
         break;
       }
@@ -155,6 +158,7 @@ export class Bot {
           const a = w.aegis!; const d = h.pos.distanceTo(a.frame.pos);
           const side = new THREE.Vector3().subVectors(h.pos, a.frame.pos).setY(0).normalize();
           const orbit = a.frame.pos.clone().add(new THREE.Vector3(-side.z, 0, side.x).multiplyScalar(60 * this.strafeDir)).addScaledVector(side, d > 140 ? 80 : d < 60 ? -40 : 0);
+          if (a.bounds) { const c = a.bounds.center; const rel = orbit.clone().sub(c).setY(0); const lim = a.bounds.radius * 0.6; if (rel.length() > lim) orbit.copy(c).add(rel.setLength(lim)); }
           this.mechSteer(orbit, d > 240, false, h.pos);
         }
         this.mechCombat(dt);
@@ -279,6 +283,10 @@ export class Bot {
       if (a.hasMissiles && a.missileCD <= 0) this.down.add('m_missiles');
       if (t.pos.distanceTo(a.frame.pos) < 40) this.down.add('m_blade');
     }
+    // read telegraphs: sidestep with a quick boost just before they land (the designed counterplay)
+    const boss = w.mechHostiles.find((m) => m.alive && (m as unknown as { telegraphLeft?: number | null }).telegraphLeft != null) as unknown as { telegraphLeft: number; telegraphKind: string } | undefined;
+    if (boss && boss.telegraphLeft < 0.3 && this.boostT <= 0) { this.boostT = 0.8; this.strafeDir *= -1; this.move[0] = this.strafeDir; this.move[1] = 0; this.down.delete('m_boost'); this.tapBoost = true; }
+    if (this.tapBoost) { this.tapT += dt; if (this.tapT < 0.05) this.down.add('m_boost'); else { this.tapBoost = false; this.tapT = 0; } }
     // dodge telegraphed attacks with quick boosts
     if (this.boostT <= 0 && w.rng.chance(dt * 0.6)) { this.boostT = 1.5; this.strafeDir *= -1; }
   }
