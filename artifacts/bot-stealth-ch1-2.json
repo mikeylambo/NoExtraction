@@ -1,0 +1,52 @@
+[
+  {
+    "chapter": "ch1",
+    "ok": true,
+    "mode": "stealth",
+    "simSeconds": 318,
+    "deaths": 0,
+    "lockdowns": 0,
+    "takedowns": 3,
+    "failed": null,
+    "errors": [],
+    "lastLog": [
+      "[249.6] at 0,0,-86",
+      "[252.9] checkpoint hangar hp 100 armor - at 0,0,-86",
+      "[285.5] area clear",
+      "[292.3] c1.sabotage done",
+      "[292.3] flag c1.sabotaged",
+      "[301.1] c1.tube done",
+      "[301.2] flag c1.window",
+      "[302.1] checkpoint exit hp 100 armor - at 0,0,-156",
+      "[308.3] at 0,0,-148",
+      "[317.6] at 0,0,-198",
+      "[317.8] flag chapter.done",
+      "[317.8] critical path complete"
+    ]
+  },
+  {
+    "chapter": "ch2",
+    "ok": true,
+    "mode": "stealth",
+    "simSeconds": 203,
+    "deaths": 0,
+    "lockdowns": 0,
+    "takedowns": 0,
+    "failed": null,
+    "errors": [],
+    "lastLog": [
+      "[127.9] at 0,0,-197",
+      "[128.0] flag c2.zoneStarted",
+      "[134.2] at 0,0,-240",
+      "[135.6] at 0,0,-246",
+      "[136.9] at 0,0,-252",
+      "[140.9] at 3,0,-278",
+      "[171.1] checkpoint pad hp 100 armor - at 0,0,-352",
+      "[174.2] at 0,0,-351",
+      "[174.2] flag c2.atPad",
+      "[183.9] cache:sc1 done",
+      "[202.3] flag chapter.done",
+      "[202.4] critical path complete"
+    ]
+  }
+]

@@ -1,0 +1,127 @@
+<title>No Extraction Slice Report</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column of findings, then a wide screenshot contact sheet — like a mission debrief over ice. */
+:root {
+  --bg: #eef2f5; --surface: #ffffff; --fg: #0f1a24; --muted: #51606d; --rule: #d3dce3;
+  --cyan: #0a8fae; --red: #c4182a; --amber: #a86400; --violet: #5b3fcf;
+  --ok: #1b7a4a; --bad: #c4182a;
+  --display: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --body: 'Barlow', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #081019; --surface: #0e1924; --fg: #e3ecf2; --muted: #93a4b2; --rule: #1f2f3d;
+  --cyan: #3ee6ff; --red: #ff5a67; --amber: #ffb02e; --violet: #c9b8ff; --ok: #4fd18b; --bad: #ff5a67; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #081019; --surface: #0e1924; --fg: #e3ecf2; --muted: #93a4b2; --rule: #1f2f3d;
+  --cyan: #3ee6ff; --red: #ff5a67; --amber: #ffb02e; --violet: #c9b8ff; --ok: #4fd18b; --bad: #ff5a67; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 16px/1.55 var(--body); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 80px; }
+.wrap { max-width: 1100px; margin: 0 auto; display: grid; gap: 40px; }
+.col { max-width: 760px; display: grid; gap: 14px; min-width: 0; }
+header { display: grid; gap: 8px; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 700 clamp(44px, 8vw, 84px)/0.95 var(--display); letter-spacing: .04em; text-transform: uppercase; margin: 0; text-wrap: balance; }
+.tag { font: 500 20px/1.3 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h2 { font: 700 30px/1.1 var(--display); letter-spacing: .05em; text-transform: uppercase; margin: 0; text-wrap: balance; }
+h3 { font: 600 22px/1.2 var(--display); letter-spacing: .04em; margin: 22px 0 10px; }
+p, li { margin: 0; }
+ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
+code, .mono { font-family: var(--mono); font-size: .88em; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.fact { background: var(--surface); border: 1px solid var(--rule); padding: 14px 16px; display: grid; gap: 4px; min-width: 0; }
+.fact b { font: 600 13px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.fact span { font: 600 22px/1.2 var(--display); overflow-wrap: anywhere; }
+.table { overflow-x: auto; border: 1px solid var(--rule); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 600 12px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+td.num { font-variant-numeric: tabular-nums; font-family: var(--mono); }
+.ok { color: var(--ok); font-weight: 600; }
+.bad { color: var(--bad); font-weight: 600; }
+.proofs { list-style: none; padding: 0; columns: 2 320px; column-gap: 28px; font-size: 14px; }
+.proofs li { break-inside: avoid; padding: 2px 0; }
+.law { display: flex; flex-wrap: wrap; gap: 10px 22px; font: 500 14px/1.3 var(--mono); }
+.law i { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -1px; }
+.shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 12px; }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--rule); min-width: 0; }
+figure img { display: block; width: 100%; height: auto; }
+figcaption { font: 400 12px/1.3 var(--mono); color: var(--muted); padding: 6px 8px; }
+.short li { padding-left: 2px; }
+a { color: var(--cyan); }
+a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+  <header class="col">
+    <div class="eyebrow">SLU · Wave 3 · Build report · commit <span class="mono">{{COMMIT}}</span></div>
+    <h1>No Extraction</h1>
+    <div class="tag">The Slice — six chapters, title to credits</div>
+  </header>
+
+  <section class="col">
+    <h2>Where it stands</h2>
+    <p>The whole Slice is built and playable: Chapter 1 onboarding through the sabotage, the missed extraction and The Pad, the dead colony and the Freight Lift, the dark conduits and the Conduit Flood, AEGIS-07's boot-up through The Marshal, and the Ascent to the final line and credits, with the title screen showing the planet gone afterwards. A headless bot drives the real input path through every chapter's critical path.</p>
+    <div class="facts">
+      <div class="fact"><b>Repo / branch</b><span>mikeylambo/noextraction · claude/new-session-vmmwli</span></div>
+      <div class="fact"><b>Deployed URL</b><span>None — no Vercel access from the build session</span></div>
+      <div class="fact"><b>Proofs</b><span>{{PROOFCOUNT}} pass</span></div>
+      <div class="fact"><b>Unit tests</b><span>25 / 25 pass</span></div>
+      <div class="fact"><b>VO lines scripted</b><span>172 (subtitle-only until recorded)</span></div>
+      <div class="fact"><b>Packages</b><span>@slu/narrative · @slu/mech-frame · @slu/perception</span></div>
+    </div>
+  </section>
+
+  <section class="col">
+    <h2>Bot runs</h2>
+    <p>Each row is a full critical-path run in headless Chromium (SwiftShader), simulation at 8× through the real input layer. Sim seconds are game time, not human play time: the bot walks straight lines and aims perfectly.</p>
+    <div class="table"><table>
+      <thead><tr><th>Chapter</th><th>Config</th><th>Result</th><th>Sim s</th><th>Deaths</th><th>Lockdowns</th><th>Takedowns</th><th>Failure</th></tr></thead>
+      <tbody>{{BOTS}}</tbody>
+    </table></div>
+  </section>
+
+  <section class="col">
+    <h2>Proofs</h2>
+    <ul class="proofs">{{PROOFS}}</ul>
+    <p>Menu and save flow (separate test): title → New Game → slot → difficulty → play → pause → options (adjust) → resume → checkpoint → page reload → Continue resumes at the same checkpoint.</p>
+  </section>
+
+  <section class="col">
+    <h2>Performance</h2>
+    <p>Measured at 1920×1080 in each chapter's busiest spot, in the build container with a <strong>CPU software renderer</strong>. Frame times here say nothing about the 2019 MacBook Pro target; draw calls, triangles and actor counts are hardware-independent. Budget: draw calls &lt; 800, ≤ 14 enemies on foot, ≤ 6 frames in mech, particles ≤ 4,000.</p>
+    <div class="table"><table>
+      <thead><tr><th>Chapter</th><th>Draw calls (max)</th><th>Triangles</th><th>Enemies / frames</th><th>Particles</th><th>Frame ms (SwiftShader)</th><th>FPS (SwiftShader)</th></tr></thead>
+      <tbody>{{PERF}}</tbody>
+    </table></div>
+  </section>
+
+  <section class="col">
+    <h2>Readability law</h2>
+    <div class="law"><span><i style="background:var(--red)"></i>Sable threat — cones, glints, beams, alarms, lockdown</span><span><i style="background:var(--amber)"></i>Wren — caches, ship lights, her subtitles</span><span><i style="background:var(--cyan)"></i>Ballast — HUD, prompts, visor</span><span><i style="background:var(--violet)"></i>The failing core</span></div>
+    <p>Enforced by lint: the three meaning colours exist only in <code>data/palette.ts</code>. Colourblind modes remap them; shapes carry the meaning too (eye for threat, diamond for Wren).</p>
+  </section>
+
+  <section class="col">
+    <h2>What fell short of the GDD</h2>
+    <ul class="short">
+      <li><strong>No deploy.</strong> <code>vercel.json</code> is in the repo; connecting it needs a Vercel project and a <code>GITHUB_TOKEN</code> with read access to the shell repo.</li>
+      <li><strong>No human playthroughs or videos.</strong> Feel tuning (takedown punch, slide-vault flow, man-to-mech camera) has not been judged by a person; there is no side-by-side capture of Aegis against AlphaMech. Values are the extracted baseline and unit-tested, not felt.</li>
+      <li><strong>Target-machine performance unmeasured.</strong> Only the hardware-independent numbers above are real.</li>
+      <li><strong>Component coverage.</strong> Chapter 5 was bot-verified with no components and with all three; the other six of the eight combinations were not run.</li>
+      <li><strong>Marshal TTK</strong> was measured only with the bot (which dies and retries from phase checkpoints); a 4–6 minute human time on Normal is a target, not a measurement.</li>
+      <li><strong>Runtime is likely short of 60 minutes.</strong> The bot clears each chapter in 3–8 sim minutes; a careful first-time player will take longer, but the areas are leaner than the GDD's per-chapter minutes.</li>
+      <li><strong>Placeholder audio and stand-in art by design:</strong> synthesized SFX and score, subtitle-only VO, procedural hero assets. Files dropped at the manifest paths replace them without code changes.</li>
+      <li><strong>Enemy navigation</strong> is steering plus stuck recovery, not a navmesh; enemies can snag on dense cover.</li>
+      <li><strong>Gamepad</strong> is fully bound (menus and play) but untested on a physical controller.</li>
+    </ul>
+    <p>Details: <code>DECISIONS.md</code>, <code>TUNING_LOG.md</code>, <code>AUDIO_DELIVERY.md</code>, and the READMEs in <code>packages/</code>.</p>
+  </section>
+
+  <section>
+    <h2>Screens</h2>
+    {{SHOTS}}
+  </section>
+</div>
