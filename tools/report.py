@@ -16,8 +16,10 @@ def img(name, w=880):
 commit = subprocess.check_output(['git', '-C', ROOT, 'rev-parse', '--short', 'HEAD']).decode().strip()
 e = html.escape
 bots = []
-for f in ['bot-stealth-ch1-2.json', 'bot-stealth-ch3-6.json', 'bot-loud.json', 'bot-stealth-flightGovernor+missileRack+arcBlade.json']:
-    for r in j(f, []) or []: bots.append((f, r))
+for f in ['bot-stealth-ch1-2.json', 'bot-stealth-ch3-6.json', 'bot-stealth-ch5.json', 'bot-stealth-flightGovernor+missileRack+arcBlade.json', 'bot-loud.json']:
+    for r in j(f, []) or []:
+        if f == 'bot-stealth-ch3-6.json' and r['chapter'] == 'ch5': continue  # superseded by the post-fix ch5 runs
+        bots.append((f, r))
 perf = (j('perf.json', {}) or {}).get('results', [])
 proofs = (j('proofs.json', {}) or {}).get('results', [])
 GROUPS = [

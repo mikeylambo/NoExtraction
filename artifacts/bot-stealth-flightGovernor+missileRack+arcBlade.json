@@ -1,27 +1,27 @@
 [
   {
     "chapter": "ch5",
-    "ok": false,
+    "ok": true,
     "mode": "stealth",
-    "simSeconds": 488,
+    "simSeconds": 401,
     "deaths": 1,
     "lockdowns": 0,
     "takedowns": 0,
-    "failed": "29:waitFlag flag chapter.done timeout",
+    "failed": null,
     "errors": [],
     "lastLog": [
-      "[181.5] mech at 0,0,-7470",
-      "[198.2] fight done (c5.ambushDone)",
-      "[203.7] mech at 0,0,-8050",
-      "[208.8] checkpoint marshal hp 100 armor 1768 at 0,0,-8900",
-      "[224.7] mech at 0,0,-9030 (arena-bounded)",
-      "[281.9] checkpoint marshalP2 hp 100 armor 1390 at -105,103,-9303",
-      "[330.9] checkpoint marshalP3 hp 100 armor 0 at -52,103,-9432",
-      "[330.9] respawned; rewinding to step 26",
-      "[385.2] fight done (c5.marshalDown)",
-      "[387.5] flag line.c5.aegis.cradle",
-      "[391.0] mech at 0,0,-9785",
-      "[481.0] FAIL flag chapter.done timeout"
+      "[198.3] fight done (c5.ambushDone)",
+      "[203.4] mech at 0,0,-8050",
+      "[208.4] checkpoint marshal hp 100 armor 1804 at 0,0,-8900",
+      "[224.4] mech at 0,0,-9030 (arena-bounded)",
+      "[284.5] checkpoint marshalP2 hp 100 armor 1342 at 62,103,-9428",
+      "[333.3] respawned; rewinding to step 26",
+      "[334.4] checkpoint marshalP3 hp 100 armor 892 at -130,103,-9405",
+      "[392.0] fight done (c5.marshalDown)",
+      "[394.2] flag line.c5.aegis.cradle",
+      "[398.0] mech at 0,0,-9785",
+      "[400.5] flag chapter.done",
+      "[400.5] critical path complete"
     ]
   }
 ]
