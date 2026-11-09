@@ -31,8 +31,8 @@ export const SYSTEMS_LOSS = [
 /** Ascent (GDD §4.9 brief): jettison order and climb. */
 export const ASCENT = {
   targetAltitude: 100_000,
-  baseClimb: 1400,
-  jettisonBurst: 900,
+  baseClimb: 520,
+  jettisonBurst: 380,
   burstDecay: 1.6,
   steerSpeed: 34,
   steerBounds: 60,

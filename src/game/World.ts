@@ -25,6 +25,7 @@ import type { Hud } from '../ui/Hud';
 import type { Aegis } from '../mech/Aegis';
 import type { MechHostile } from '../ai/MechHostile';
 import type { LightPool } from '../world/LightPool';
+import type { Ascent } from '../mech/Ascent';
 
 export interface Inventory {
   weapons: string[];
@@ -82,6 +83,8 @@ export class World {
   // systems (assigned by the chapter loader)
   player: Ballast | null = null;
   aegis: Aegis | null = null;
+  ascent: Ascent | null = null;
+  ascentView: 'climb' | 'planet' | 'ship' | 'cockpit' = 'climb';
   interact!: Interactables;
   gates!: Gates;
   collapse!: CollapseSystem;

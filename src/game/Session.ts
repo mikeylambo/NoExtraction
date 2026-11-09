@@ -133,6 +133,7 @@ export class Session {
     for (const m of w.mechHostiles) m.dispose(); w.mechHostiles = [];
     w.player?.dispose(); w.player = null;
     w.aegis?.dispose(); w.aegis = null;
+    w.ascent?.dispose(); w.ascent = null; w.ascentView = 'climb'; w.camera.far = 6000; w.camera.updateProjectionMatrix();
     w.alert.clear(); w.gates.clear(); w.collapse.clear(); w.hazards.clear(); w.interact.clear(); w.lights.clear();
     w.zones.stop(); w.perception.clear(); w.perception.radioEnabled = true; w.triggers.clear();
     w.collision.clear(); w.fx.clear(); w.clearUpdaters(); w.clearListeners();
@@ -369,7 +370,8 @@ export class Session {
     w.sequences.update(dt);
     w.dialogue.tick(dt);
 
-    if (w.inMech) w.aegis!.update(dt, f);
+    if (w.ascent?.active) w.ascent.update(dt, f);
+    else if (w.inMech) w.aegis!.update(dt, f);
     else if (w.player) {
       w.player.update(dt, f);
       w.interact.update(dt, f, !w.cinematic.controlLocked);
@@ -425,7 +427,8 @@ export class Session {
       w.camera.lookAt(pose.target.x, pose.target.y, pose.target.z);
       if (pose.roll) w.camera.rotateZ(pose.roll);
       w.camera.fov = pose.fov; w.camera.updateProjectionMatrix();
-    } else if (w.inMech) w.aegis!.cam.apply(w.camera);
+    } else if (w.ascent?.active) w.ascent.camera(w.camera, dt, w.ascentView);
+    else if (w.inMech) w.aegis!.cam.apply(w.camera);
     else if (w.player) w.player.cam.apply(w.camera, w);
     const focus = w.focusPos();
     w.atmo.update(dt, w.camera.position, focus);

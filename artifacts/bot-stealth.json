@@ -1,27 +1,21 @@
 [
   {
-    "chapter": "ch5",
+    "chapter": "ch6",
     "ok": true,
     "mode": "stealth",
-    "simSeconds": 480,
-    "deaths": 9,
+    "simSeconds": 107,
+    "deaths": 0,
     "lockdowns": 0,
     "takedowns": 0,
     "failed": null,
     "errors": [],
     "lastLog": [
-      "[440.3] respawned; rewinding to step 26",
-      "[425.4] respawned; rewinding to step 26",
-      "[437.1] respawned; rewinding to step 26",
-      "[427.6] respawned; rewinding to step 26",
-      "[426.1] respawned; rewinding to step 26",
-      "[436.3] respawned; rewinding to step 26",
-      "[449.2] respawned; rewinding to step 26",
-      "[471.1] fight done (c5.marshalDown)",
-      "[473.1] flag line.c5.aegis.cradle",
-      "[477.4] mech at 0,0,-9785",
-      "[480.1] flag chapter.done",
-      "[480.1] critical path complete"
+      "[1.2] checkpoint start hp 100 armor 2400 at 0,0,0",
+      "[3.2] flag ascent.started",
+      "[17.4] checkpoint jettison0 hp 100 armor 2400 at 0,0,0",
+      "[31.3] checkpoint jettison1 hp 100 armor 2400 at 0,0,0",
+      "[46.6] checkpoint jettison2 hp 100 armor 2400 at 0,0,0",
+      "[62.0] checkpoint jettison3 hp 100 armor 2400 at 0,0,0"
     ]
   }
 ]
