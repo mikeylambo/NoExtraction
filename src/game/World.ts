@@ -71,7 +71,7 @@ export class World {
   readonly dialogue: DialogueDirector;
   readonly sequences = new SequenceDirector<StoryAction>();
   readonly cinematic = new CinematicCamera();
-  readonly checkpoint: StoryCheckpoint<Inventory, unknown>;
+  readonly checkpoint: StoryCheckpoint<Inventory, import('./Session').CheckpointExtra>;
 
   // perception & AI
   readonly perception: PerceptionSystem;
@@ -104,6 +104,11 @@ export class World {
   get inMech(): boolean { return !!this.aegis && this.aegis.active; }
 
   private updaters: { id: string; fn: (dt: number) => void }[] = [];
+  private listeners = new Map<string, ((payload: unknown) => void)[]>();
+  /** Game event bus (cache, component, weapon, takedown, lockdown...). Story scripts listen here. */
+  on(type: string, fn: (payload: unknown) => void): () => void { const a = this.listeners.get(type) ?? []; a.push(fn); this.listeners.set(type, a); return () => this.listeners.set(type, (this.listeners.get(type) ?? []).filter((f) => f !== fn)); }
+  emit(type: string, payload?: unknown): void { for (const fn of [...(this.listeners.get(type) ?? [])]) fn(payload); }
+  clearListeners(): void { this.listeners.clear(); }
 
   constructor() {
     this.fx = new Fx(this.scene);

@@ -83,6 +83,7 @@ export class GameInput {
   /** Scripted input for the bot: overrides devices when set. */
   scripted: { move: [number, number]; look: [number, number]; down: Set<string> } | null = null;
   private scriptedPrev = new Set<string>();
+  private scriptedHeld = new Map<string, number>();
   sens = { mouse: 0.0022, pad: 3.1, invertY: false };
 
   constructor(readonly canvas: HTMLCanvasElement, options: GameOptions) {
@@ -119,9 +120,6 @@ export class GameInput {
   poll(realDt: number): void {
     const raw = this.source.poll();
     this.family.sampleGamepads();
-    if (this.scripted) {
-      for (const a of ACTIONS) raw.set(a.action, this.scripted.down.has(a.action) ? 1 : 0);
-    }
     this.manager.update(raw);
     for (const a of ACTIONS) {
       const st = this.manager.get(a.action);
@@ -130,7 +128,6 @@ export class GameInput {
       if (st.down) this.heldTime.set(a.action, (this.heldTime.get(a.action) ?? 0) + realDt);
       else this.heldTime.delete(a.action);
     }
-    if (this.scripted) this.scriptedPrev = new Set(this.scripted.down);
   }
 
   isDown(action: string): boolean { return this.manager.isDown(action); }
@@ -151,6 +148,16 @@ export class GameInput {
     if (this.scripted) { lx = this.scripted.look[0]; ly = this.scripted.look[1]; }
     const down = new Set<string>();
     for (const a of ACTIONS) if (m.isDown(a.action)) down.add(a.action);
+    if (this.scripted) {
+      const sd = new Set(this.scripted.down);
+      const pressed = new Set([...sd].filter((a) => !this.scriptedPrev.has(a)));
+      const released = new Set([...this.scriptedPrev].filter((a) => !sd.has(a)));
+      for (const a of sd) this.scriptedHeld.set(a, (this.scriptedHeld.get(a) ?? 0) + dt);
+      for (const a of [...this.scriptedHeld.keys()]) if (!sd.has(a)) this.scriptedHeld.delete(a);
+      this.scriptedPrev = sd;
+      this.pendingPressed = new Set(); this.pendingReleased = new Set();
+      return { moveX: mx, moveZ: mz, lookX: lx, lookY: ly, down: sd, pressed, released, held: new Map(this.scriptedHeld), wheel: 0, pad: false };
+    }
     const f: InputFrame = { moveX: mx, moveZ: mz, lookX: lx, lookY: ly, down, pressed: this.pendingPressed, released: this.pendingReleased, held: new Map(this.heldTime), wheel: this.wheelAcc, pad: this.usingPad };
     this.pendingPressed = new Set(); this.pendingReleased = new Set(); this.wheelAcc = 0;
     return f;

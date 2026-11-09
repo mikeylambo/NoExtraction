@@ -1,0 +1,21 @@
+[
+  {
+    "chapter": "ch1",
+    "ok": true,
+    "mode": "stealth",
+    "simSeconds": 307,
+    "deaths": 0,
+    "lockdowns": 2,
+    "takedowns": 3,
+    "failed": null,
+    "errors": [],
+    "lastLog": [
+      "[290.1] c1.tube done",
+      "[290.1] flag c1.window",
+      "[297.3] at 0,0,-148",
+      "[306.5] at 0,0,-198",
+      "[306.7] flag chapter.done",
+      "[306.7] critical path complete"
+    ]
+  }
+]

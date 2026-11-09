@@ -1,0 +1,23 @@
+html,body{margin:0;height:100%;background:#020407;overflow:hidden;color:#eaf2f6;font-family:'Barlow Condensed','Arial Narrow',system-ui,sans-serif}
+#app{position:fixed;inset:0}
+.nx-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.nx-menu{position:fixed;inset:0;z-index:1000;display:none}
+.nx-menu .slu-screen{background:linear-gradient(90deg,rgba(2,4,8,.92) 0%,rgba(2,4,8,.6) 45%,rgba(2,4,8,0) 75%)!important;place-items:center start!important;padding-left:7vw!important}
+.nx-menu .slu-panel{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;width:min(560px,90vw)!important}
+.nx-menu .slu-header h1{font-size:clamp(40px,6vw,84px)!important;letter-spacing:.08em!important;font-weight:700;text-transform:uppercase}
+.nx-menu .slu-header p{letter-spacing:.2em;text-transform:uppercase;font-size:15px!important}
+.nx-menu .slu-choice{background:transparent!important;border:0!important;border-left:2px solid transparent!important;border-radius:0!important;padding:9px 16px!important}
+.nx-menu .slu-choice[data-focused="true"],.nx-menu .slu-choice:hover{border-left-color:#3ee6ff!important;background:rgba(62,230,255,.07)!important}
+.nx-menu .slu-choice-label{font-size:22px!important;letter-spacing:.06em;font-weight:600!important}
+.nx-menu .slu-choice-desc{font-size:15px!important;letter-spacing:.04em}
+.nx-menu .slu-choice:disabled{opacity:.8!important}
+.nx-menu .slu-back{background:transparent!important;border:0!important;letter-spacing:.2em}
+.nx-splash{position:fixed;inset:0;z-index:2000;background:#000;display:grid;place-items:center;text-align:center;transition:opacity .8s}
+.nx-splash.out{opacity:0}.nx-splash small{letter-spacing:.6em;opacity:.6}.nx-splash h1{font-size:clamp(48px,9vw,120px);letter-spacing:.1em;margin:.2em 0}.nx-splash p{letter-spacing:.4em;opacity:.6;animation:nxblink 1.6s infinite}
+.nx-credits{position:fixed;inset:0;z-index:1500;background:#000;overflow:hidden;text-align:center;transition:opacity .9s}.nx-credits.out{opacity:0}
+.nx-credits h1{font-size:64px;letter-spacing:.12em}.nx-credits h3{margin-top:12vh;letter-spacing:.5em;opacity:.6;font-size:16px}
+.nx-credits p{margin:22px 0}.nx-credits small{display:block;letter-spacing:.3em;opacity:.6;font-size:14px}.nx-credits b{display:block;font-size:26px;font-weight:600}.nx-credits .legal{opacity:.5;font-size:13px}
+.nx-dev{position:fixed;right:10px;top:10px;z-index:3000;background:rgba(6,10,14,.94);border:1px solid #2a3540;padding:10px 14px;font:12px 'IBM Plex Mono',monospace;max-width:560px;max-height:90vh;overflow:auto}
+.nx-dev label{display:block;margin:6px 0}.nx-dev select{max-width:330px}.nx-dev button{margin-left:6px}.nx-dev h4{margin:0 0 8px}
+.nx-overlay{position:fixed;left:10px;bottom:10px;z-index:2900;font:12px 'IBM Plex Mono',monospace;white-space:pre;background:rgba(0,0,0,.55);padding:6px 10px;pointer-events:none}
+.nx-fatal{position:fixed;inset:20px;z-index:5000;background:#200;color:#fbb;padding:20px;white-space:pre-wrap}

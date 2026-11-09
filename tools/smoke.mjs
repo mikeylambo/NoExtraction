@@ -1,0 +1,16 @@
+import { startPreview, openGame, sleep } from './browser.mjs';
+const OUT = process.argv[2]; console.log('go');
+const pv = await startPreview();
+const { browser, page, errors } = await openGame(pv.url, { query: '?overlay' });
+await sleep(3000);
+await page.screenshot({ path: `${OUT}/s0-splash.png` });
+await page.keyboard.press('Enter');
+await sleep(1500);
+await page.screenshot({ path: `${OUT}/s1-title.png` });
+await page.evaluate(() => window.__nx.app.launch('ch1'));
+await sleep(6000);
+await page.screenshot({ path: `${OUT}/s2-ch1.png` });
+console.log(JSON.stringify((await page.evaluate(() => { const s = window.__nx.state(); return { mode: s.mode, beat: s.beat, player: s.player, perf: s.perf, cin: s.cinematic, enemies: s.enemies.length }; }))));
+console.log('ERRORS', errors.slice(0, 10).join('\n'));
+await browser.close(); pv.stop();
+process.exit(0);

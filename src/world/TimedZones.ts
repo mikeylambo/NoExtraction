@@ -22,6 +22,14 @@ export class TimedZones {
     return this.active;
   }
 
+  /** A story clock that never fails (the extraction window). */
+  startNarrative(id: string, name: string, seconds: number, onExpire: () => void = () => {}): ZoneRun {
+    this.active = { id, total: seconds, left: seconds, checkpointId: '', onExpire };
+    this.lastMark = -1;
+    this.w.hud?.zoneStart(name);
+    return this.active;
+  }
+
   complete(id?: string): void {
     const a = this.active; if (!a || (id && a.id !== id)) return;
     this.completed.add(a.id);
@@ -34,7 +42,8 @@ export class TimedZones {
   update(dt: number): void {
     const a = this.active; if (!a) return;
     if (!this.w.dev.freezeZones) a.left -= dt;
-    for (const m of TIMED_ZONE_ACCEL_AT) if (this.lastMark > m && a.left <= m) this.w.audio?.tempo(m <= 10 ? 1.35 : 1.15);
+    if (this.lastMark >= 0) for (const m of TIMED_ZONE_ACCEL_AT) if (this.lastMark > m && a.left <= m) this.w.audio?.tempo(m <= 10 ? 1.35 : 1.15);
+    if (this.lastMark < 0) { if (a.left <= 0) { this.active = null; a.onExpire?.(); } return; }
     this.lastMark = a.left;
     if (a.left <= 0) {
       a.left = 0;
