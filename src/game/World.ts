@@ -38,6 +38,8 @@ export interface Inventory {
   health: number;
   components: ComponentId[];
   caches: string[];
+  /** Aegis systems lost so far (carried from Chapter 5 into the Ascent). */
+  aegisLost?: string[];
 }
 
 export const freshInventory = (): Inventory => ({

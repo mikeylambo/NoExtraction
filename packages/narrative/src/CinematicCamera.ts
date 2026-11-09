@@ -71,6 +71,7 @@ export class CinematicCamera {
 
   /** End immediately; blend out from wherever the camera is. */
   stop(blendOut = this.opts.blendOut ?? 0.4): void {
+    if (this.phase === 'blendOut') { if (blendOut <= 0) this.handoff(); return; } // a hard cut overrides a blend in progress
     if (this.phase !== 'shots') return;
     this.opts = { ...this.opts, blendOut };
     this.beginBlendOut();

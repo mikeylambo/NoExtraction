@@ -14,6 +14,8 @@ import { DEFAULT_OPTIONS, type GameOptions } from '../../data/options';
 import { CHAPTERS, chapterById, gradeChapter, betterGrade, type Grade, type ChapterStats } from '../../data/chapters';
 import { DIFFICULTY, type DifficultyId } from '../../data/enemies';
 import { SCRIPTS } from '../story';
+import { CACHES } from '../../data/caches';
+import { freshInventory } from './World';
 import { optionChoices, stepOption, type AllSettings } from '../ui/Options';
 import { TitleScene } from '../ui/TitleScene';
 import { CreditsRoll, CREDITS } from '../ui/Credits';
@@ -24,7 +26,7 @@ import { Overlay } from '../dev/Overlay';
 import { loadModelOverrides } from '../world/ModelOverrides';
 
 export interface SlotData { chapterId: string; payload: SavePayload; difficulty: DifficultyId; savedAt: string; playSeconds: number }
-export interface Profile { unlocked: string[]; grades: Record<string, Grade>; endingSeen: boolean; lastSlot: number }
+export interface Profile { unlocked: string[]; grades: Record<string, Grade>; endingSeen: boolean; lastSlot: number; componentsFound?: string[]; cachesFound?: string[] }
 const SAVE_SCHEMA = 1;
 
 type Mode = 'splash' | 'menu' | 'loading' | 'playing' | 'paused' | 'results' | 'credits' | 'ending';
@@ -378,9 +380,9 @@ export class App {
   private startChapter(id: string, o: { payload?: SavePayload; replay?: string; fromSelect?: boolean } = {}): void {
     this.hud.setVisible(true);
     this.hud.fadeTo(1, 0);
-    // chapter select starts with the components a playthrough would most likely have by then
-    const prevInv = o.payload ? undefined : this.session.w.chapterId !== id && this.session.loaded && this.mode !== 'menu' ? this.session.w.inventory : undefined;
-    this.session.load(id, { payload: o.payload ?? null, inventory: prevInv, replay: o.replay });
+    // chapter select: the chapter's loadout, plus components/caches this profile has ever found before it
+    const inv = o.payload ? undefined : o.fromSelect || o.replay ? this.selectLoadout(id) : undefined;
+    this.session.load(id, { payload: o.payload ?? null, inventory: inv, replay: o.replay });
     this.checkpoints.clear();
     const c = chapterById(id);
     if (!o.payload && !o.replay) { this.hud.chapterCard(c.number, c.title); this.audio.ui('ui.title', 1); }
@@ -390,6 +392,18 @@ export class App {
     this.input.flush();
     if (!this.headless) void this.platform.requestPointerLock(this.canvas);
     if (o.replay) this.session.w.on('replay:end', () => { void this.showTitle(); this.showChapter(id); });
+  }
+
+  private selectLoadout(id: string): import('./World').Inventory {
+    const n = chapterById(id).number;
+    const inv = freshInventory();
+    if (n >= 3) { inv.weapons.push('carbine'); inv.ammo.carbine = { mag: 30, reserve: 60 }; }
+    if (n >= 4) { inv.weapons.push('shotgun'); inv.ammo.shotgun = { mag: 6, reserve: 12 }; }
+    const compChapter: Record<string, number> = { missileRack: 2, flightGovernor: 3, arcBlade: 4 };
+    inv.components = (this.profile.componentsFound ?? []).filter((c) => compChapter[c]! < n) as typeof inv.components;
+    inv.caches = (this.profile.cachesFound ?? []).filter((c) => { const ch = CACHES.find((x) => x.id === c)?.chapter; return ch ? chapterById(ch).number < n : false; });
+    if (n === 6) inv.aegisLost = ['leftArm', 'shoulderCannon'];
+    return inv;
   }
 
   pause(): void {
@@ -424,6 +438,9 @@ export class App {
     const { grade, score } = gradeChapter(def, stats);
     const res = this.results.build({ ...stats }, { score, timeMs: stats.seconds * 1000, metadata: { grade, chapter: id } });
     this.profile.grades[id] = betterGrade(this.profile.grades[id], grade);
+    const inv = this.session.w.inventory;
+    this.profile.componentsFound = [...new Set([...(this.profile.componentsFound ?? []), ...inv.components])];
+    this.profile.cachesFound = [...new Set([...(this.profile.cachesFound ?? []), ...inv.caches])];
     const next = SCRIPTS[id] ? CHAPTERS[def.number]?.id : undefined;
     if (next && !this.profile.unlocked.includes(next)) this.profile.unlocked.push(next);
     void this.saveProfile();

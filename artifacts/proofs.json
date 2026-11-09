@@ -1,0 +1,334 @@
+{
+  "at": "2026-11-09T14:26:26.878Z",
+  "results": [
+    {
+      "name": "ch1 lockdown seals c1.fast (run 1)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch1 lockdown seals c1.fast (run 2)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch1 lockdown seals c1.fast (run 3)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch2 lockdown seals c2.fast (run 1)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch2 lockdown seals c2.fast (run 2)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch2 lockdown seals c2.fast (run 3)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch3 lockdown seals c3.fast (run 1)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch3 lockdown seals c3.fast (run 2)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch3 lockdown seals c3.fast (run 3)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch4 lockdown seals c4.fast (run 1)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch4 lockdown seals c4.fast (run 2)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch4 lockdown seals c4.fast (run 3)",
+      "ok": true,
+      "detail": {
+        "before": false,
+        "sealed": true,
+        "lockdowns": 1,
+        "solid": true
+      }
+    },
+    {
+      "name": "ch1 lockdown from 8 s continuous Hunted seals the fast gate",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "collapse fissure telegraph 2s = spec 2s",
+      "ok": true,
+      "detail": {
+        "kind": "fissure",
+        "telegraph": 2
+      }
+    },
+    {
+      "name": "collapse structure telegraph 2.5s = spec 2.5s",
+      "ok": true,
+      "detail": {
+        "kind": "structure",
+        "telegraph": 2.5
+      }
+    },
+    {
+      "name": "collapse shelf telegraph 3s = spec 3s",
+      "ok": true,
+      "detail": {
+        "kind": "shelf",
+        "telegraph": 3
+      }
+    },
+    {
+      "name": "collapse debris telegraph 1.5s = spec 1.5s",
+      "ok": true,
+      "detail": {
+        "kind": "debris",
+        "telegraph": 1.5
+      }
+    },
+    {
+      "name": "collapse aurora telegraph 1s = spec 1s",
+      "ok": true,
+      "detail": {
+        "kind": "aurora",
+        "telegraph": 1
+      }
+    },
+    {
+      "name": "collapse steam telegraph 1.2s = spec 1.2s",
+      "ok": true,
+      "detail": {
+        "kind": "steam",
+        "telegraph": 1.2
+      }
+    },
+    {
+      "name": "all six collapse kinds landed after their telegraphs",
+      "ok": true,
+      "detail": {
+        "stillRunning": 0
+      }
+    },
+    {
+      "name": "Core Stability scrub 72→0 produces 7 distinct world looks",
+      "ok": true,
+      "detail": [
+        {
+          "pct": 72,
+          "sky": [
+            661030,
+            2375774
+          ],
+          "snow": 0.15,
+          "tremorEvery": 55,
+          "aurora": 0.45,
+          "coreGlow": 0,
+          "fogFar": 340
+        },
+        {
+          "pct": 58,
+          "sky": [
+            791588,
+            3225690
+          ],
+          "snow": 0.3,
+          "tremorEvery": 32,
+          "aurora": 0.6,
+          "coreGlow": 0.05,
+          "fogFar": 300
+        },
+        {
+          "pct": 41,
+          "sky": [
+            1120289,
+            3950166
+          ],
+          "snow": 1,
+          "tremorEvery": 24,
+          "aurora": 0.35,
+          "coreGlow": 0.12,
+          "fogFar": 170
+        },
+        {
+          "pct": 24,
+          "sky": [
+            394766,
+            1709360
+          ],
+          "snow": 0.050000000000000044,
+          "tremorEvery": 18,
+          "aurora": 0,
+          "coreGlow": 0.85,
+          "fogFar": 90
+        },
+        {
+          "pct": 11,
+          "sky": [
+            1313820,
+            5913190
+          ],
+          "snow": 0.45,
+          "tremorEvery": 14,
+          "aurora": 1,
+          "coreGlow": 0.5,
+          "fogFar": 1500
+        },
+        {
+          "pct": 2,
+          "sky": [
+            788500,
+            3810386
+          ],
+          "snow": 0.2,
+          "tremorEvery": 6,
+          "aurora": 1,
+          "coreGlow": 1,
+          "fogFar": 3000
+        },
+        {
+          "pct": 0,
+          "sky": [
+            0,
+            657940
+          ],
+          "snow": 0,
+          "tremorEvery": 60,
+          "aurora": 0,
+          "coreGlow": 1,
+          "fogFar": 9000
+        }
+      ]
+    },
+    {
+      "name": "Timed Zone (The Pad) fail restarts at the zone checkpoint with a full clock",
+      "ok": true,
+      "detail": {
+        "before": {
+          "zone": {
+            "id": "pad",
+            "left": 88.6
+          },
+          "cp": "zone:pad"
+        },
+        "after": {
+          "zone": {
+            "id": "pad",
+            "left": 88.5
+          },
+          "pos": [
+            0,
+            0,
+            -197
+          ],
+          "cp": "zone:pad"
+        }
+      }
+    },
+    {
+      "name": "sequence: VO + subtitles + shots + collapse, then control returns",
+      "ok": true,
+      "detail": {
+        "seq": {
+          "locked": true,
+          "subs": 1
+        },
+        "seq2": {
+          "locked": false,
+          "flag": true,
+          "change": true
+        }
+      }
+    },
+    {
+      "name": "skip ends the cinematic, runs essential steps, returns control",
+      "ok": true,
+      "detail": {
+        "cine": null,
+        "locked": false,
+        "flag": true
+      }
+    },
+    {
+      "name": "mid-chapter checkpoint restores flags and world changes",
+      "ok": true,
+      "detail": {
+        "v": 7,
+        "c": true,
+        "cp": "proofCp"
+      }
+    }
+  ],
+  "errors": []
+}

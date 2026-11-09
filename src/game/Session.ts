@@ -83,7 +83,7 @@ export class Session {
     w.graph.register(Object.values(SCRIPTS).map((s) => s.chapter));
     for (const s of Object.values(SCRIPTS)) w.sequences.register(s.sequences);
     w.sequences.onAction((a, c) => this.run(a, c.skipping));
-    w.sequences.events.on('end', (e) => { if (!w.sequences.cinematic) { w.cinematic.stop(0.6); } w.emit('sequence:end', e.id); if (this.replayOnly && e.replay) w.emit('replay:end', e.id); });
+    w.sequences.events.on('end', (e) => { if (!w.sequences.cinematic) { w.cinematic.stop(e.skipped ? 0 : 0.6); } w.emit('sequence:end', e.id); if (this.replayOnly && e.replay) w.emit('replay:end', e.id); });
     this.wireDialogue();
     w.scene.children.forEach((c) => this.persistent.add(c));
     w.alert.listeners.push((e) => { if (e.type === 'lockdown') { w.emit('lockdown', e.area); hud.toast('Lockdown', 'red'); } });
@@ -195,6 +195,7 @@ export class Session {
       w.aegis.active = !!spawn.mech;
       // restore grace: never resume a checkpoint below half armor
       if (payload?.extra.aegis) { w.aegis.armor = Math.max(payload.extra.aegis.armor, w.aegis.armorMax * 0.5); for (const s of payload.extra.aegis.lost) w.aegis.lost.add(s as never); w.aegis.applyComponents(); }
+      if (!payload?.extra.aegis) { for (const s2 of w.inventory.aegisLost ?? []) w.aegis.lost.add(s2 as never); w.aegis.applyComponents(); }
       if (spawn.mech) w.aegis.spawn(new THREE.Vector3(...spawn.pos), spawn.yaw);
     }
     if (!spawn.mech) {
@@ -350,6 +351,7 @@ export class Session {
     };
     void def;
     w.state.set('allPersonalCaches', PERSONAL_CACHE_IDS.every((id) => w.inventory.caches.includes(id)));
+    if (w.aegis) w.inventory.aegisLost = [...w.aegis.lost].filter((x) => x !== 'hardLock');
     if (w.chapterId === 'ch6') this.host.onEnding();
     else this.host.onChapterComplete(stats, w.chapterId);
   }
@@ -431,6 +433,8 @@ export class Session {
     else if (w.inMech) w.aegis!.cam.apply(w.camera);
     else if (w.player) w.player.cam.apply(w.camera, w);
     const focus = w.focusPos();
+    // no weather underground (cargo bay, conduits): snow only above the surface
+    if (!w.ascent?.active) w.atmo.snowScale = w.chapterId === 'ch4' || focus.y < -4 ? 0 : 1;
     w.atmo.update(dt, w.camera.position, focus);
     w.fx.flashScale = w.options.reduceFlashes ? 0.3 : 1;
     w.fx.update(dt);

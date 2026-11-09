@@ -14,7 +14,8 @@ const pv = await startPreview(5211);
 const out = [];
 for (const [ch, fn] of Object.entries(spots)) {
   const { browser, page, errors } = await openGame(pv.url, { query: '?overlay', width: 1920, height: 1080 });
-  await page.waitForFunction(() => window.__nx && window.__nx.app.mode !== 'splash');
+  await page.waitForFunction(() => window.__nx); await sleep(1500); await page.keyboard.press('Enter');
+  await page.waitForFunction(() => window.__nx.app.mode !== 'splash', null, { timeout: 30000 });
   await page.evaluate((c) => window.__nx.app.launch(c), ch); await sleep(2500);
   await page.evaluate(`(${fn.toString()})(window.__nx)`); await sleep(ch === 'ch5' ? 20000 : 6000);
   const samples = [];

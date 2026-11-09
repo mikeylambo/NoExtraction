@@ -1,0 +1,27 @@
+[
+  {
+    "chapter": "ch1",
+    "ok": true,
+    "mode": "loud",
+    "simSeconds": 277,
+    "deaths": 2,
+    "lockdowns": 2,
+    "takedowns": 0,
+    "failed": null,
+    "errors": [],
+    "lastLog": [
+      "[200.6] at 0,0,-86",
+      "[212.6] checkpoint hangar hp 93 armor - at 0,0,-86",
+      "[246.4] area clear",
+      "[251.1] c1.sabotage done",
+      "[251.1] flag c1.sabotaged",
+      "[260.3] c1.tube done",
+      "[260.3] flag c1.window",
+      "[261.3] checkpoint exit hp 93 armor - at 0,0,-156",
+      "[267.4] at 0,0,-148",
+      "[276.7] at 0,0,-198",
+      "[276.9] flag chapter.done",
+      "[276.9] critical path complete"
+    ]
+  }
+]
