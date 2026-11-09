@@ -38,7 +38,7 @@ export class SubtitleView {
     this.el = document.createElement('div');
     this.el.className = 'nv-subs';
     this.el.setAttribute('aria-live', 'polite');
-    Object.assign(this.el.style, { position: 'absolute', left: '50%', bottom: '11%', transform: 'translateX(-50%)', width: 'min(92vw, 980px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', pointerEvents: 'none', zIndex: '40' });
+    Object.assign(this.el.style, { position: 'absolute', left: '50%', bottom: '12%', transform: 'translateX(-50%)', width: 'min(64vw, 900px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', pointerEvents: 'none', zIndex: '40' });
     root.appendChild(this.el);
   }
 

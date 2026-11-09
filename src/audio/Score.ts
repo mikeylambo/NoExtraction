@@ -43,6 +43,10 @@ export class Score {
   private layers = { base: 1, suspicion: 0, hunted: 0, lockdown: 0 };
   private target = { suspicion: 0, hunted: 0, lockdown: 0 };
   private noise: AudioBuffer;
+  /** Recorded cues/stems that replace the synth patterns (probed from the manifest paths). */
+  private files = new Map<string, AudioBuffer>();
+  private fileSrc: { src: AudioBufferSourceNode; g: GainNode; layer: 'base' | 'suspicion' | 'hunted' | 'lockdown' }[] = [];
+  setFile(cue: string, buf: AudioBuffer): void { this.files.set(cue, buf); }
   constructor(private readonly ctx: AudioContext, bus: GainNode) {
     this.out = ctx.createGain(); this.out.gain.value = 0; this.out.connect(bus);
     this.noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
@@ -58,6 +62,18 @@ export class Score {
     this.out.gain.setTargetAtTime(0, t, fade / 4);
     this.cue = cue;
     this.tempoMult = 1;
+    for (const f of this.fileSrc) { f.g.gain.setTargetAtTime(0, t, fade / 4); f.src.stop(t + fade); }
+    this.fileSrc = [];
+    if (cue && this.files.has(cue)) {
+      // recorded cue (+ stems for the infiltration bed), all started on the same clock
+      this.pattern = null;
+      const start = t + 0.05;
+      const add = (id: string, layer: 'base' | 'suspicion' | 'hunted' | 'lockdown') => { const b = this.files.get(id); if (!b) return; const src = this.ctx.createBufferSource(); src.buffer = b; src.loop = true; const g = this.ctx.createGain(); g.gain.value = layer === 'base' ? 1 : 0; src.connect(g); g.connect(this.out); src.start(start); this.fileSrc.push({ src, g, layer }); };
+      add(cue, 'base');
+      if (cue === 'infiltration') { add('suspicion', 'suspicion'); add('hunted', 'hunted'); add('lockdown', 'lockdown'); }
+      this.out.gain.setTargetAtTime(0.7, start, 0.4);
+      return;
+    }
     if (!cue || !PATTERNS[cue]) { this.pattern = null; return; }
     const p = PATTERNS[cue]!;
     setTimeout(() => {
@@ -78,6 +94,8 @@ export class Score {
 
   update(dt: number): void {
     for (const k of ['suspicion', 'hunted', 'lockdown'] as const) this.layers[k] += (this.target[k] - this.layers[k]) * Math.min(1, dt * 1.5);
+    for (const f of this.fileSrc) if (f.layer !== 'base') f.g.gain.value = this.layers[f.layer];
+    for (const f of this.fileSrc) f.src.playbackRate.value = this.tempoMult;
     const p = this.pattern; if (!p) return;
     const spb = 60 / (p.bpm * this.tempoMult) / 4;
     while (this.nextTime < this.ctx.currentTime + 0.12) {

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { AudioSystem } from '@slu/web-shell';
-import { SFX, MIX } from '../../data/audio';
+import { SFX, MIX, MUSIC } from '../../data/audio';
 import { RECIPES, type Recipe, type Layer } from './Recipes';
 import { Score } from './Score';
 
@@ -56,6 +56,12 @@ export class AudioEngine implements AudioSystem {
 
   /** Real files at manifest paths override recipes (probe quietly; missing files are expected). */
   private async probeFiles(): Promise<void> {
+    for (const m of MUSIC) {
+      try {
+        const r = await fetch(m.file, { method: 'HEAD' });
+        if (r.ok && (r.headers.get('content-type') ?? '').startsWith('audio')) this.score?.setFile(m.id, await this.ctx!.decodeAudioData(await (await fetch(m.file)).arrayBuffer()));
+      } catch { /* synth score stays */ }
+    }
     for (const s of SFX) {
       try {
         const r = await fetch(s.file, { method: 'HEAD' });

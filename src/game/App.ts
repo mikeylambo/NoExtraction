@@ -4,6 +4,7 @@ import {
   defaultCoreSettings, tunables, type RendererAdapter, type UIScreenModel,
 } from '@slu/web-shell';
 import { PostStack, createPalette } from '@slu/web-shell/look/three';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { SubtitleView } from '@slu/narrative';
 import { GameInput, ACTIONS } from './Input';
 import { Session, type SavePayload } from './Session';
@@ -123,6 +124,10 @@ export class App {
     tunables.set('look.post', 'quality', this.headless ? 'low' : 'high');
     tunables.set('look.post', 'grainAmount', 0.02);
     tunables.set('look.post', 'bloomThreshold', 0.82);
+    // image-based fill so metals read at night (kept low: the world is lit by moon, aurora and lamps)
+    const pmrem = new THREE.PMREMGenerator(this.renderer);
+    this.session.w.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    this.session.w.scene.environmentIntensity = 0.32;
     this.title = new TitleScene(this.profile.endingSeen);
     this.applySettings(opts);
     this.settings.events.on('changed', (s) => this.applySettings(s));

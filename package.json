@@ -14,7 +14,10 @@
     "lint": "node tools/lint.mjs",
     "test": "node --import tsx --test tests/*.test.ts",
     "bot": "node tools/bot.mjs",
-    "check": "npm run typecheck && npm run lint && npm run test && vite build && node tools/bot.mjs"
+    "check": "npm run typecheck && npm run lint && npm run test && vite build && node tools/bot.mjs ch1,ch2,ch3,ch4,ch5,ch6",
+    "shots": "node tools/shots.mjs",
+    "audio-delivery": "tsx tools/audio-delivery.ts",
+    "check:fast": "npm run typecheck && npm run lint && npm run test"
   },
   "dependencies": {
     "@slu/web-shell": "github:mikeylambo/Web-Game-Shell-v1.02#7003ec7a46f0de4c86b8dbb28fea81c10d4f21fa",

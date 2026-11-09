@@ -38,7 +38,7 @@ function pivot(parent: THREE.Object3D, x: number, y: number, z: number): THREE.G
 /** Procedural helmeted humanoid (stand-in for hero/enemy GLBs; manifest overrides drop in). */
 export function buildHumanoid(style: HumanStyle): HumanRig {
   const S = STYLES[style];
-  const armor = new THREE.MeshStandardMaterial({ color: S.armor, roughness: 0.55, metalness: 0.35 });
+  const armor = new THREE.MeshStandardMaterial({ color: S.armor, roughness: 0.5, metalness: 0.2 });
   const under = new THREE.MeshStandardMaterial({ color: S.under, roughness: 0.8, metalness: 0.1 });
   const visorM = new THREE.MeshStandardMaterial({ color: 0x050505, emissive: S.visor, emissiveIntensity: S.visorI, roughness: 0.2 });
   const b = S.bulk;
