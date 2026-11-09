@@ -19,6 +19,10 @@ npm run dev        # http://localhost:5190
 | `npm run bot -- ch3 [--loud] [--components=flightGovernor,missileRack,arcBlade]` | Bot run of chosen chapters (`artifacts/bot-*.json`) |
 | `npm run shots -- artifacts/shots ch1,ch5` | Screenshot tour |
 | `npm run audio-delivery` | Regenerate `AUDIO_DELIVERY.md` |
+| `npm run lookdev-shots` | Render the lookdev stills (`artifacts/lookdev`) |
+
+**Lookdev:** `npm run dev` then open `/lookdev.html`: one night courtyard pushed toward the MGS4-era
+target (keys 1–4 shots, 0 auto, O free cam, P post on/off). Asset contract: `ASSET_SPEC.md`.
 
 ## Layout
 

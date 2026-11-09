@@ -11,6 +11,9 @@ export default defineConfig({
       '@slu/perception': pkg('perception'),
     },
   },
-  build: { target: 'es2022', chunkSizeWarningLimit: 2000, sourcemap: false },
+  build: {
+    target: 'es2022', chunkSizeWarningLimit: 2000, sourcemap: false,
+    rollupOptions: { input: { main: fileURLToPath(new URL('./index.html', import.meta.url)), lookdev: fileURLToPath(new URL('./lookdev.html', import.meta.url)) } },
+  },
   server: { host: true },
 });
