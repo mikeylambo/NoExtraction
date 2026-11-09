@@ -74,6 +74,11 @@ export const CH2_SCRIPT: ChapterScript = {
     w.on('weapon', (id) => { if (id === 'carbine' && ctx.once('c2.carbineTip')) w.hud.tutorialPrompt('carbine', '<kbd>1</kbd>/<kbd>2</kbd> swap — the carbine is loud', 5); });
     w.on('component', (id) => { if (id === 'missileRack') w.dialogue.say('c2.ballast.missileRack'); });
     w.on('lockdown', () => { if (ctx.once('c2.lockTip')) w.hud.tutorialPrompt('lockdown', 'Fast gates sealed — hack a console or take the long way', 6); });
+    // an aurora flare over the motor pool: radios, alarms and the visor go dark for 10 s — a window
+    ctx.trigger('c2.auroraT', [-55, -1, -12], [55, 8, -4], () => {
+      w.collapse.trigger('c2.aurora');
+      w.hud.tutorialPrompt('aurora', 'Aurora flare — their radios and alarms are down for a few seconds', 6);
+    });
     ctx.trigger('c2.armory', [55, -1, -80], [100, 8, 30], () => ctx.checkpoint('armory'));
     ctx.trigger('c2.road', [-55, -1, -100], [40, 8, -84], () => { ctx.beat('road'); ctx.checkpoint('road'); ctx.objective('Follow the cliff road to the bridge', [0, 0, -196]); });
     // the Pad: the bridge starts collapsing the moment you're on it

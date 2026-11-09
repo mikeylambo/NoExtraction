@@ -101,6 +101,7 @@ export class CollapseSystem {
         w.audio?.sfx('aurora.flare', p, 1);
         w.atmo.flare = 1;
         w.hud?.staticBurst(r.tele);
+        if (!w.options.reduceFlashes) w.postFx?.('chromatic', 0.6);
         break;
       case 'steam':
         w.audio?.sfx('steam.vent', p, 1);

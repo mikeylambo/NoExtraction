@@ -25,7 +25,7 @@ export const CORE_STATES: CoreState[] = [
   { pct: 41, label: 'Snowstorm bands, collapsing structures, orbital debris streaks', look: { sky: [0x111821, 0x3c4656], fog: 0x37414e, fogNear: 22, fogFar: 170, aurora: 0.35, snow: 1, tremorEvery: 24, tremorStrength: 0.14, debrisStreaks: 0.6, coreGlow: 0.12, sun: 0.55, ambient: 0.5, wind: 0.9, flicker: 0.2 } },
   { pct: 24, label: 'Subsurface water surging, violet core glow through the ice', look: { sky: [0x06060e, 0x1a1530], fog: 0x0a0a16, fogNear: 10, fogFar: 90, aurora: 0, snow: 0.05, tremorEvery: 18, tremorStrength: 0.16, debrisStreaks: 0, coreGlow: 0.85, sun: 0.08, ambient: 0.12, wind: 0.1, flicker: 0.15 } },
   { pct: 11, label: 'Ice shelf breakup, cryovolcanic plumes, magnetic storms', look: { sky: [0x140c1c, 0x5a3a66], fog: 0x2a2234, fogNear: 120, fogFar: 1500, aurora: 1, snow: 0.45, tremorEvery: 14, tremorStrength: 0.22, debrisStreaks: 0.8, coreGlow: 0.5, sun: 0.6, ambient: 0.5, wind: 0.7, flicker: 0.5 } },
-  { pct: 2, label: 'The planet breaks', look: { sky: [0x1a0812, 0x8a3a5a], fog: 0x3a2030, fogNear: 200, fogFar: 3000, aurora: 1, snow: 0.2, tremorEvery: 6, tremorStrength: 0.35, debrisStreaks: 1, coreGlow: 1, sun: 0.7, ambient: 0.6, wind: 1, flicker: 0.8 } },
+  { pct: 2, label: 'The planet breaks', look: { sky: [0x0c0814, 0x3a2452], fog: 0x3a2030, fogNear: 200, fogFar: 3000, aurora: 1, snow: 0.2, tremorEvery: 6, tremorStrength: 0.35, debrisStreaks: 1, coreGlow: 1, sun: 0.7, ambient: 0.6, wind: 1, flicker: 0.8 } },
   { pct: 0, label: 'The planet breaks', look: { sky: [0x000000, 0x0a0a14], fog: 0x000000, fogNear: 400, fogFar: 9000, aurora: 0, snow: 0, tremorEvery: 0, tremorStrength: 0, debrisStreaks: 0, coreGlow: 1, sun: 1, ambient: 0.3, wind: 0, flicker: 0 } },
 ];
 

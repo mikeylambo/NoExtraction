@@ -73,6 +73,7 @@ export class App {
   frameCount = 0;
   private rebindTarget: string | null = null;
   bot: import('../dev/Bot').Bot | null = null;
+  private ignoreBackUntil = 0;
 
   constructor(readonly root: HTMLElement) {
     this.canvas = document.createElement('canvas');
@@ -128,6 +129,11 @@ export class App {
     const pmrem = new THREE.PMREMGenerator(this.renderer);
     this.session.w.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
     this.session.w.scene.environmentIntensity = 0.32;
+    this.session.w.postFx = (kind, amount) => {
+      if (kind === 'radialBlur') this.post.distort(0.5, 0.5, { strength: amount * 12, life: 0.35, speed: 1.6 });
+      else if (kind === 'chromatic') this.post.pulse('chromatic.hit', amount);
+      else this.post.pulse('flash', amount);
+    };
     this.title = new TitleScene(this.profile.endingSeen);
     this.applySettings(opts);
     this.settings.events.on('changed', (s) => this.applySettings(s));
@@ -146,7 +152,13 @@ export class App {
     this.splash();
   }
 
-  private menuRoot(): HTMLElement { const m = document.createElement('div'); m.className = 'nx-menu'; this.root.appendChild(m); return m; }
+  private menuRoot(): HTMLElement {
+    const m = document.createElement('div'); m.className = 'nx-menu'; this.root.appendChild(m);
+    // the shell UI already activates on Enter/Space via the semantic input layer: suppress the
+    // browser's native button click for those keys so a press activates exactly once
+    m.addEventListener('keydown', (e) => { if (e.code === 'Enter' || e.code === 'Space') e.preventDefault(); }, true);
+    return m;
+  }
 
   applySettings(s: AllSettings): void {
     const w = this.session.w;
@@ -208,6 +220,7 @@ export class App {
   private menuEl(): HTMLElement { return this.root.querySelector('.nx-menu') as HTMLElement; }
 
   private async onMenu(screen: string, choice: string): Promise<void> {
+    if ((window as unknown as { __menuLog?: string[] }).__menuLog) (window as unknown as { __menuLog: string[] }).__menuLog.push(`${screen}:${choice}:${this.mode}`);
     void this.audio.unlock();
     this.audio.ui('ui.confirm', 0.7);
     if (screen === 'title') {
@@ -254,6 +267,7 @@ export class App {
   }
 
   private onBack(screen: string): void {
+    if (this.frameCount <= this.ignoreBackUntil) return; // the press that opened this menu is not also a 'back' (the shell UI tick reads input one frame later)
     this.audio.ui('ui.back', 0.6);
     if (this.rebindTarget) return;
     if (screen === 'pause') { this.resume(); return; }
@@ -384,6 +398,7 @@ export class App {
     this.shell.pause();
     this.session.w.sequences.pause(); this.session.w.dialogue.pause(); this.audio.stopVoice();
     this.platform.exitPointerLock();
+    this.ignoreBackUntil = this.frameCount + 2;
     this.showMenu('pause');
   }
   resume(): void {
@@ -470,7 +485,7 @@ export class App {
     this.frameCount++;
     this.renderer.info.reset();
     this.input.poll(real);
-    if (this.mode === 'menu' || this.mode === 'results') {
+    if (this.mode === 'menu' || this.mode === 'results' || this.mode === 'paused') {
       if (this.input.manager.wasPressed('ui_left')) this.menuAdjust(-1);
       if (this.input.manager.wasPressed('ui_right')) this.menuAdjust(1);
       if (this.input.manager.wasPressed('ui_down') || this.input.manager.wasPressed('ui_up')) this.audio.ui('ui.tick', 0.4);

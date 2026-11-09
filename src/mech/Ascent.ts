@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { ASCENT } from '../../data/aegis';
 import { PALETTE } from '../../data/palette';
 import { FEEL } from '../../data/feel';
-import { glowSprite } from '../world/Materials';
+import { glowSprite, glowTexture } from '../world/Materials';
 import { buildWrenShip } from '../world/Ships';
 import type { World } from '../game/World';
 import type { InputFrame } from '../game/Input';
@@ -51,9 +51,9 @@ export class Ascent {
         float n(vec3 p){ vec3 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f); return mix(mix(mix(h(i),h(i+vec3(1,0,0)),f.x),mix(h(i+vec3(0,1,0)),h(i+vec3(1,1,0)),f.x),f.y),mix(mix(h(i+vec3(0,0,1)),h(i+vec3(1,0,1)),f.x),mix(h(i+vec3(0,1,1)),h(i+vec3(1,1,1)),f.x),f.y),f.z); }
         void main(){ float d = max(0.0, dot(vN, normalize(vec3(-0.4,0.6,0.5))));
           float ice = n(vP*6.0)*0.5 + n(vP*20.0)*0.25;
-          vec3 col = mix(vec3(0.45,0.55,0.66), vec3(0.92,0.96,1.0), ice) * (0.1 + d*0.9);
-          float cr = abs(n(vP*8.0) - 0.5); float crack = smoothstep(0.02 + 0.05*uBreak, 0.0, cr) * uCrack;
-          col += vec3(0.84,0.7,1.0) * crack * (1.2 + uBreak * 3.0);
+          vec3 col = mix(vec3(0.32,0.40,0.50), vec3(0.80,0.86,0.92), ice) * (0.03 + d*0.75);
+          float cr = abs(n(vP*8.0) - 0.5); float crack = smoothstep(0.008 + 0.03*uBreak, 0.0, cr) * uCrack;
+          col += vec3(0.78,0.66,1.0) * crack * (0.9 + uBreak * 2.4);
           col = mix(col, vec3(0.6,0.4,1.0), uBreak * 0.25 * crack);
           gl_FragColor = vec4(col, 1.0); }`,
     }));
@@ -72,7 +72,7 @@ export class Ascent {
     const n = 600; const pos = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) { pos[i * 3] = ((i * 0.618) % 1 - 0.5) * 900; pos[i * 3 + 1] = ((i * 0.381) % 1) * 3000; pos[i * 3 + 2] = ((i * 0.7548) % 1 - 0.5) * 900; }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    this.clouds = new THREE.Points(g, new THREE.PointsMaterial({ color: 0xdfe8f0, size: 30, transparent: true, opacity: 0.35, depthWrite: false, fog: false }));
+    this.clouds = new THREE.Points(g, new THREE.PointsMaterial({ color: 0xdfe8f0, size: 60, map: glowTexture(), transparent: true, opacity: 0.35, depthWrite: false, fog: false }));
     this.clouds.frustumCulled = false;
   }
 

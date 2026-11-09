@@ -95,6 +95,7 @@ export const CH2: LevelDef = {
       { id: 'c2.debris2', kind: 'debris', at: [-2, 0, -262], radius: 6 },
       { id: 'c2.debris3', kind: 'debris', at: [1, 0, -296], radius: 6 },
       { id: 'c2.gantryFall', kind: 'structure', at: [0, 0, -248], drop: ['c2.gantry'], radius: 3 },
+      { id: 'c2.aurora', kind: 'aurora', at: [0, 30, -20] },
       ...[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => ({ id: `c2.fall${i}`, kind: 'fissure' as const, at: [-4, 0, -200 - i * segLen] as [number, number, number], to: [4, 0, -200 - i * segLen] as [number, number, number], remove: [`c2.bridge${i}`] })),
     ]);
 

@@ -133,6 +133,9 @@ export class World {
   runUpdaters(dt: number): void { for (const u of [...this.updaters]) u.fn(dt); }
   clearUpdaters(): void { this.updaters = []; }
 
+  /** Post-processing hook set once by the app (not cleared between chapters). */
+  postFx: ((kind: 'radialBlur' | 'flash' | 'chromatic', amount: number) => void) | null = null;
+
   addShake(amount: number): void {
     const capped = Math.min(this.shakeCap, amount);
     this.shake.trauma = Math.min(this.shakeCap, Math.max(this.shake.trauma, 0) + capped);

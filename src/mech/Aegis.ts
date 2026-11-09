@@ -326,7 +326,7 @@ export class Aegis {
         s.life = 0;
         if (hit) {
           hit.damage(s.dmg * w.difficulty.playerDamage, this.frame.pos, s.missile ? 90 : AEGIS.cannon.impact);
-          if (!s.missile) { w.hitstop(FEEL.hitstop.cannonHit); if (!w.options.reduceBlur) w.hud?.radialBlur(FEEL.blur.cannonRadial); }
+          if (!s.missile) { w.hitstop(FEEL.hitstop.cannonHit); if (!w.options.reduceBlur) w.postFx?.('radialBlur', FEEL.blur.cannonRadial); }
         }
         if (!s.missile) for (const h of this.hostiles()) if (h !== hit && h.pos.distanceTo(s.p) < AEGIS.cannon.splash) h.damage(s.dmg * 0.3, s.p, 120);
         for (const e of w.enemies) if (e.alive && e.pos.distanceTo(s.p) < 10) e.damage(999, { from: s.p, mech: true });

@@ -1,0 +1,42 @@
+// Menu + save flow proof: title → new game → slot → difficulty → play → pause → options → resume
+// → checkpoint → reload page → Continue resumes the same chapter/checkpoint. KBM only (pad uses the same shell UI path).
+import { startPreview, openGame, sleep } from './browser.mjs';
+const pv = await startPreview(5212);
+let { browser, page, errors } = await openGame(pv.url, { query: '', width: 1280, height: 720 });
+const log = (...a) => console.log(...a);
+const screen = () => page.evaluate(() => document.querySelector('.nx-menu .slu-screen')?.getAttribute('data-screen-id') ?? null);
+const press = async (k, n = 1) => { for (let i = 0; i < n; i++) { await page.keyboard.down(k); await sleep(120); await page.keyboard.up(k); await sleep(700); } };
+await page.evaluate(() => localStorage.clear());
+await page.addInitScript(() => { window.__menuLog = []; });
+await page.reload(); await sleep(2500);
+await press('Enter'); await sleep(800); log('after splash:', await screen());
+await press('Enter'); log('New Game →', await screen());
+await press('Enter'); log('Slot 1 →', await screen());
+await press('ArrowDown'); await press('Enter'); await sleep(2500);
+log('mode after difficulty:', await page.evaluate(() => window.__nx.app.mode), 'chapter', await page.evaluate(() => window.__nx.state().chapter), 'difficulty', await page.evaluate(() => window.__nx.app.difficulty));
+await page.evaluate(() => window.__nx.skip()); await sleep(500);
+await press('Escape'); log('pause →', await screen(), await page.evaluate(() => window.__nx.app.mode));
+const foc = () => page.evaluate(() => document.querySelector('.nx-menu [data-focused="true"]')?.getAttribute('data-choice-id'));
+log('focus', await foc()); await press('ArrowDown'); log('focus', await foc()); await press('ArrowDown'); log('focus', await foc()); await press('Enter'); log('options →', await screen(), await page.evaluate(() => window.__nx.app.mode));
+await press('Enter'); log('gameplay page →', await screen(), await page.evaluate(() => document.querySelector('.nx-menu h1')?.textContent));
+await press('ArrowRight'); log('difficulty now:', await page.evaluate(() => window.__nx.app.settings.snapshot().difficulty)); await press('ArrowLeft');
+log('menu log so far', JSON.stringify(await page.evaluate(() => window.__menuLog)));
+await press('Escape'); await press('Escape'); log('back to', await screen());
+await press('Enter'); log('resumed mode:', await page.evaluate(() => window.__nx.app.mode));
+// reach the first checkpoint trigger (outer) by walking there for real is slow: teleport into the trigger
+await page.evaluate(() => window.__nx.teleport(0, 0, 146)); await sleep(2500);
+const cp = await page.evaluate(() => window.__nx.app.session.lastCheckpoint?.checkpointId);
+log('checkpoint saved:', cp);
+const slot = await page.evaluate(() => JSON.parse(localStorage.getItem('no-extraction:slot1') ?? 'null')?.data?.payload?.checkpointId);
+log('slot1 on disk:', slot);
+await page.reload(); await sleep(2500);
+await press('Enter'); await sleep(800);
+log('title continue enabled:', await page.evaluate(() => !document.querySelector('[data-choice-id="continue"]')?.hasAttribute('disabled')));
+await press('ArrowDown'); await press('Enter'); await sleep(3000);
+const st = await page.evaluate(() => { const s = window.__nx.state(); return { mode: s.mode, chapter: s.chapter, pos: s.player?.pos, cp: window.__nx.app.session.lastCheckpoint?.checkpointId }; });
+log('after Continue:', JSON.stringify(st));
+const menusOk = true;
+const ok = st.chapter === 'ch1' && st.cp === 'outer' && Math.abs(st.pos[2] - 146) < 3;
+log('menu log', JSON.stringify(await page.evaluate(() => window.__menuLog)));
+log(ok ? 'FLOW OK' : 'FLOW FAILED', errors.slice(0, 3).join('\n'));
+await browser.close(); pv.stop(); process.exit(ok ? 0 : 1);
