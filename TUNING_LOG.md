@@ -48,6 +48,9 @@ Unchanged in Aegis. The only edits to extracted behaviour are bug fixes (below),
 | build | Marshal gantry crush | 320 → 240 | Same. |
 | build | Marshal overcharge beam | 520 → 400 | Same; it remains the biggest hit and is fully dodgeable with a quick boost. |
 | build | Sovereign plating (share of damage that gets through) | — → rifle 0.3 / missiles 0.5 / blade 0.6 / cannon 1.0 | Without plating, rifle DPS (~400) killed 9,000 armor in < 30 s; plating targets the GDD 4–6 min TTK. Measured TTK in `artifacts/` (see report). |
+| build | Marshal evasion (miss chance while boosting) | 0.65 → 0.50 | Bot runs alternated between a death loop and a 15-minute stalemate; the duel should reward aim, not be a coin flip. |
+| build | Sovereign rifle plating | 0.30 → 0.36 | Same. |
+| build | Restore grace at Marshal phase checkpoints | 50% → 75% armor | Phase checkpoints are saved mid-duel; retries should start fightable. |
 | build | Shelf crevasse width | 45 → 30 m | Must be clearable in every component configuration (jump-jet hop without the governor). |
 | build | Ascent base climb | 1,400 → 520 m/s | Chapter 6 lasted ~2 min against a GDD 7 min target. |
 | build | Ascent jettison burst | 900 → 380 m/s | Proportional to the slower climb. |

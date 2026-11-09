@@ -1,0 +1,78 @@
+{
+  "machine": "CI container, SwiftShader (CPU) WebGL — NOT the 2019 MBP target",
+  "at": "2026-11-09T14:55:06.887Z",
+  "results": [
+    {
+      "chapter": "ch1",
+      "frameMsAvg": 39.63,
+      "frameMsP95": 100,
+      "fps": 25.38,
+      "drawCallsMax": 378,
+      "trianglesMax": 20603,
+      "enemies": 11,
+      "mechs": 0,
+      "particlesMax": 0,
+      "errors": []
+    },
+    {
+      "chapter": "ch2",
+      "frameMsAvg": 40.74,
+      "frameMsP95": 100,
+      "fps": 24.63,
+      "drawCallsMax": 305,
+      "trianglesMax": 10843,
+      "enemies": 11,
+      "mechs": 0,
+      "particlesMax": 0,
+      "errors": []
+    },
+    {
+      "chapter": "ch3",
+      "frameMsAvg": 35.97,
+      "frameMsP95": 100,
+      "fps": 27.88,
+      "drawCallsMax": 306,
+      "trianglesMax": 11393,
+      "enemies": 12,
+      "mechs": 0,
+      "particlesMax": 0,
+      "errors": []
+    },
+    {
+      "chapter": "ch4",
+      "frameMsAvg": 29.8,
+      "frameMsP95": 100,
+      "fps": 33.75,
+      "drawCallsMax": 252,
+      "trianglesMax": 6483,
+      "enemies": 7,
+      "mechs": 0,
+      "particlesMax": 0,
+      "errors": []
+    },
+    {
+      "chapter": "ch5",
+      "frameMsAvg": 40.67,
+      "frameMsP95": 100,
+      "fps": 24.5,
+      "drawCallsMax": 156,
+      "trianglesMax": 18637,
+      "enemies": 0,
+      "mechs": 5,
+      "particlesMax": 0,
+      "errors": []
+    },
+    {
+      "chapter": "ch6",
+      "frameMsAvg": 37.6,
+      "frameMsP95": 100,
+      "fps": 26.5,
+      "drawCallsMax": 84,
+      "trianglesMax": 17197,
+      "enemies": 0,
+      "mechs": 0,
+      "particlesMax": 0,
+      "errors": []
+    }
+  ]
+}

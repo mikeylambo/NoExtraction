@@ -162,7 +162,7 @@ export class Bot {
           this.mechSteer(orbit, d > 240, false, h.pos);
         }
         this.mechCombat(dt);
-        if (this.t > (step.timeout ?? 600)) fail(`mechFight ${step.until} timeout`);
+        if (this.t > (step.timeout ?? 600)) fail(`mechFight ${step.until} timeout (${w.mechHostiles.filter((m) => m.alive && m.active).map((m) => `${m.name} ${Math.round(m.hp)}hp @${Math.round(m.pos.distanceTo(w.aegis!.frame.pos))}m`).join(', ')}; aegis y ${Math.round(w.aegis!.frame.pos.y)})`);
         break;
       }
       case 'ascent': {

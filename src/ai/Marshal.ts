@@ -9,7 +9,7 @@ type Attack = 'rifleBurst' | 'bladeLunge' | 'missileSalvo' | 'gantryCrush' | 'ov
 interface Pending { kind: Attack; t: number; total: number; aim: THREE.Vector3; dir: THREE.Vector3; fx: THREE.Object3D[] }
 
 /** Sovereign plating: share of non-cannon damage that gets through (tuned for 4–6 min TTK). */
-export const SOVEREIGN_PLATING = { rifle: 0.3, missile: 0.5, blade: 0.6, cannon: 1 };
+export const SOVEREIGN_PLATING = { rifle: 0.36, missile: 0.5, blade: 0.6, cannon: 1 };
 
 /**
  * THE MARSHAL in SOVEREIGN. Three phases by armor: Duel (100–65%), Platform breaks (65–30%: arena
@@ -33,7 +33,7 @@ export class Marshal extends MechHostile {
   constructor(w: World, at: THREE.Vector3, yaw: number) {
     super(w, at, yaw, MARSHAL.armor * w.difficulty.bossArmor, true);
     this.name = 'SOVEREIGN';
-    this.evasion = 0.65;
+    this.evasion = 0.5;
     this.speed = MARSHAL.speed;
     this.band = [70, 180];
     this.blade = glowSprite(PALETTE.red, 10, 0);

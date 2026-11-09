@@ -110,8 +110,8 @@ changes (old → new) live in `TUNING_LOG.md`.
 16. **Story difficulty** lowers enemy damage/accuracy, lengthens telegraphs and detection fill, raises
     the health regen cap to 100 and boss armor to 60%. Hard shortens telegraphs and fill times
     (constitution §19: information and execution first, damage last).
-17. **Checkpoint restore grace.** Resuming from a checkpoint never starts below 50% armor (mech) or
-    60 health (on foot), so a checkpoint saved mid-fight cannot become a death loop.
+17. **Checkpoint restore grace.** Resuming from a checkpoint never starts below 50% armor (75% at
+    Marshal phase checkpoints) or 60 health (on foot), so a checkpoint saved mid-fight cannot become a death loop.
 18. **Hard lock auto-release.** If the hard-locked target dies, the lock drops to soft lock.
 19. **Bot.** The bot drives the real input path (scripted `InputFrame`s). It aims precisely
     (it is a test harness, not a player model), sidesteps telegraphs with quick boosts, hacks sealed
