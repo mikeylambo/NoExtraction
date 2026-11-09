@@ -187,7 +187,7 @@ export class Ballast {
     if (mag > 1e-3) wish.divideScalar(Math.max(1e-3, wish.length()));
     this.sprinting = this.sprintToggle && !this.crouched && iz > 0.3 && mag > 0.5;
     if (!this.sprinting && mag < 0.1) this.sprintToggle = this.sprintToggle && f.pad;
-    let target = this.crouched ? M.crouch : this.sprinting ? M.sprint : M.walk;
+    let target: number = this.crouched ? M.crouch : this.sprinting ? M.sprint : M.walk;
     if (this.surface === 'drift') target *= M.driftSpeedScale;
     if (this.submerged > 0.3) target *= 0.6;
     if (this.aiming) target = Math.min(target, M.walk * 0.85);
