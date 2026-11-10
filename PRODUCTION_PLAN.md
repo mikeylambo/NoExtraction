@@ -1,6 +1,7 @@
 # NO EXTRACTION — Production Plan
 
 *From vertical slice to a Steam release. Living document: update the status columns as work lands.*
+*Shared, editable copy with a status-dropdown tracker: [No Extraction — Production Plan](https://claude.ai/artifact/KqiRzocfZgSvzMfFuY9bek). Keep the two in step.*
 
 Status key: **Done** · **Doing** · **Next** · **Later** · **Blocked** (says on what).
 Owners are roles until people are named: **Director** (creative + business decisions),
@@ -87,8 +88,8 @@ Owners are roles until people are named: **Director** (creative + business decis
 | Task | Owner | Status | Depends on |
 |---|---|---|---|
 | Perf tooling (bot runs, `artifacts/perf.json`) | Eng | **Done** (CPU renderer only) | |
-| **Benchmark mode runnable on any machine** (fixed fly-through per chapter, fps/frame-time/draw-call report to copy back) | Eng | **Next (M0)** | |
-| Measure on real hardware: 2019 MacBook Pro (UHD 630 / Radeon Pro), a Steam Deck, a mid-range Windows GPU | Director + QA | Next (M0) | benchmark mode |
+| **Benchmark mode runnable on any machine**: `?bench` plays each chapter's heaviest spot with a camera sweep, reports fps, frame-time percentiles, draw calls, triangles, GPU; Copy/Download | Eng | **Built**: first real run pending | |
+| Measure on real hardware: 2019 MacBook Pro (UHD 630 / Radeon Pro), a Steam Deck, a mid-range Windows GPU. Run `?bench` (default tier) and `?bench&q=low` on each | Director + QA | **Next (M0)** | benchmark mode |
 | Set min/recommended spec and per-chapter budgets (draw calls, triangles, texture memory) | Eng | M0 | measurements |
 
 ### 3.7 Engineering: shipping (Eng)

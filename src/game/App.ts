@@ -23,6 +23,7 @@ import { TitleScene } from '../ui/TitleScene';
 import { CreditsRoll, CREDITS } from '../ui/Credits';
 import { PLAYER } from '../../data/player';
 import { installDevHooks } from '../dev/Hooks';
+import { Bench } from '../dev/Bench';
 import { DevPanel } from '../dev/DevPanel';
 import { Overlay } from '../dev/Overlay';
 import { loadModelOverrides } from '../world/ModelOverrides';
@@ -77,6 +78,8 @@ export class App {
   /** Headless bot: render every Nth frame, run sim faster. */
   readonly fast = new URLSearchParams(location.search).has('fast');
   readonly headless = new URLSearchParams(location.search).has('headless');
+  /** `?bench`: real-hardware benchmark run (src/dev/Bench.ts); no pointer lock, so nothing pauses it. */
+  readonly bench = new URLSearchParams(location.search).has('bench');
   frameCount = 0;
   private rebindTarget: string | null = null;
   bot: import('../dev/Bot').Bot | null = null;
@@ -155,7 +158,7 @@ export class App {
     this.platform.onResize((w, h, dpr) => this.resize(w, h, dpr));
     this.platform.onVisibilityChange((hidden) => { if (hidden && this.mode === 'playing') this.pause(); });
     this.canvas.addEventListener('click', () => { if (this.mode === 'playing') void this.platform.requestPointerLock(this.canvas); });
-    document.addEventListener('pointerlockchange', () => { if (!document.pointerLockElement && this.mode === 'playing' && !this.input.scripted && !this.headless) this.pause(); });
+    document.addEventListener('pointerlockchange', () => { if (!document.pointerLockElement && this.mode === 'playing' && !this.input.scripted && !this.headless && !this.bench) this.pause(); });
     this.overlay = new Overlay(this);
     this.devPanel = new DevPanel(this);
     installDevHooks(this);
@@ -163,6 +166,7 @@ export class App {
     this.ui.startInputLoop();
     this.loop();
     this.splash();
+    if (this.bench) new Bench(this).start();
   }
 
   private menuRoot(): HTMLElement {
@@ -410,7 +414,7 @@ export class App {
     this.mode = 'playing';
     this.shell.session.setPhase('playing');
     this.input.flush();
-    if (!this.headless) void this.platform.requestPointerLock(this.canvas);
+    if (!this.headless && !this.bench) void this.platform.requestPointerLock(this.canvas);
     if (o.replay) this.session.w.on('replay:end', () => { void this.showTitle(); this.showChapter(id); });
   }
 
@@ -442,7 +446,7 @@ export class App {
     this.shell.resume();
     this.session.w.sequences.resume(); this.session.w.dialogue.resume();
     this.input.flush();
-    if (!this.headless) void this.platform.requestPointerLock(this.canvas);
+    if (!this.headless && !this.bench) void this.platform.requestPointerLock(this.canvas);
   }
 
   private async persist(p: SavePayload): Promise<void> {
@@ -491,7 +495,7 @@ export class App {
     this.hud.fadeTo(0, 1.2);
     this.mode = 'playing';
     this.input.flush();
-    if (!this.headless) void this.platform.requestPointerLock(this.canvas);
+    if (!this.headless && !this.bench) void this.platform.requestPointerLock(this.canvas);
   }
 
   private ending(): void {
