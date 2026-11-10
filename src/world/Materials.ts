@@ -28,10 +28,10 @@ const SPECS: Record<MatKey, MatSpec> = {
   rock: { color: 0x4a5560, rough: 0.95, metal: 0, snow: 1, surface: 'rock' },
   concrete: { color: 0x7d868e, rough: 0.9, metal: 0, snow: 1, surface: 'concrete' },
   metal: { color: 0x8a949d, rough: 0.5, metal: 0.6, snow: 0.8, surface: 'paint' },
-  metalDark: { color: 0x2c333a, rough: 0.55, metal: 0.55, snow: 0.8, surface: 'paint' },
+  metalDark: { color: 0x2c333a, rough: 0.55, metal: 0.55, snow: 0.8, surface: 'rust' },
   sable: { color: 0x3b4148, rough: 0.6, metal: 0.4, snow: 0.9, surface: 'paint' },
   halcyon: { color: 0xc9d1d8, rough: 0.45, metal: 0.3, snow: 0.9, surface: 'paint' },
-  crate: { color: 0x59626b, rough: 0.8, metal: 0.2, snow: 1, surface: 'paint' },
+  crate: { color: 0x59626b, rough: 0.8, metal: 0.2, snow: 1, surface: 'corrugated' },
   iceWall: { color: 0xa9d4ee, rough: 0.1, metal: 0, snow: 0.2, transparent: true, opacity: 0.38, core: 1, surface: 'ice' },
   water: { color: 0x0d2a3a, rough: 0.08, metal: 0.2, snow: 0, transparent: true, opacity: 0.82, core: 1.5 },
   grate: { color: 0x555d65, rough: 0.6, metal: 0.7, snow: 0.3, surface: 'grate' },
@@ -58,7 +58,7 @@ export function patchWorld(m: THREE.MeshStandardMaterial, snow: number, core: nu
   const cover = surface('snow');
   const detail = det ? {
     uDetMap: { value: det.set.map }, uDetNor: { value: det.set.normalMap }, uDetOrm: { value: det.set.orm },
-    uDetTile: { value: det.tile }, uDetLum: { value: det.set.lum }, uDetRough: { value: det.set.rough }, uDetNormalK: { value: det.normal }, uDetAlbK: { value: det.albedo },
+    uDetTile: { value: det.tile }, uDetGreen: { value: det.green }, uDetLum: { value: det.set.lum }, uDetRough: { value: det.set.rough }, uDetNormalK: { value: det.normal }, uDetAlbK: { value: det.albedo },
     uCoverMap: { value: cover.set.map }, uCoverLum: { value: cover.set.lum }, uCoverTile: { value: cover.tile },
   } : {};
   m.onBeforeCompile = (shader) => {
@@ -75,7 +75,7 @@ uniform float uSnowAmount; uniform vec3 uSnowColor; uniform float uCoreGlow; uni
 uniform float uMatSnow; uniform float uMatCore; uniform float uMatSparkle;
 #ifdef USE_DETAIL
 uniform sampler2D uDetMap; uniform sampler2D uDetNor; uniform sampler2D uDetOrm; uniform sampler2D uCoverMap;
-uniform float uDetTile; uniform float uDetLum; uniform float uDetRough; uniform float uDetNormalK; uniform float uDetAlbK; uniform float uCoverLum; uniform float uCoverTile;
+uniform float uDetTile; uniform float uDetGreen; uniform float uDetLum; uniform float uDetRough; uniform float uDetNormalK; uniform float uDetAlbK; uniform float uCoverLum; uniform float uCoverTile;
 #endif`)
       .replace('#include <color_fragment>', `#include <color_fragment>
 float snowK = smoothstep(0.55, 0.9, vWNorm.y) * uSnowAmount * uMatSnow;
@@ -103,7 +103,7 @@ metalnessFactor = max(metalnessFactor, dOrm.b) * (1.0 - snowK);
       .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
 #ifdef USE_DETAIL
 {
-  vec3 dn = texture2D(uDetNor, dUv).xyz * 2.0 - 1.0;
+  vec3 dn = texture2D(uDetNor, dUv).xyz * 2.0 - 1.0; dn.y *= uDetGreen;
   vec3 wN = normalize(normalize(vWNorm) + (dT * dn.x + dB * dn.y) * uDetNormalK * (1.0 - snowK * 0.6));
   normal = normalize((viewMatrix * vec4(wN, 0.0)).xyz);
 }

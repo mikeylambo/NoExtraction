@@ -26,6 +26,7 @@ import { installDevHooks } from '../dev/Hooks';
 import { DevPanel } from '../dev/DevPanel';
 import { Overlay } from '../dev/Overlay';
 import { loadModelOverrides } from '../world/ModelOverrides';
+import { loadSurfaceScans } from '../render/scans';
 
 export interface SlotData { chapterId: string; payload: SavePayload; difficulty: DifficultyId; savedAt: string; playSeconds: number }
 export interface Profile { unlocked: string[]; grades: Record<string, Grade>; endingSeen: boolean; lastSlot: number; componentsFound?: string[]; cachesFound?: string[] }
@@ -115,8 +116,9 @@ export class App {
     const prof = await this.profileSave.loadWithRecovery();
     if (prof.data) this.profile = { ...this.profile, ...prof.data };
 
-    const overrides = await loadModelOverrides();
+    const [overrides, scans] = await Promise.all([loadModelOverrides(), loadSurfaceScans(tier)]);
     if (overrides.length) console.info('model overrides:', overrides.join(', '));
+    if (scans.length) console.info('surface scans:', scans.join(', '));
     const opts = this.settings.snapshot();
     this.input = new GameInput(this.canvas, opts);
     this.hud = new Hud(this.root);

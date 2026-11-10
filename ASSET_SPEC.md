@@ -179,7 +179,23 @@ blendshapes (Meshy won't make these, so this is a later step for hero faces only
 Name files `<set>_<clip>_<take>.fbx` (e.g. `loco_walk_start_02.fbx`). Clean-up (foot locking, loop
 points, root motion) happens in the motion pipeline from the web-shell (`docs/MOTION-IMPACT-PIPELINE.md`).
 
-## 9. Delivery checklist
+## 9. Tiling surfaces (Megascans / Fab)
+
+Level geometry is procedural boxes; its detail comes from the surface library (`src/render/surfaces.ts`),
+which generates every surface in code until a scan replaces it. Slots: `assets/manifest.ts` `SURFACES`
+(snow, packedSnow, concrete, paint, corrugated, rust, rock, ice, grate).
+
+1. Download the surface at **2K** and unzip it into `assets/surfaces/<id>/` (git-ignored).
+2. `python3 tools/pack_surface.py --id <id> [--size 1024|2048]` (needs `pip install pillow`). It finds
+   base colour, normal, AO, roughness/gloss and metalness by filename, packs **ORM**, converts DirectX
+   normals to OpenGL and writes WebP files to `public/surfaces/` (committed; they ship with the build).
+3. Set the slot's `tile` to the scan's real-world size (the Fab listing gives it, usually 2 m).
+4. Boot the game: the console lists `surface scans`. The low quality tier loads them at half size.
+
+The scan's albedo is applied as detail around each material's own colour, so pick neutral scans and
+let the material colour do the faction tint. Snow cover, the visor scan and core glow still layer on top.
+
+## 10. Delivery checklist
 
 - [ ] GLB, metres, +Y up, front = Blender Front view, pivot at the base, transforms applied
 - [ ] Within the triangle budget; LODs where listed

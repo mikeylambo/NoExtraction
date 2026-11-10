@@ -3,3 +3,6 @@ dist
 .vercel
 artifacts/tmp
 *.log
+__pycache__
+# raw Megascans/Fab downloads (packed results in public/surfaces are committed)
+assets/surfaces/

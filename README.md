@@ -21,6 +21,7 @@ npm run dev        # http://localhost:5190
 | `npm run audio-delivery` | Regenerate `AUDIO_DELIVERY.md` |
 | `npm run script:check` / `script:import` / `script:export` | Dialogue script sync (see below) |
 | `npm run lookdev-shots` | Render the lookdev stills (`artifacts/lookdev`) |
+| `python3 tools/pack_surface.py --id <slot>` | Pack a Megascans/PBR download into `public/surfaces/` (ORM, WebP); see ASSET_SPEC §9 |
 
 **Lookdev:** `npm run dev` then open `/lookdev.html`: one night courtyard pushed toward the MGS4-era
 target (keys 1–4 shots, 0 auto, O free cam, P post on/off). Asset contract: `ASSET_SPEC.md`.

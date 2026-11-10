@@ -217,8 +217,10 @@ Square, transparent background if offered (otherwise pure black). Save as `decal
 
 ## 6. Megascans / Fab shopping list (for reference)
 
-Download at **2K**, all maps (Albedo, Normal in OpenGL format, Roughness, AO, Displacement). Drop each
-surface into `assets/surfaces/<id>/` and I'll pack the ORM and wire it into `src/render/surfaces.ts`.
+Download at **2K**, all maps (Albedo, Normal, Roughness, AO). Unzip each surface into
+`assets/surfaces/<id>/` and run `python3 tools/pack_surface.py --id <id>`: it packs the ORM, converts a
+DirectX normal, and writes `public/surfaces/`, which the game loads at boot. Slots and tile sizes are in
+`assets/manifest.ts` (`SURFACES`).
 
 | Surface id | What to search for |
 |---|---|
@@ -227,9 +229,9 @@ surface into `assets/surfaces/<id>/` and I'll pack the ORM and wire it into `src
 | `ice` | blue glacier ice with cracks, and a frost overlay |
 | `concrete` | cast concrete with formwork seams; a cracked, stained concrete floor |
 | `paint` | chipped painted steel in a neutral grey (I tint it per faction in code) |
-| corrugated | corrugated sheet metal (containers, sheds) |
+| `corrugated` | corrugated sheet metal (containers, sheds) |
 | `grate` | steel tread plate or floor grating (Ch5 catwalks) |
-| rust | rusted steel |
+| `rust` | rusted steel (dark machinery, high cover) |
 | `rock` | dark basalt or granite rock face, and gravel / scree |
 
 3D scans: 3–4 large rocks or cliff chunks, 2–3 ice blocks or shards, a small rubble / debris set.
