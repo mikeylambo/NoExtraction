@@ -4,7 +4,7 @@ import { patchWorld } from '../world/Materials';
 import { fetchImage, texture } from './scans';
 import type { QualityTier } from './quality';
 
-const DIR = `${import.meta.env.BASE_URL}decals/`;
+const DIR = `${import.meta.env?.BASE_URL ?? "/"}decals/`;
 
 /** A loaded decal texture: one material (one draw call per level) plus its sheet layout. */
 export interface DecalTex {

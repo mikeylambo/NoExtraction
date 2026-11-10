@@ -83,6 +83,33 @@ export const DECAL_TEXTURES: DecalTexture[] = [
   { id: 'emblem_halcyon', source: 'GPT Halcyon emblem' },
 ];
 
+/**
+ * Environment kit: modular meshes laid over the level's collision boxes (rules: data/kit.ts).
+ * Collision stays the boxes; a piece is only the look. Files: public/assets/kit/<id>.glb.
+ * Every piece is authored at its `size` (metres, x = length, y = height, z = depth), standing on
+ * y = 0, front facing +Z; the game fits its bounding box to each box (or to each tile of one), so
+ * the visible mesh should fill its bounds. A mesh whose material is named `world` takes the box's
+ * own world material (scanned surface + snow); any other material is used as authored.
+ * `npm run kit-templates` writes code-built stand-ins for every piece (exact bounds) into
+ * public/assets/kit; an artist's GLB at the same path replaces its stand-in.
+ */
+export interface KitPiece { id: string; size: [number, number, number]; tris: number; note: string }
+
+export const KIT_PIECES: KitPiece[] = [
+  { id: 'wall_panel', size: [4, 2.5, 0.6], tris: 3000, note: 'Cast-concrete wall module, both faces finished; tiles along and up long concrete/halcyon walls' },
+  { id: 'wall_cap', size: [4, 0.3, 0.9], tris: 800, note: 'Steel coping along wall tops; tiles along' },
+  { id: 'crate', size: [1.2, 1.2, 1.2], tris: 1000, note: 'Supply crate, framed; stacked two high on tall crate boxes' },
+  { id: 'rock_a', size: [4, 3, 4], tris: 1500, note: 'Large rock; rocks are picked per box and turned in 90° steps' },
+  { id: 'rock_b', size: [4, 3, 4], tris: 1500, note: 'Large rock, second shape' },
+  { id: 'rock_c', size: [4, 3, 4], tris: 1500, note: 'Large rock, third shape' },
+  { id: 'cliff_a', size: [4, 10, 4], tris: 2500, note: 'Rock spire / cliff column for tall rock boxes (height over twice the footprint)' },
+  { id: 'cliff_b', size: [4, 10, 4], tris: 2500, note: 'Cliff column, second shape' },
+  { id: 'pipe_run', size: [4, 1, 0.8], tris: 1500, note: 'Pipe bundle on saddles (low cover); tiles along' },
+  { id: 'tank', size: [4, 5, 4], tris: 2500, note: 'Fuel/water tank on a plinth' },
+  { id: 'pole', size: [0.3, 6, 0.3], tris: 300, note: 'Steel pole: lamp posts, tower legs' },
+  { id: 'blast_barrier', size: [1, 1.5, 1], tris: 400, note: 'Concrete T-wall section (high cover); tiles along' },
+];
+
 export const TEXTURES: { id: string; path: string; note: string }[] = [
   { id: 'lut', path: 'assets/textures/grade_lut.png', note: 'Optional 256×16 colour-grade LUT for the post stack' },
 ];

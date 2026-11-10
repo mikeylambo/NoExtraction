@@ -42,8 +42,8 @@ Owners are roles until people are named: **Director** (creative + business decis
 | Decal system + first set (cracks, leaks, rust, frost, tracks, stencils, emblems) | Eng | **Done** | |
 | Surface picks: snow, concrete, ice, grate | Director | **Done** (review in game) | |
 | Rock and packed-snow surfaces | Env Art | Next | |
-| **Modular kit spec** (wall 4 m, corner, door bay, window, roof edge, catwalk, stairs, pipe runs) + **kit-over-box tech**: visual meshes follow the collision boxes, collision stays authoritative | Eng + Env Art | **Next (M1)** | |
-| Kit modelling (Meshy/Blender or Fab kits) to `ASSET_SPEC.md` budgets | Env Art | Next (M1) | kit spec |
+| **Modular kit spec + kit-over-box tech**: `KIT_PIECES` (12 pieces) + `data/kit.ts` rules; instanced meshes over the collision boxes; code-built stand-ins (`npm run kit-templates`) dress Chapter 1 today (≈1,000 boxes, +9 draw calls) | Eng | **Done** | |
+| Kit modelling to replace the stand-ins, own concepts in Blender/Meshy (Fab listings only as general study; free Megascans rocks/cliffs where they fit) | Env Art | **Next (M1)** | |
 | Props: containers, barriers, lamps, flood towers, fuel drums, crates, sandbags, cable spools, snowmobile, tracked hauler | Env Art | Next (M1 for Ch1 set) | |
 | 3D scans from the ArtPass release (rubble, sandbags): FBX → GLB + prop slots | Eng | Next (M1) | |
 | Chapter 1 dressing + lighting pass | Env Art | M1 | kit, props |

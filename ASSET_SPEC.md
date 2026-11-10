@@ -220,7 +220,36 @@ texture is one draw call per level, so prefer a few good textures (or an atlas s
 near-duplicates. Decals take snow cover from the surface under them and keep the palette law:
 stencils and emblems are tinted paint, never red.
 
-## 11. Delivery checklist
+## 11. Environment kit (modular meshes over the collision boxes)
+
+Levels stay built from boxes for collision and gameplay. The **kit** decides what is drawn: rules in
+`data/kit.ts` match boxes by material, kind and size, and lay kit pieces over them (fit one piece,
+tile a module along a wall, stack crates). Nothing about collision, AI or the bot changes.
+
+| File | What it holds |
+|---|---|
+| `assets/manifest.ts` `KIT_PIECES` | every piece: id, authored size (metres), triangle budget, what it is for |
+| `data/kit.ts` `KIT_RULES` | which boxes each piece dresses, and how (fit / tile / stack, random turns, decals kept or not) |
+| `public/assets/kit/<id>.glb` | the piece files; each is a code-built stand-in until an artist's GLB replaces it |
+
+**Authoring a piece**
+1. Run `npm run kit-templates` (or open the stand-in already in `public/assets/kit/`) and import that
+   GLB into Blender: it is the exact bounding block for the piece, pivot at the bottom centre, front
+   toward +Z (Blender's Front view).
+2. Model inside those bounds and **fill them**: the game stretches the piece's bounds onto each box,
+   and the box is what the player collides with, so a piece much smaller than its bounds leaves
+   invisible walls. Tiling modules (walls, caps, pipes, barriers) must meet their neighbours at the
+   bounds' ends. Wall modules are seen from both sides: finish both faces.
+3. Materials: name a material `world` to have the game paint it with the box's scanned surface and
+   snow (cheap, consistent), or give it its own PBR textures (§2 rules). Stay within the triangle
+   budget in the manifest.
+4. Export GLB to `public/assets/kit/<id>.glb` (replacing the stand-in) and boot: the console lists
+   `kit pieces`. Compare with `?kit=0`.
+
+Pieces are drawn with instancing (one draw call per piece and material), so a chapter with a hundred
+rocks pays a handful of draw calls; triangles are what to watch, and the benchmark (`?bench`) reports them.
+
+## 12. Delivery checklist
 
 - [ ] GLB, metres, +Y up, front = Blender Front view, pivot at the base, transforms applied
 - [ ] Within the triangle budget; LODs where listed

@@ -4,7 +4,7 @@ import { useScan } from './surfaces';
 import type { PbrSet } from './textures';
 import type { QualityTier } from './quality';
 
-const DIR = `${import.meta.env.BASE_URL}surfaces/`;
+const DIR = `${import.meta.env?.BASE_URL ?? "/"}surfaces/`;
 
 /** Fetch an image as an ImageBitmap (optionally at half size); null when missing. */
 export async function fetchImage(url: string, half: boolean): Promise<ImageBitmap | null> {

@@ -18,6 +18,7 @@
     "shots": "node tools/shots.mjs",
     "lookdev-shots": "node tools/lookdev-shots.mjs",
     "audio-delivery": "tsx tools/audio-delivery.ts",
+    "kit-templates": "tsx tools/kit-templates.ts",
     "script:check": "tsx tools/script.ts check",
     "script:import": "tsx tools/script.ts import && tsx tools/audio-delivery.ts",
     "script:export": "tsx tools/script.ts export",

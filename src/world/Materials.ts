@@ -66,7 +66,7 @@ export function patchWorld(m: THREE.MeshStandardMaterial, snow: number, core: nu
     if (det) shader.defines = { ...shader.defines, USE_DETAIL: '' };
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', `#include <common>\nvarying vec3 vWPos; varying vec3 vWNorm;${snowAttr ? '\nattribute float aSnow; varying float vASnow;' : ''}`)
-      .replace('#include <worldpos_vertex>', `#include <worldpos_vertex>\nvWPos = (modelMatrix * vec4(transformed, 1.0)).xyz; vWNorm = normalize(mat3(modelMatrix) * objectNormal);${snowAttr ? ' vASnow = aSnow;' : ''}`);
+      .replace('#include <worldpos_vertex>', `#include <worldpos_vertex>\nvec4 nxP = vec4(transformed, 1.0); mat3 nxN = mat3(modelMatrix);\n#ifdef USE_INSTANCING\nnxP = instanceMatrix * nxP; nxN = nxN * mat3(instanceMatrix);\n#endif\nvWPos = (modelMatrix * nxP).xyz; vWNorm = normalize(nxN * objectNormal);${snowAttr ? ' vASnow = aSnow;' : ''}`);
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', `#include <common>
 varying vec3 vWPos; varying vec3 vWNorm;

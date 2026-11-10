@@ -29,6 +29,7 @@ import { Overlay } from '../dev/Overlay';
 import { loadModelOverrides } from '../world/ModelOverrides';
 import { loadSurfaceScans } from '../render/scans';
 import { loadDecals } from '../render/decals';
+import { loadKit } from '../render/kit';
 
 export interface SlotData { chapterId: string; payload: SavePayload; difficulty: DifficultyId; savedAt: string; playSeconds: number }
 export interface Profile { unlocked: string[]; grades: Record<string, Grade>; endingSeen: boolean; lastSlot: number; componentsFound?: string[]; cachesFound?: string[] }
@@ -120,10 +121,11 @@ export class App {
     const prof = await this.profileSave.loadWithRecovery();
     if (prof.data) this.profile = { ...this.profile, ...prof.data };
 
-    const [overrides, scans, decals] = await Promise.all([loadModelOverrides(), loadSurfaceScans(tier), loadDecals(tier)]);
+    const [overrides, scans, decals, kit] = await Promise.all([loadModelOverrides(), loadSurfaceScans(tier), loadDecals(tier), loadKit()]);
     if (overrides.length) console.info('model overrides:', overrides.join(', '));
     if (scans.length) console.info('surface scans:', scans.join(', '));
     if (decals.length) console.info(`decals: ${decals.length} textures`);
+    if (kit.length) console.info('kit pieces:', kit.join(', '));
     const opts = this.settings.snapshot();
     this.input = new GameInput(this.canvas, opts);
     this.hud = new Hud(this.root);
