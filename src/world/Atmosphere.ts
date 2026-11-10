@@ -84,12 +84,15 @@ export class Atmosphere {
     u.uCore.value = L.coreGlow * 0.5 + (this.core < 30 ? 0.25 : 0);
     u.uBreak.value = this.breakAmount;
     u.uStars.value = (1 - L.snow * 0.8) * (1 - dark);
-    u.uMoonVis.value = (1 - Math.min(1, L.snow)) * 0.8 * (1 - dark) + 0.2 * (1 - dark);
+    // storms (snow > 0.5) bury the moon and most of the aurora
+    const storm = Math.max(0, Math.min(1, (L.snow - 0.5) / 0.4));
+    u.uMoonVis.value = (1 - storm * 0.95) * (1 - dark);
+    u.uAurora.value *= 1 - storm * 0.7;
     this.sky.update(this.time, { position: camPos } as THREE.Camera);
     // exponential height fog: density chosen so the authored far distance is ~90% fogged
     this.fog.color.setHex(L.fog).multiplyScalar(1 - dark * 0.7);
-    this.fog.density = 2.3 / Math.max(10, L.fogFar * (1 - dark * 0.4));
-    this.sun.intensity = (L.sun * 1.15 + this.flare * 0.8) * (1 - dark * 0.92);
+    this.fog.density = (2.3 / Math.max(10, L.fogFar * (1 - dark * 0.4))) * (1 + storm * 1.6);
+    this.sun.intensity = (L.sun * 1.15 * (1 - storm * 0.45) + this.flare * 0.8) * (1 - dark * 0.92);
     this.hemi.intensity = (L.ambient * 1.4 + 0.2 + this.flare * 0.4) * (1 - dark * 0.75);
     this.sun.position.copy(focus).addScaledVector(MOON_DIR, 140);
     this.sun.target.position.copy(focus);
