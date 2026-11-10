@@ -8,7 +8,7 @@ export interface ModelEntry { id: string; path: string; standIn: string; scale?:
 
 export const MODELS: ModelEntry[] = [
   { id: 'ballast', path: 'assets/models/ballast.glb', standIn: 'buildHumanoid("ballast")', note: 'Helmeted operative, ~1.8 m, origin at feet, facing −Z' },
-  { id: 'trooper', path: 'assets/models/sable_trooper.glb', standIn: 'buildHumanoid("trooper")', note: 'Sable trooper, red visor slit (threat colour)' },
+  { id: 'trooper', path: 'assets/models/sable_trooper.glb', standIn: 'buildHumanoid("trooper")', note: 'Sable trooper, red visor slit (threat colour). Rigged GLB present (Meshy; built by tools/build-character.mjs); spotter and heavy borrow it until theirs exist' },
   { id: 'spotter', path: 'assets/models/sable_spotter.glb', standIn: 'buildHumanoid("spotter")', note: 'Sable spotter with scoped rifle' },
   { id: 'heavy', path: 'assets/models/sable_heavy.glb', standIn: 'buildHumanoid("heavy")', note: 'Armoured front, LMG; ~2.05 m' },
   { id: 'aegis', path: 'assets/models/aegis07.glb', standIn: 'buildPlayerMech(AEGIS_PALETTE)', note: 'AEGIS-07, ~10 m, signal white; rig pivots are procedural, GLB is visual only' },

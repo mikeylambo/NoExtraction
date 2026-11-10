@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { PALETTE } from '../../data/palette';
-import { applyOverride } from './ModelOverrides';
+import { applyOverride, skinnedOverride } from './ModelOverrides';
+import { SkinnedHuman } from './SkinnedHuman';
 
 export type HumanStyle = 'ballast' | 'trooper' | 'spotter' | 'heavy';
 
@@ -17,6 +18,8 @@ export interface HumanRig {
   gun: THREE.Group;
   visor: THREE.Mesh;
   muzzle: THREE.Object3D;
+  /** Set when a rigged GLB replaces the box figure; the animator then drives it instead of the pivots. */
+  skin: SkinnedHuman | null;
   mats: { armor: THREE.MeshStandardMaterial; under: THREE.MeshStandardMaterial; visor: THREE.MeshStandardMaterial };
   /** Head sphere for hit tests, local to root. */
   headOffset: number;
@@ -81,8 +84,16 @@ export function buildHumanoid(style: HumanStyle): HumanRig {
   const muzzle = new THREE.Object3D(); muzzle.position.set(0, 0, longGun ? -0.62 : -0.24); gun.add(muzzle);
   if (style === 'heavy') { const drum = part(0.16, 0.16, 0.16, gunM, 0); drum.position.set(0, -0.1, -0.1); gun.add(drum); }
   if (style === 'spotter') { const scope = part(0.05, 0.05, 0.22, visorM, 0); scope.position.set(0, 0.08, -0.2); gun.add(scope); }
-  applyOverride(root, style);
-  return { root, body, hips, torso, head, armL, foreL, armR, foreR, legL, shinL, legR, shinR, gun, visor, muzzle, mats: { armor, under, visor: visorM }, headOffset: 1.62 * S.scale };
+  // Sable variants without their own model wear the trooper's until theirs arrives.
+  const src = skinnedOverride(style) ?? (style !== 'ballast' ? skinnedOverride('trooper') : null);
+  let skin: SkinnedHuman | null = null;
+  if (src) {
+    skin = new SkinnedHuman(src, { visor: S.visor, visorIntensity: S.visorI * 1.4 });
+    root.traverse((c) => { if ((c as THREE.Mesh).isMesh) c.visible = false; });
+    const facing = new THREE.Group(); facing.rotation.y = Math.PI; facing.add(skin.root); // rigs face −Z, GLBs +Z
+    body.add(facing);
+  } else applyOverride(root, style);
+  return { root, body, hips, torso, head, armL, foreL, armR, foreR, legL, shinL, legR, shinR, gun, visor, muzzle: skin ? skin.muzzle : muzzle, skin, mats: { armor, under, visor: visorM }, headOffset: 1.62 * S.scale };
 }
 
 export interface HumanPose {
@@ -128,6 +139,7 @@ export class HumanAnimator {
     r.head.rotation.x = aim * 0.05 + p.stun * Math.sin(this.phase * 0.2 + performance.now() * 0.006) * 0.4;
     r.body.rotation.x = -p.dead * 1.45;
     r.body.position.y = p.dead * 0.12;
+    if (r.skin) { r.skin.root.rotation.x = c * 0.3 + p.stun * 0.25; r.skin.update(dt, p.dead > 0.05 ? 0 : p.speed, p.aim * (1 - p.stun)); }
   }
 }
 

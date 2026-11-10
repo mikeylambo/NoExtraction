@@ -138,7 +138,7 @@ window.__look = {
   info() { return { calls: renderer.info.render.calls, tris: renderer.info.render.triangles, programs: renderer.info.programs?.length }; },
 };
 
-loadActors(scene, `${import.meta.env.BASE_URL}lookdev/soldier.glb`, set.patrol, set.heightAt, quality === 'high' ? 1024 : 512)
+loadActors(scene, `${import.meta.env.BASE_URL}assets/models/sable_trooper.glb`, set.patrol, set.heightAt, quality === 'high' ? 1024 : 512)
   .then((r) => { actors = r.actors; patroller = r.patroller; })
   .catch((e) => console.error('actors failed', e))
   .finally(() => { transientCache = null; window.__look!.ready = true; });
