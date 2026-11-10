@@ -96,6 +96,9 @@ insignia. Ask GPT for "original design" and avoid naming other games in prompts.
 
 ## 5. GPT prompt templates
 
+Ready-to-paste, filled-in prompts for every asset (plus chapter target frames, insignia and the
+Megascans shopping list) are in **`GPT_PROMPTS.md`**. The templates below are the pattern behind them.
+
 Feed the GPT image into Meshy's image-to-3D. Clean input means clean geometry.
 
 **Character turnaround (one image per character):**

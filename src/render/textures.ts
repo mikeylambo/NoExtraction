@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 /**
- * Procedural PBR texture sets for the lookdev scene. Everything is tileable and generated at boot
+ * Procedural PBR texture sets, shared by the lookdev scene and the game's world materials. Everything is tileable and generated at boot
  * (no texture downloads): albedo (sRGB), normal (from a height field), and ORM (R = AO, G = rough,
  * B = metal — the glTF packing, so authored assets drop into the same slots).
  */
@@ -27,7 +27,8 @@ export function fbm(u: number, v: number, base: number, oct: number, seed: numbe
   return sum / norm;
 }
 
-export interface PbrSet { map: THREE.Texture; normalMap: THREE.Texture; orm: THREE.Texture }
+/** `lum` and `rough` are the set's mean albedo luminance and roughness, so world materials can use it as detail around their own values. */
+export interface PbrSet { map: THREE.Texture; normalMap: THREE.Texture; orm: THREE.Texture; lum: number; rough: number }
 
 type Gen = (u: number, v: number) => { h: number; r: number; g: number; b: number; ao: number; rough: number; metal: number };
 
@@ -35,9 +36,10 @@ function build(size: number, gen: Gen, normalStrength: number, repeat: number): 
   const n = size * size;
   const h = new Float32Array(n);
   const alb = new Uint8Array(n * 4), orm = new Uint8Array(n * 4), nor = new Uint8Array(n * 4);
+  let lum = 0, rough = 0;
   for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
     const i = y * size + x; const s = gen(x / size, y / size);
-    h[i] = s.h;
+    h[i] = s.h; lum += 0.2126 * s.r + 0.7152 * s.g + 0.0722 * s.b; rough += s.rough;
     alb[i * 4] = clamp255(s.r); alb[i * 4 + 1] = clamp255(s.g); alb[i * 4 + 2] = clamp255(s.b); alb[i * 4 + 3] = 255;
     orm[i * 4] = clamp255(s.ao); orm[i * 4 + 1] = clamp255(s.rough); orm[i * 4 + 2] = clamp255(s.metal); orm[i * 4 + 3] = 255;
   }
@@ -53,14 +55,14 @@ function build(size: number, gen: Gen, normalStrength: number, repeat: number): 
     t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; t.magFilter = THREE.LinearFilter;
     t.anisotropy = 8; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.needsUpdate = true; return t;
   };
-  return { map: tex(alb, true), normalMap: tex(nor, false), orm: tex(orm, false) };
+  return { map: tex(alb, true), normalMap: tex(nor, false), orm: tex(orm, false), lum: lum / n, rough: rough / n };
 }
 const clamp255 = (v: number) => Math.max(0, Math.min(255, v * 255));
 const smooth = (a: number, b: number, x: number) => { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 
 /** Wind-packed snow: sastrugi ripples, crust breaks, fine grain. */
-export function snowSet(repeat: number): PbrSet {
-  return build(512, (u, v) => {
+export function snowSet(repeat: number, size = 512): PbrSet {
+  return build(size, (u, v) => {
     const ripple = Math.sin((u * 9 + fbm(u, v, 3, 3, 4) * 2.2) * Math.PI * 2) * 0.5 + 0.5;
     const crust = fbm(u, v, 6, 4, 9);
     const grain = fbm(u, v, 64, 2, 21);
@@ -80,8 +82,8 @@ export function packedSnowSet(repeat: number): PbrSet {
 }
 
 /** Cast concrete: formwork panel seams, tie holes, rain streaks, grime pooling low. */
-export function concreteSet(repeat: number): PbrSet {
-  return build(512, (u, v) => {
+export function concreteSet(repeat: number, size = 512): PbrSet {
+  return build(size, (u, v) => {
     const base = fbm(u, v, 4, 5, 51); const pits = fbm(u, v, 48, 2, 57);
     const seamU = Math.min((u * 2) % 1, 1 - ((u * 2) % 1)), seamV = Math.min((v * 4) % 1, 1 - ((v * 4) % 1));
     const seam = 1 - smooth(0, 0.012, Math.min(seamU, seamV));
@@ -95,8 +97,8 @@ export function concreteSet(repeat: number): PbrSet {
 }
 
 /** Painted steel with chipped paint over bare/rusted metal and scratches. `paint` is linear-ish RGB. */
-export function paintedMetalSet(paint: [number, number, number], repeat: number, seed = 0): PbrSet {
-  return build(512, (u, v) => {
+export function paintedMetalSet(paint: [number, number, number], repeat: number, seed = 0, size = 512): PbrSet {
+  return build(size, (u, v) => {
     const chipN = fbm(u, v, 8, 6, 71 + seed); const edge = fbm(u, v, 20, 3, 79 + seed);
     const chip = smooth(0.66, 0.7, chipN + edge * 0.12);
     const scratch = Math.max(0, 1 - Math.abs(Math.sin((u * 1.7 + v * 0.3 + fbm(u, v, 3, 2, 83 + seed) * 0.4) * 160)) * 25) * smooth(0.5, 0.8, fbm(u, v, 3, 2, 89 + seed));
@@ -112,13 +114,33 @@ export function paintedMetalSet(paint: [number, number, number], repeat: number,
 }
 
 /** Rough frost-covered rock. */
-export function rockSet(repeat: number): PbrSet {
-  return build(512, (u, v) => {
+export function rockSet(repeat: number, size = 512): PbrSet {
+  return build(size, (u, v) => {
     const r = fbm(u, v, 4, 6, 111, 0.55); const crack = 1 - smooth(0, 0.04, Math.abs(fbm(u, v, 3, 4, 117) - 0.5));
     const frost = smooth(0.55, 0.75, fbm(u, v, 8, 3, 121));
     const c = 0.2 + r * 0.16 - crack * 0.1;
     const fc = 0.75;
     return { h: r - crack * 0.4, r: c + (fc - c) * frost, g: c + (fc * 1.02 - c) * frost, b: c * 1.06 + (fc * 1.06 - c) * frost, ao: 1 - crack * 0.6, rough: 0.9 - frost * 0.2, metal: 0 };
+  }, 4, repeat);
+}
+
+/** Shelf ice: smooth, glassy, with long pressure cracks and trapped bubbles. */
+export function iceSet(repeat: number, size = 512): PbrSet {
+  return build(size, (u, v) => {
+    const body = fbm(u, v, 3, 4, 131); const crack = 1 - smooth(0, 0.025, Math.abs(fbm(u, v, 2, 5, 137) - 0.5));
+    const bub = smooth(0.78, 0.85, fbm(u, v, 40, 2, 141)); const frost = smooth(0.6, 0.85, fbm(u, v, 6, 3, 149));
+    const c = 0.55 + body * 0.15 + bub * 0.15 + frost * 0.2 + crack * 0.12;
+    return { h: body * 0.3 - crack * 0.5 + frost * 0.2, r: c * 0.86, g: c * 0.95, b: c, ao: 1 - crack * 0.3, rough: 0.12 + frost * 0.5 + crack * 0.2, metal: 0 };
+  }, 2, repeat);
+}
+
+/** Steel floor grating: a square bar grid over darkness. */
+export function grateSet(repeat: number, size = 256): PbrSet {
+  return build(size, (u, v) => {
+    const gu = Math.abs(((u * 16) % 1) - 0.5), gv = Math.abs(((v * 16) % 1) - 0.5);
+    const bar = Math.max(smooth(0.36, 0.42, gu), smooth(0.36, 0.42, gv)); const wear = fbm(u, v, 8, 3, 151);
+    const c = 0.08 + bar * (0.38 + wear * 0.12);
+    return { h: bar, r: c, g: c * 1.01, b: c * 1.03, ao: 0.4 + bar * 0.6, rough: 0.5 + wear * 0.3 - bar * 0.1, metal: bar * 0.8 };
   }, 4, repeat);
 }
 

@@ -13,6 +13,8 @@ export interface GameOptions {
   padSensitivity: number;
   invertY: boolean;
   fov: number;
+  /** Render quality: auto picks from the GPU (integrated GPUs get low). */
+  graphics: 'auto' | 'low' | 'high';
   subtitles: boolean;
   subtitleSize: SubtitleSize;
   subtitleBackground: number;
@@ -38,6 +40,7 @@ export const DEFAULT_OPTIONS: GameOptions = {
   padSensitivity: 1,
   invertY: false,
   fov: 70,
+  graphics: 'auto',
   subtitles: true,
   subtitleSize: 'medium',
   subtitleBackground: 0.55,

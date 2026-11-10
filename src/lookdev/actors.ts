@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { PALETTE } from '../../data/palette';
-import { lightBeam } from './atmosphere';
+import { lightBeam } from '../render/atmosphere';
 
 /**
  * Skinned, animation-blended characters. The GLB is a stand-in (three.js example soldier, Mixamo

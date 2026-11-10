@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { buildSet } from './set';
 import { loadActors, type Actor } from './actors';
 import { FilmPost } from './post';
-import { Sky, Snowfall, BlowingSnow, installHeightFog, MOON_DIR, MOON_COLOR, FOG_COLOR } from './atmosphere';
+import { Sky, Snowfall, BlowingSnow, installHeightFog, nightEnvironment, MOON_DIR, MOON_COLOR, FOG_COLOR } from '../render/atmosphere';
 
 /**
  * Lookdev scene (lookdev.html): one night courtyard pushed as far as the browser renderer goes,
@@ -27,18 +27,8 @@ const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(FOG_COLOR.getHex(), 0.011);
 const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 2000);
 
-// environment: a dim sky dome plus a few warm and cold "lamp" cards, so metals catch believable highlights
-{
-  const env = new THREE.Scene();
-  const dome = new THREE.SphereGeometry(50, 32, 16); const c = new Float32Array(dome.attributes.position.count * 3);
-  for (let i = 0; i < dome.attributes.position.count; i++) { const y = dome.attributes.position.getY(i) / 50; const k = Math.max(0, y); const col = new THREE.Color().copy(FOG_COLOR).multiplyScalar(1.4).lerp(new THREE.Color(0x05080f), Math.min(1, k * 1.6)); if (y < 0) col.setRGB(0.14, 0.16, 0.19); c.set([col.r, col.g, col.b], i * 3); }
-  dome.setAttribute('color', new THREE.BufferAttribute(c, 3));
-  env.add(new THREE.Mesh(dome, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide })));
-  const card = (color: number, i: number, x: number, y: number, z: number, s: number) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(s, s), new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(i), side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); env.add(m); };
-  card(0xffc890, 3, -20, 18, 10, 6); card(0xffc890, 3, 18, 16, -12, 5); card(0xdfe9ff, 6, 30, 25, -30, 8);
-  card(0xb8cfff, 4, MOON_DIR.x * 45, MOON_DIR.y * 45, MOON_DIR.z * 45, 4);
-  const pmrem = new THREE.PMREMGenerator(renderer); scene.environment = pmrem.fromScene(env, 0.02).texture; scene.environmentIntensity = 0.55;
-}
+// environment: a dim sky dome plus warm and cold lamp cards (shared with the game)
+scene.environment = nightEnvironment(renderer); scene.environmentIntensity = 0.55;
 
 // moonlight (key) + cold sky fill
 const moon = new THREE.DirectionalLight(MOON_COLOR, 1.0);

@@ -4,7 +4,9 @@ import {
   defaultCoreSettings, tunables, type RendererAdapter, type UIScreenModel,
 } from '@slu/web-shell';
 import { PostStack, createPalette } from '@slu/web-shell/look/three';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { installHeightFog, nightEnvironment } from '../render/atmosphere';
+import { FilmLayer } from '../render/film';
+import { resolveTier, tierSettings, quality, gpuName, type QualityTier } from '../render/quality';
 import { SubtitleView } from '@slu/narrative';
 import { GameInput, ACTIONS } from './Input';
 import { Session, type SavePayload } from './Session';
@@ -39,6 +41,7 @@ export class App {
   readonly canvas: HTMLCanvasElement;
   readonly renderer: THREE.WebGLRenderer;
   post!: PostStack;
+  film!: FilmLayer;
   readonly platform = new BrowserPlatform();
   readonly storage = new BrowserStorage('no-extraction');
   settings!: SettingsStore<AllSettings>;
@@ -78,6 +81,8 @@ export class App {
   private ignoreBackUntil = 0;
 
   constructor(readonly root: HTMLElement) {
+    // height fog replaces three's fog chunks: must happen before any material compiles
+    installHeightFog(0, 0.05);
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'nx-canvas';
     root.appendChild(this.canvas);
@@ -85,13 +90,15 @@ export class App {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.25;
+    this.renderer.toneMappingExposure = 1.3;
     this.renderer.info.autoReset = false;
   }
 
   async boot(): Promise<void> {
     this.settings = new SettingsStore<AllSettings>(this.storage, 'settings', { ...defaultCoreSettings, ...DEFAULT_OPTIONS });
     await this.settings.load();
+    const tier = resolveTier(this.settings.snapshot().graphics ?? 'auto', this.renderer);
+    console.info(`render quality: ${tier} (gpu: ${gpuName()})`);
     const adapter: RendererAdapter = {
       id: 'three',
       resize: (w, h, dpr) => this.resize(w, h, dpr),
@@ -124,13 +131,13 @@ export class App {
       onEnding: () => this.ending(),
     });
     this.post = new PostStack(this.renderer, this.session.w.scene, this.session.w.camera, tunables, createPalette({ void: '#0b1118', 'void.deep': '#04070a', highlight: '#f4f7ff' }));
-    tunables.set('look.post', 'quality', this.headless ? 'low' : 'high');
+    this.film = new FilmLayer(this.post, this.session.w.scene, this.session.w.camera);
+    this.film.setTier(this.headless ? 'low' : tier);
     tunables.set('look.post', 'grainAmount', 0.02);
     tunables.set('look.post', 'bloomThreshold', 0.82);
-    // image-based fill so metals read at night (kept low: the world is lit by moon, aurora and lamps)
-    const pmrem = new THREE.PMREMGenerator(this.renderer);
-    this.session.w.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-    this.session.w.scene.environmentIntensity = 0.32;
+    // image-based fill so metals read at night: the lookdev night dome with lamp and moon cards
+    this.session.w.scene.environment = nightEnvironment(this.renderer);
+    this.session.w.scene.environmentIntensity = 0.5;
     this.session.w.postFx = (kind, amount) => {
       if (kind === 'radialBlur') this.post.distort(0.5, 0.5, { strength: amount * 12, life: 0.35, speed: 1.6 });
       else if (kind === 'chromatic') this.post.pulse('chromatic.hit', amount);
@@ -173,12 +180,21 @@ export class App {
     tunables.set('look.post', 'distortion', !s.reduceBlur);
     this.audio.setBusVolume('master', s.masterVolume); this.audio.setBusVolume('music', s.musicVolume); this.audio.setBusVolume('sfx', s.sfxVolume); this.audio.setBusVolume('voice', s.voVolume); this.audio.setBusVolume('ambience', s.ambienceVolume);
     this.difficulty = s.difficulty; this.session.setDifficulty(s.difficulty);
+    this.applyGraphics(s.graphics ?? 'auto');
     if (s.fullscreen && !document.fullscreenElement) void this.platform.requestFullscreen().catch(() => {});
     if (!s.fullscreen && document.fullscreenElement) void this.platform.exitFullscreen();
   }
 
+  /** Live part of a quality change (post resolution, AO, pixel ratio). Texture and shadow sizes follow on the next load. */
+  private applyGraphics(choice: 'auto' | 'low' | 'high'): void {
+    const before: QualityTier = quality();
+    const t = resolveTier(choice, this.renderer);
+    this.film?.setTier(this.headless ? 'low' : t);
+    if (t !== before) this.resize(innerWidth, innerHeight, devicePixelRatio);
+  }
+
   resize(w: number, h: number, dpr: number): void {
-    const ratio = Math.min(dpr, this.headless ? 1 : 2);
+    const ratio = Math.min(dpr, this.headless ? 1 : tierSettings().maxPixelRatio);
     this.renderer.setPixelRatio(ratio);
     this.renderer.setSize(w, h, false);
     this.post?.resize(w, h, ratio);
@@ -529,7 +545,7 @@ export class App {
       this.session.render(pd);
       const desat = this.hud.dead;
       this.canvas.style.filter = desat > 0 ? `saturate(${1 - desat * 0.85}) brightness(${1 - desat * 0.2})` : '';
-      if (!this.headless || this.frameCount % 15 === 0) { this.post.setCamera(w.camera); this.post.update(real, now / 1000); this.post.render(); }
+      if (!this.headless || this.frameCount % 15 === 0) { this.post.setCamera(w.camera); this.film.update(now / 1000, w.camera, w.cineFocus); this.post.update(real, now / 1000); this.post.render(); }
     } else {
       this.title.update(real);
       this.renderer.render(this.title.scene, this.title.camera);

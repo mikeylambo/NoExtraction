@@ -74,6 +74,8 @@ export class World {
   readonly dialogue: DialogueDirector;
   readonly sequences = new SequenceDirector<StoryAction>();
   readonly cinematic = new CinematicCamera();
+  /** Depth-of-field focus distance while a cinematic shot owns the camera (null in gameplay). */
+  cineFocus: number | null = null;
   readonly checkpoint: StoryCheckpoint<Inventory, import('./Session').CheckpointExtra>;
 
   // perception & AI

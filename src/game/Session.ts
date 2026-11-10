@@ -426,6 +426,7 @@ export class Session {
     for (const m of w.mechHostiles) m.present(dt);
     const gp = this.gameplayPose();
     const pose = w.cinematic.update(dt, gp);
+    w.cineFocus = pose && w.sequences.cinematic ? Math.hypot(pose.target.x - pose.position.x, pose.target.y - pose.position.y, pose.target.z - pose.position.z) : null;
     if (pose) {
       w.camera.position.set(pose.position.x, pose.position.y, pose.position.z);
       w.camera.lookAt(pose.target.x, pose.target.y, pose.target.z);

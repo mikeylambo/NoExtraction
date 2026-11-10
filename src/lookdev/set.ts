@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { PALETTE } from '../../data/palette';
-import { fbm, snowSet, packedSnowSet, concreteSet, paintedMetalSet, rockSet, chainLinkTexture, pbrMaterial } from './textures';
-import { lightBeam, glare } from './atmosphere';
+import { fbm, snowSet, packedSnowSet, concreteSet, paintedMetalSet, rockSet, chainLinkTexture, pbrMaterial } from '../render/textures';
+import { lightBeam, glare } from '../render/atmosphere';
 
 /**
  * The lookdev set: a Sable perimeter courtyard on the ice shelf at night. Everything here is built
