@@ -19,10 +19,28 @@ npm run dev        # http://localhost:5190
 | `npm run bot -- ch3 [--loud] [--components=flightGovernor,missileRack,arcBlade]` | Bot run of chosen chapters (`artifacts/bot-*.json`) |
 | `npm run shots -- artifacts/shots ch1,ch5` | Screenshot tour |
 | `npm run audio-delivery` | Regenerate `AUDIO_DELIVERY.md` |
+| `npm run script:check` / `script:import` / `script:export` | Dialogue script sync (see below) |
 | `npm run lookdev-shots` | Render the lookdev stills (`artifacts/lookdev`) |
 
 **Lookdev:** `npm run dev` then open `/lookdev.html`: one night courtyard pushed toward the MGS4-era
 target (keys 1–4 shots, 0 auto, O free cam, P post on/off). Asset contract: `ASSET_SPEC.md`.
+
+## Writing dialogue
+
+The dialogue is written in `script/NoExtraction.fountain`, a [Fountain](https://fountain.io) screenplay.
+Open it in Highland, Beat, Slugline, or VS Code with a Fountain extension. Every spoken block ends with
+its line id as a note, `[[c1.wren.open1]]`. The cue is the speaker label from `data/story/lines.ts`
+(BALLAST, AVA, AEGIS-07, THE MARSHAL, HALCYON SYSTEMS, SABLE), and the parenthetical is the line's
+performance note. Scene headings and action are free text for the writer and never reach the game.
+
+- `npm run script:import` writes script text and parentheticals into `data/story/*.ts` and refreshes
+  `AUDIO_DELIVERY.md`. A block with a new id is appended to its chapter's data file; it plays once a
+  chapter script in `src/story` says it.
+- `npm run script:check` fails if the script and the game data disagree (part of `check` and `check:fast`).
+- `npm run script:export` appends game lines the script doesn't place yet to the end of the script.
+
+The parser is game-agnostic (`parseFountain`, `fountainDialogue` in `@slu/narrative`), so other SLU games
+can reuse it.
 
 ## Layout
 

@@ -1,7 +1,7 @@
 /**
  * The readability law (GDD §2, §13). Every colour with gameplay meaning comes from here; the lint
  * step fails if these hex values appear anywhere else in src/.
- *   red   — Sable threat only      amber — Wren only      cyan — Ballast's information only
+ *   red   — Sable threat only      amber — Ava only      cyan — Ballast's information only
  *   violet-white — the failing core       signal white → red — Aegis HUD as systems fail
  */
 export const PALETTE = {
@@ -35,7 +35,7 @@ export type ColorblindMode = 'off' | 'protan' | 'deutan' | 'tritan';
 
 /**
  * Colourblind remaps keep the law's three categories distinct; shape + icon carry meaning too
- * (threat = triangle/eye, Wren = diamond, Ballast info = circle/chevron).
+ * (threat = triangle/eye, Ava = diamond, Ballast info = circle/chevron).
  */
 export const COLORBLIND: Record<ColorblindMode, { red: string; amber: string; cyan: string }> = {
   off: { red: CSS.red, amber: CSS.amber, cyan: CSS.cyan },

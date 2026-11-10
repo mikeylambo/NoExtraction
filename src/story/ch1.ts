@@ -1,7 +1,7 @@
 import type { ChapterScript } from './Script';
 
 /**
- * Chapter 1 — The Job. Onboarding through the mission (GDD §16), Wren live on the radio.
+ * Chapter 1 — The Job. Onboarding through the mission (GDD §16), Ava live on the radio.
  * Prompts are contextual and fade permanently after two successful uses; nothing pauses play.
  */
 export const CH1_SCRIPT: ChapterScript = {

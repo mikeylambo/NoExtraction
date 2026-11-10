@@ -6,8 +6,8 @@ import { applyOverride } from './ModelOverrides';
 const box = (w: number, h: number, d: number, m: THREE.Material, x = 0, y = 0, z = 0) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); b.position.set(x, y, z); b.castShadow = true; return b; };
 
 /**
- * Wren's extraction ship (hero stand-in; a GLB at assets/models/wren_ship.glb overrides it).
- * Halcyon white hull, amber running lights (amber = Wren), engine glow.
+ * Ava's extraction ship (hero stand-in; a GLB at assets/models/wren_ship.glb overrides it).
+ * Halcyon white hull, amber running lights (amber = Ava), engine glow.
  */
 export function buildWrenShip(): { root: THREE.Group; engines: THREE.Sprite[]; lights: THREE.Sprite[] } {
   const root = new THREE.Group();

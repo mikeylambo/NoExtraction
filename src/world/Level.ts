@@ -59,7 +59,7 @@ export class LevelContext {
   gate(def: GateDef): void { this.w.gates.add(this.b, def); }
   collapse(list: CollapseInstance[]): void { this.w.collapse.register(list); }
 
-  /** Wren's cache: amber light, amber prompt, recording + contents. */
+  /** Ava's cache: amber light, amber prompt, recording + contents. */
   cache(id: string, at: Vec3T, yaw = 0): void {
     const def = CACHES.find((c) => c.id === id)!;
     const w = this.w;
@@ -92,7 +92,7 @@ export class LevelContext {
         if (c.routeMarker) w.state.set(`route.${c.routeMarker}`);
         w.audio?.sfx('cache.chime', null, 1);
         w.audio?.sfx('cache.click', null, 0.8);
-        w.hud?.toast(def.kind === 'story' ? 'Wren' : 'Wren · personal', 'amber');
+        w.hud?.toast(def.kind === 'story' ? 'Ava' : 'Ava · personal', 'amber');
         w.dialogue.sayAll(def.lines, { channel: 'recording' });
         w.emit('cache', id);
         emitter.intensity = 0;

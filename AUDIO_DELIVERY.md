@@ -31,7 +31,7 @@ Michael. Dry, professional, then furious, then focused. Helmeted throughout: sli
 | `c2.ballast.alarm` | Copy. Quiet. |  | 1.4 s | `assets/vo/ballast/c2.ballast.alarm.ogg` |
 | `c2.ballast.missileRack` | Missile rack. Somebody's going to miss this. |  | 3.3 s | `assets/vo/ballast/c2.ballast.missileRack.ogg` |
 | `c2.ballast.bridge` | Bridge. Ninety seconds. Hold it. | Running, breathing hard. | 2.7 s | `assets/vo/ballast/c2.ballast.bridge.ogg` |
-| `c2.ballast.wait` | Wren. Wren! I am on the bridge! | Furious. Breathless. | 3.4 s | `assets/vo/ballast/c2.ballast.wait.ogg` |
+| `c2.ballast.wait` | Ava. Ava! I am on the bridge! | Furious. Breathless. | 3.4 s | `assets/vo/ballast/c2.ballast.wait.ogg` |
 | `c2.ballast.pad1` | Four minutes. I was four minutes late. | Quiet. Disbelief. | 3.3 s | `assets/vo/ballast/c2.ballast.pad1.ogg` |
 | `c2.ballast.pad2` | Acceptable parameters. Sure. | Talking back to the PA. | 1.8 s | `assets/vo/ballast/c2.ballast.pad2.ogg` |
 | `c2.ballast.quake` | Oh, come on— | The ground goes out from under him. | 1.8 s | `assets/vo/ballast/c2.ballast.quake.ogg` |
@@ -97,7 +97,7 @@ Michael. Dry, professional, then furious, then focused. Helmeted throughout: sli
 | `c6.ballast.final` | …You’re late. | Final line. Dry. Exhausted. One take. | 1.4 s | `assets/vo/ballast/c6.ballast.final.ogg` |
 | `c6.ballast.final` (alt) | …You’re late. | Alternate warmer take, used when allPersonalCaches | 1.4 s | `assets/vo/ballast/c6.ballast.final.warm.ogg` |
 
-### WREN (42 lines)
+### AVA (42 lines)
 
 Live radio in Chapter 1 only (band-limited radio). Every cache line is a recording made before she lifted off — steady, rehearsed, fragile underneath. Last line of the game is live again.
 
@@ -357,7 +357,7 @@ Designed voices. Barks are about their own evacuation — never comic, occasiona
 | `shelf.tilt` | collapse | Deep shelf tilt groan | 3 s | sfx | `assets/sfx/shelf_tilt.ogg` |
 | `steam.vent` | collapse | Steam vent hiss | 3 s | sfx | `assets/sfx/steam_vent.ogg` |
 | `aurora.flare` | collapse | Static wash, sky brighten | 1.5 s | sfx | `assets/sfx/aurora_flare.ogg` |
-| `cache.chime` | cache | Amber cache chime (Wren) | 1 s | sfx | `assets/sfx/cache_chime.ogg` |
+| `cache.chime` | cache | Amber cache chime (Ava) | 1 s | sfx | `assets/sfx/cache_chime.ogg` |
 | `cache.click` | cache | Recording click-in | 0.3 s | sfx | `assets/sfx/cache_click.ogg` |
 | `cache.hiss` | cache | Tape hiss bed under recordings | 4 s | sfx | `assets/sfx/cache_hiss.ogg` |
 | `mech.servo` | aegis | Servo whine | 0.6 s | sfx | `assets/sfx/mech_servo.ogg` |
@@ -410,7 +410,7 @@ Designed voices. Barks are about their own evacuation — never comic, occasiona
 | `marshal2` | Boss theme stage 2 | 64 s | yes | `assets/music/marshal2.ogg` |
 | `marshal3` | Boss theme stage 3 | 64 s | yes | `assets/music/marshal3.ogg` |
 | `ascent` | Builds, then cuts to silence at the atmosphere break | 120 s | no | `assets/music/ascent.ogg` |
-| `credits` | Wren theme, full arrangement | 150 s | no | `assets/music/credits.ogg` |
+| `credits` | Ava theme, full arrangement | 150 s | no | `assets/music/credits.ogg` |
 | `title` | Title: planet cracking, sparse | 120 s | yes | `assets/music/title.ogg` |
 
 ### Adaptive stems

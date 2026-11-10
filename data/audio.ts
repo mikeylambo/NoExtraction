@@ -46,7 +46,7 @@ export const SFX: SfxDef[] = [
   s('shelf.tilt', 'collapse', 'Deep shelf tilt groan', 3),
   s('steam.vent', 'collapse', 'Steam vent hiss', 3),
   s('aurora.flare', 'collapse', 'Static wash, sky brighten', 1.5, 'sfx', false),
-  s('cache.chime', 'cache', 'Amber cache chime (Wren)', 1, 'sfx', false),
+  s('cache.chime', 'cache', 'Amber cache chime (Ava)', 1, 'sfx', false),
   s('cache.click', 'cache', 'Recording click-in', 0.3, 'sfx', false),
   s('cache.hiss', 'cache', 'Tape hiss bed under recordings', 4, 'sfx', false),
   s('mech.servo', 'aegis', 'Servo whine', 0.6),
@@ -97,7 +97,7 @@ export const MUSIC: MusicCue[] = [
   m('aegis', 'Full theme, first played at boot-up', 96),
   m('marshal1', 'Boss theme stage 1', 64), m('marshal2', 'Boss theme stage 2', 64), m('marshal3', 'Boss theme stage 3', 64),
   m('ascent', 'Builds, then cuts to silence at the atmosphere break', 120, false),
-  m('credits', 'Wren theme, full arrangement', 150, false),
+  m('credits', 'Ava theme, full arrangement', 150, false),
   m('title', 'Title: planet cracking, sparse', 120),
 ];
 
@@ -105,7 +105,7 @@ export const MIX = {
   /** VO always above everything except collapse stings. */
   voDuckOthersDb: -8,
   collapseStingOverVo: true,
-  /** Wren's recordings duck combat barks by −12 dB. */
+  /** Ava's recordings duck combat barks by −12 dB. */
   recordingDuckBarksDb: -12,
   /** Atmosphere break: everything to −60 dB over 0.4 s; only breathing + reactor tick remain. */
   silence: { db: -60, seconds: 0.4, keep: ['cockpit.breath', 'reactor.tick'] },

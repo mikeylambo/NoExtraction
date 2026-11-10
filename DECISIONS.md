@@ -69,14 +69,14 @@ changes (old → new) live in `TUNING_LOG.md`.
    an optional component (8 combinations must exist). Decision: the lift/bay is the critical path; the
    governor sits in a Halcyon cargo pod off the path behind a weakened door (breacher) or a crawl
    round the back. Taking it costs Timed Zone seconds.
-2. **Why the governor is in the shaft.** In Ch1 Wren tells Ballast to drop the pulled governor in the
+2. **Why the governor is in the shaft.** In Ch1 Ava tells Ballast to drop the pulled governor in the
    Halcyon cargo tube; in Ch3 her cache says the cargo never shipped — it is stuck in the colony lift
    shaft. ("Undoing his own sabotage" stays literal.)
 3. **Why AEGIS is at the forward depot.** Sable could not fly it out without the governor, so they left
-   it at their forward depot at the end of the conduits. Wren's Ch5 cache says so.
+   it at their forward depot at the end of the conduits. Ava's Ch5 cache says so.
 4. **"The clock appears for the first time" (Ch1).** Implemented as a non-failing narrative
    "Extraction window" clock (8:00) that continues into Ch2; The Pad is the first real Timed Zone.
-5. **The Pad is a lost cause by design.** Reaching the pad completes the zone; Wren's ship is already
+5. **The Pad is a lost cause by design.** Reaching the pad completes the zone; Ava's ship is already
    climbing in every outcome. Failing the clock restarts at the bridge.
 6. **Mech numbers.** GDD §7 says starting values are targets and AlphaMech's tuned feel wins:
    movement, energy and camera use the AlphaMech baseline (quick boost 20 energy, assault drain 6/s,
@@ -97,16 +97,16 @@ changes (old → new) live in `TUNING_LOG.md`.
     (the hit lands regardless). Ascent jettisons weapons → shoulders → armor → booster.
 12. **Marshal arena shrink.** Phase 2 telegraphs (3 s shelf crack) and drops the outer ring of the
     platform; bounds shrink to two thirds. Twin Wardens join once.
-13. **Ballast's real name** is "Teo", said once by Wren in the last personal cache (pc4). The final
+13. **Ballast's real name** is "Teo", said once by Ava in the last personal cache (pc4). The final
     line has an alternate warmer take when all four personal caches were found (VoiceTrack alt take,
     condition `allPersonalCaches`).
 14. **Readability law in AI visuals.** Enemy muzzle glints, vision cones, drone beams, alarm lamps,
-    tracers and lockdown UI are red; Wren's caches, ship lights and subtitle label are amber (with a
+    tracers and lockdown UI are red; Ava's caches, ship lights and subtitle label are amber (with a
     diamond marker); Ballast's HUD, prompts, takedown prompt and visor are cyan; the core is violet.
     Warm fire-barrel light and white gate trim avoid the three meaning colours. Lint enforces that the
     three hex values only appear in `data/palette.ts`.
 15. **Colourblind modes** remap the three CSS meaning colours (protan/deutan/tritan); shapes carry
-    meaning too (eye icon = threat, diamond = Wren, circle/chevron = Ballast info).
+    meaning too (eye icon = threat, diamond = Ava, circle/chevron = Ballast info).
 16. **Story difficulty** lowers enemy damage/accuracy, lengthens telegraphs and detection fill, raises
     the health regen cap to 100 and boss armor to 60%. Hard shortens telegraphs and fill times
     (constitution §19: information and execution first, damage last).

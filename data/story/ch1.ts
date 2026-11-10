@@ -1,6 +1,6 @@
 import { L, P } from './lines';
 
-/** Chapter 1 — The Job (72%). Wren live on the radio: the only time we hear her in real time. */
+/** Chapter 1 — The Job (72%). Ava live on the radio: the only time we hear her in real time. */
 export const LINES = [
   L('c1.halcyon.core72', 'halcyon', 'Halcyon Resource Group. Core Stability: seventy-two percent. All personnel proceed to assigned extraction points. Thank you for your service.', P.broadcast, 'Calm, polite, corporate. Slight PA reverb.'),
   L('c1.wren.open1', 'wren', "That's the broadcast. Seventy-two and falling. I'm holding the pad until oh-four-forty.", P.story, 'Live radio. Brisk, warm under the professionalism.'),

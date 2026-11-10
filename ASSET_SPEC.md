@@ -45,7 +45,7 @@ GPT image  ──►  Meshy (image → 3D, PBR)  ──►  Blender cleanup  ─
 | Enemy character (trooper/spotter/heavy) | 15–25k | LOD1 50%, LOD2 20% | 2048 body + 1024 gear |
 | Player mech (AEGIS-07) | 40–60k | LOD1 50% | 2 × 2048 |
 | Enemy mech (Warden, Sovereign) | 30–50k | LOD1 50%, LOD2 25% | 2 × 2048 |
-| Ship (Wren's) | 30–50k | LOD1 40% | 2 × 2048 |
+| Ship (Ava's) | 30–50k | LOD1 40% | 2 × 2048 |
 | Building module (bunker, shed) | 2–8k | none | 1024 unique + tiling materials |
 | Medium prop (container, barrier, lamp) | 500–3k | LOD1 50% if > 1.5k | 1024 |
 | Small prop (drum, crate, sandbag) | 150–1k | none | 512 |
@@ -63,7 +63,7 @@ material languages carry the story:
   colour is a **red visor/sensor glow**. Red always means Sable threat. Never use it on anything else.
 - **Halcyon (the crew Ballast works for):** cleaner engineering, off-white composites with grey
   panelling, cyan information lights. Cyan only for Ballast's information (HUD, visor, scan).
-- **Wren:** amber running lights. Amber only for Wren.
+- **Ava:** amber running lights. Amber only for Ava.
 - **The Core:** violet-white. Only the failing core.
 - **Colony infrastructure:** neutral. Cast concrete, corrugated olive/teal/rust containers, tungsten
   (warm white) lamps, cold-white floodlights.
@@ -184,7 +184,7 @@ points, root motion) happens in the motion pipeline from the web-shell (`docs/MO
 - [ ] GLB, metres, +Y up, front = Blender Front view, pivot at the base, transforms applied
 - [ ] Within the triangle budget; LODs where listed
 - [ ] Base Color / Normal / ORM, no baked light, ≤ 2048
-- [ ] Emissive colours follow the palette law (red = Sable, cyan = Ballast info, amber = Wren)
+- [ ] Emissive colours follow the palette law (red = Sable, cyan = Ballast info, amber = Ava)
 - [ ] Characters: rigged, A-pose, skinned, no clips embedded
 - [ ] Compressed (`gltf-transform optimize in.glb out.glb --texture-compress webp`)
 - [ ] Dropped at `assets/models/<id>.glb`, listed in `assets/manifest.ts`

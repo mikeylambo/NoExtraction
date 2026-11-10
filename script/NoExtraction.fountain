@@ -1,0 +1,968 @@
+Title: NO EXTRACTION
+Credit: The Slice — Dialogue Script
+Source: data/story/*.ts (sync with npm run script:check / script:import)
+Draft date: 2026-11-10
+Notes: Every spoken block ends with its line id as a note, e.g. [[c1.wren.open1]]. Keep the note when you rewrite a line.
+    Parentheticals are the performance notes the VO actor sees. Cue extensions (RADIO), (PA), (RECORDING) are cosmetic.
+
+# Chapter 1 — The Job
+
+= Core Stability 72%. Ava live on the radio. Onboarding through the mission.
+
+>CHAPTER 1 — THE JOB<
+
+EXT. RIDGE ABOVE THE SABLE COMPLEX - NIGHT
+
+Cinematic "The Job": a slow push down the valley to Ballast on the ridge.
+
+HALCYON SYSTEMS (PA)
+(Calm, polite, corporate. Slight PA reverb.)
+Halcyon Resource Group. Core Stability: seventy-two percent. All personnel proceed to assigned extraction points. Thank you for your service. [[c1.halcyon.core72]]
+
+AVA (RADIO)
+(Live radio. Brisk, warm under the professionalism.)
+That's the broadcast. Seventy-two and falling. I'm holding the pad until oh-four-forty. [[c1.wren.open1]]
+
+BALLAST
+(Dry. An old joke between them.)
+Not a minute after. [[c1.ballast.open1]]
+
+AVA (RADIO)
+Not a second after. Policy. Patrol below the ridge — keep your head down. [[c1.wren.open2]]
+
+[OBJECTIVE] Infiltrate the Sable complex
+
+[PROMPTS] WASD move · Mouse look — Hold Shift to sprint — Space vault low cover — Space climb
+
+EXT. OUTER PATH - NIGHT
+
+A lone trooper ahead.
+
+AVA (RADIO)
+(Quiet, focused.)
+One trooper on the path. Get behind him. [[c1.wren.firstPatrol]]
+
+[PROMPTS] C crouch — quieter, harder to see — F takedown — from behind, unaware targets
+
+[OBJECTIVE] Take down the trooper
+
+On his first takedown:
+
+AVA (RADIO)
+(Approving. A little proud. GDD-mandated line.)
+Clean. Like always. [[c1.wren.clean]]
+
+Further down the path, two troopers close together.
+
+AVA (RADIO)
+Two of them, close together. Drop the first and keep moving — you'll have a second before the other one knows. [[c1.wren.pair]]
+
+[PROMPT] F again — chain takedown · [OBJECTIVE] Drop both troopers
+
+On his first chain:
+
+AVA (RADIO)
+(Smiling.)
+Two for two. Show-off. [[c1.wren.chainDone]]
+
+EXT. COURTYARD - NIGHT
+
+AVA (RADIO)
+Courtyard ahead. Pulse your visor — their sightlines paint on the ground. [[c1.wren.visor]]
+
+AVA (RADIO)
+Cyan gate's the fast way in. It stays open as long as nobody knows you're there. [[c1.wren.fastGate]]
+
+AVA (RADIO)
+Or go around through the service yard. Slower. Safer. Your call. [[c1.wren.longRoute]]
+
+[PROMPT] Q visor scan — marks enemies and their sightlines
+
+[OBJECTIVE] Through the courtyard — cyan gate, or the service yard
+
+EXT. INNER YARD - NIGHT
+
+AVA (RADIO)
+Spotter on the tower. Forty metres of eyes. Break his line, or take him off it. [[c1.wren.spotter]]
+
+HALCYON SYSTEMS (PA)
+Seismic advisory. Personnel are reminded that extraction schedules are final. [[c1.halcyon.tremor]]
+
+[OBJECTIVE] Reach the hangar
+
+If he is spotted (alert reaches Hunted):
+
+AVA (RADIO)
+(Sharp. Worried, not panicked.)
+They've got you. Break contact. [[c1.wren.seen]]
+
+If the complex locks down:
+
+AVA (RADIO)
+Lockdown. Fast gate's sealed — hack the console or take the long way. [[c1.wren.lockdown]]
+
+INT. HANGAR - NIGHT
+
+Cinematic "AEGIS-07": reveal of the frame, then its face.
+
+AVA (RADIO)
+(A little awed.)
+There she is. AEGIS-07. [[c1.wren.hangar1]]
+
+BALLAST
+(Deadpan.)
+Big. [[c1.ballast.hangar1]]
+
+AVA (RADIO)
+Sable's planetary defense prototype. Pull the flight governor and it's the most expensive statue on Ilvane. [[c1.wren.hangar2]]
+
+[OBJECTIVE] Pull the flight governor from AEGIS-07
+
+He pulls the governor. The frame powers down.
+
+BALLAST
+(Genuinely a little sorry. GDD-mandated line.)
+Sorry, big guy. [[c1.ballast.sabotage]]
+
+AVA (RADIO)
+Governor goes in the cargo tube. Policy: the part rides separate from the operative. [[c1.wren.tube]]
+
+BALLAST
+Policy says a lot of things. [[c1.ballast.tube]]
+
+[OBJECTIVE] Drop the governor in the cargo tube
+
+The governor drops. The rear gate opens. The extraction clock appears: 8:00.
+
+AVA (RADIO)
+(The clock appears on this line.)
+Extraction window's open. Eight minutes. Pad's on the cliff. Don't make me wait. [[c1.wren.window]]
+
+BALLAST
+You've never waited for anyone in your life. [[c1.ballast.window]]
+
+AVA (RADIO)
+And I'm not starting tonight. Go. [[c1.wren.window2]]
+
+[OBJECTIVE] Get to the extraction pad
+
+EXT. OUTER GATE - NIGHT
+
+AVA (RADIO)
+Through the outer gate and you are out of their house. Keep going. [[c1.wren.exit]]
+
+FADE OUT.
+
+# Chapter 2 — Left Behind
+
+= Core Stability 58%. Lockdown, the carbine, the first Timed Zone, the first cache.
+
+>CHAPTER 2 — LEFT BEHIND<
+
+EXT. MOTOR POOL - NIGHT
+
+The extraction clock is still running.
+
+HALCYON SYSTEMS (PA)
+Core Stability: fifty-eight percent. Extraction schedules are final. Halcyon thanks you for your patience. [[c2.halcyon.core58]]
+
+AVA (RADIO)
+(Urgent, still in control.)
+They found the governor gone. The whole complex is waking up. Stay off their panels — if one of them reaches an alarm, every fast gate in the sector seals. [[c2.wren.alarm]]
+
+BALLAST
+Copy. Quiet. [[c2.ballast.alarm]]
+
+AVA (RADIO)
+Weapons rack by the motor pool. Sable carbine. Loud — anyone who hears it comes for you. [[c2.wren.carbine]]
+
+AVA (RADIO)
+(Knowing him.)
+Armory's off the east road. Not on the way. If you're feeling greedy. [[c2.wren.armory]]
+
+[OBJECTIVE] Cross the motor pool to the cliff road
+
+[PROMPTS, contextual] Aurora flare — their radios and alarms are down for a few seconds — 1/2 swap — the carbine is loud — Fast gates sealed — hack a console or take the long way
+
+Optional: in the armory he finds the missile rack.
+
+BALLAST
+Missile rack. Somebody's going to miss this. [[c2.ballast.missileRack]]
+
+[OBJECTIVE] Follow the cliff road to the bridge
+
+EXT. THE BRIDGE - NIGHT
+
+He steps on. The bridge starts collapsing behind him. Timed Zone "The Pad" begins: 1:30.
+
+AVA (RADIO)
+(First crack of real worry.)
+Ballast, the window's closing. Where are you? [[c2.wren.window]]
+
+BALLAST
+(Running, breathing hard.)
+Bridge. Ninety seconds. Hold it. [[c2.ballast.bridge]]
+
+[OBJECTIVE] Reach the pad
+
+If the clock runs out:
+
+BALLAST
+Not like this. [[c2.ballast.bridgeFail]]
+
+EXT. EXTRACTION PAD - NIGHT
+
+Cinematic "Four Minutes Late": Ava's ship already climbing. Ballast alone on the pad.
+
+AVA (RADIO)
+(She hates every word.)
+I can't. The window's closed. I'm lifting. Ballast, I'm— policy. I'm sorry. [[c2.wren.climbing]]
+
+BALLAST
+(Furious. Breathless.)
+Ava. Ava! I am on the bridge! [[c2.ballast.wait]]
+
+HALCYON SYSTEMS (PA)
+(Bleakly funny. Do not play it funny.)
+Operative designation Ballast: credentials revoked. Evacuation complete. Personnel losses are within acceptable parameters. Thank you for your service. [[c2.halcyon.revoke]]
+
+BALLAST
+(Quiet. Disbelief.)
+Four minutes. I was four minutes late. [[c2.ballast.pad1]]
+
+BALLAST
+(Talking back to the PA.)
+Acceptable parameters. Sure. [[c2.ballast.pad2]]
+
+The first major quake. The bridge behind him falls into the chasm.
+
+BALLAST
+(The ground goes out from under him.)
+Oh, come on— [[c2.ballast.quake]]
+
+[OBJECTIVE] The amber light — Ava left something
+
+.PAD - AVA'S FIRST CACHE
+
+Story cache 1. Plays as radio audio while he moves.
+
+AVA (RECORDING)
+(Recorded before lift-off. Steady, rehearsed, fragile underneath.)
+If you're hearing this, I left. On schedule. You know the policy, and you know I follow it. [[c2.wren.cache1a]]
+
+AVA (RECORDING)
+Sable has one launch cradle left, at their yard. Past the dead colony, under the ice. I flew the route twice. I left you things along it. [[c2.wren.cache1b]]
+
+AVA (RECORDING)
+Amber light. You'll know. Don't make me regret this. [[c2.wren.cache1c]]
+
+BALLAST
+(To a recording that cannot hear him.)
+You left me a voicemail. You left me a voicemail and a flashlight. [[c2.ballast.cache1reply]]
+
+BALLAST
+(Looking at the horizon.)
+Sable's yard. Fine. Fine. [[c2.ballast.yard]]
+
+FADE OUT.
+
+# Chapter 3 — Dead Colony
+
+= Core Stability 41%. The breacher, alternate routes, collapse events as tools, personal caches, the Freight Lift.
+
+>CHAPTER 3 — DEAD COLONY<
+
+EXT. COLONY STREET - SNOW
+
+Cinematic "Dead Colony": a high shot down the empty street.
+
+HALCYON SYSTEMS (PA)
+Core Stability: forty-one percent. Halcyon facilities on Ilvane are now unstaffed. Please do not contact Halcyon. [[c3.halcyon.core41]]
+
+BALLAST
+Dead colony. Of course it is. [[c3.ballast.open]]
+
+[OBJECTIVE] Find a way through the colony to the freight lift
+
+He picks up the breacher shotgun.
+
+BALLAST
+Breacher. Doors are a suggestion now. [[c3.ballast.shotgun]]
+
+[PROMPT] Breacher opens weakened doors — loud
+
+Near a weakened door:
+
+BALLAST
+(Hint: weakened doors open with the breacher.)
+That door's had a hard week. [[c3.ballast.weakDoor]]
+
+Near the leaning tower, troopers beneath it:
+
+BALLAST
+(Hint: lure them under it.)
+That tower is coming down. Make it count. [[c3.ballast.collapseTool]]
+
+[PROMPT] Shoot the tower's weakened leg with the breacher
+
+EXT. PLAZA - SNOWSTORM
+
+Debris falls across the plaza. It hits Sable too.
+
+[OBJECTIVE] The radio mast — then the freight building
+
+.RADIO MAST - AVA'S SECOND CACHE
+
+AVA (RECORDING)
+The colony has been empty six days. Sable pulled out and left their own people at the mast. I bounced this off it. [[c3.wren.cache2a]]
+
+AVA (RECORDING)
+The freight lift goes down to the core conduits — the only way under the ridge. And the cargo never shipped, Ballast. Everything we sent down the tube is stuck in that shaft. Including your souvenir. [[c3.wren.cache2b]]
+
+BALLAST
+My governor. You sent me back for my own governor. [[c3.ballast.cache2reply]]
+
+[TOAST] Route marked · [OBJECTIVE] Freight lift — north of the plaza
+
+.OFF-ROUTE - PERSONAL CACHE 1
+
+Optional. Points to the flight governor.
+
+AVA (RECORDING)
+(Personal. Softer.)
+This one's not on the route. You always check the corners. I thought you'd find it. [[c3.wren.pc1a]]
+
+AVA (RECORDING)
+Cargo bay in the lift shaft. If you want that frame to fly instead of hop, the governor's in there. The shaft floods when the pumps go. Be fast. [[c3.wren.pc1b]]
+
+BALLAST
+Fly instead of hop. Noted. [[c3.ballast.pc1reply]]
+
+.OFF-ROUTE - PERSONAL CACHE 2
+
+Optional.
+
+AVA (RECORDING)
+(Remembering. Almost laughing.)
+Remember Kessel Station? You carried me two kilometres because I said my ankle was fine. [[c3.wren.pc2a]]
+
+AVA (RECORDING)
+It wasn't fine. You knew. You didn't say anything. You never say anything. [[c3.wren.pc2b]]
+
+BALLAST
+…It was three kilometres. [[c3.ballast.pc2reply]]
+
+INT. FREIGHT BUILDING
+
+[OBJECTIVE] Take the freight lift down
+
+He steps on the car. It groans and descends.
+
+BALLAST
+Going down. [[c3.ballast.liftDown]]
+
+INT. LIFT SHAFT - CARGO BAY
+
+Timed Zone "Freight Lift" begins: 3:00. The water rises with the clock.
+
+BALLAST
+(Timed Zone start.)
+Pumps are failing. Water is coming up the shaft. [[c3.ballast.freightLift]]
+
+[OBJECTIVE] Release both hatch locks before the bay floods
+
+Optional: he finds the flight governor in the cargo.
+
+BALLAST
+(To the governor.)
+Hello again. [[c3.ballast.governor]]
+
+After the first lock: [OBJECTIVE] One more hatch lock. After both: [OBJECTIVE] Through the conduit hatch.
+
+With under 30 seconds left (reuses the Chapter 4 line):
+
+BALLAST
+Water's rising. [[c4.ballast.water]]
+
+If the bay floods:
+
+BALLAST
+Too slow. Again. [[c3.ballast.liftFlood]]
+
+He gets through the hatch.
+
+FADE OUT.
+
+# Chapter 4 — Under the Ice
+
+= Core Stability 24%. Darkness and the visor, Heavies, Hounds, the Conduit Flood.
+
+>CHAPTER 4 — UNDER THE ICE<
+
+INT. CONDUIT TUNNELS - DARK
+
+Only a dim helmet lamp.
+
+HALCYON SYSTEMS (PA)
+(Barely audible, through ice.)
+Core Stability: twenty-four percent. This is an automated message. There is no one left to receive your call. [[c4.halcyon.core24]]
+
+BALLAST
+Can't see a thing. Visor it is. [[c4.ballast.dark]]
+
+[PROMPT] Q visor scan — in the dark, it is how you see
+
+[OBJECTIVE] Follow the conduits toward the yard
+
+.TUNNEL - AVA'S THIRD CACHE
+
+AVA (RECORDING)
+Under the ice is Sable's conduit network. It runs to their forward depot, right under the yard. [[c4.wren.cache3a]]
+
+AVA (RECORDING)
+The core is bleeding into the water down there. If it starts rising, don't think. Run. [[c4.wren.cache3b]]
+
+BALLAST
+Don't think. Run. Your best advice in eleven years. [[c4.ballast.cache3reply]]
+
+[OBJECTIVE] Through the pump hall
+
+INT. PUMP HALL
+
+A Heavy patrols.
+
+BALLAST
+Heavy. Don't trade with that. Get behind it. [[c4.ballast.heavy]]
+
+[PROMPT] Heavies are armoured in front — takedown from behind
+
+INT. MAINTENANCE BAY - PERSONAL CACHE 3
+
+Optional. Points to the arc blade.
+
+AVA (RECORDING)
+Maintenance bay, past the pump hall. Sable keeps frame tools there. [[c4.wren.pc3a]]
+
+AVA (RECORDING)
+There's an arc blade on the rack. You always liked getting close. Don't get too close. [[c4.wren.pc3b]]
+
+BALLAST
+Little late for that. [[c4.ballast.pc3reply]]
+
+He takes the arc blade.
+
+BALLAST
+Arc blade. Sorry, Sable. [[c4.ballast.arcBlade]]
+
+INT. THE RUNS
+
+Hounds.
+
+BALLAST
+(Whispered.)
+Hounds. They hunt by sound. Walk. [[c4.ballast.hounds]]
+
+[PROMPT] Hounds hunt by sound — walk, crouch, or throw a decoy (T cycle, G throw)
+
+.OFF-ROUTE - PERSONAL CACHE 4
+
+Optional. The one she was afraid to record.
+
+AVA (RECORDING)
+(Very quiet. This is the one she was afraid to record.)
+Last one. I nearly didn’t leave it. [[c4.wren.pc4a]]
+
+AVA (RECORDING)
+They named you Ballast because you're the weight they drop so the ship can rise. I never called you that. Not once. [[c4.wren.pc4b]]
+
+AVA (RECORDING)
+(Ballast’s real name, said once.)
+Come home, Teo. [[c4.wren.pc4c]]
+
+BALLAST
+…Nobody's called me that in a long time. [[c4.ballast.pc4reply]]
+
+INT. MAIN CONDUIT
+
+Timed Zone "Conduit Flood" begins: 2:30. The water front chases him.
+
+BALLAST
+Water's rising. [[c4.ballast.water]]
+
+BALLAST
+(Conduit Flood start.)
+Here it comes. [[c4.ballast.conduit]]
+
+[OBJECTIVE] Outrun the water
+
+INT. FORWARD DEPOT
+
+Cinematic "The Forward Depot": he looks up.
+
+BALLAST
+(He sees AEGIS-07.)
+Forward depot. And— no way. [[c4.ballast.depot]]
+
+FADE OUT.
+
+# Chapter 5 — Aegis
+
+= Core Stability 11%. AEGIS's voice arrives: the first thing in hours that answers him.
+
+>CHAPTER 5 — AEGIS<
+
+INT. FORWARD DEPOT
+
+Cinematic "AEGIS-07": the frame, parked and dead.
+
+HALCYON SYSTEMS (PA)
+(Nothing else. The script has run out of comfort.)
+Core Stability: eleven percent. [[c5.halcyon.core11]]
+
+BALLAST
+(Hand on the frame.)
+They couldn't fly you out. Because of me. [[c5.ballast.aegis]]
+
+[OBJECTIVE] The amber light by the frame
+
+.DEPOT - AVA'S LAST STORY CACHE
+
+AVA (RECORDING)
+If you made it this far, you found it. They left it behind because it can't fly. Because of you. [[c5.wren.cache4a]]
+
+AVA (RECORDING)
+The yard has one cradle left. Sable's ace is guarding it — they call him the Marshal. You're going to need the frame. [[c5.wren.cache4b]]
+
+BALLAST
+I know. I know. [[c5.ballast.cache4reply]]
+
+[OBJECTIVE] Board AEGIS-07
+
+INT. AEGIS-07 COCKPIT
+
+Cinematic "Boot-up", unskippable. All audio ducked. His breathing.
+
+If he recovered the flight governor in Chapter 3:
+
+BALLAST
+(Reinstalling the flight governor.)
+Undoing my own work. Great. [[c5.ballast.install]]
+
+[READOUT] AEGIS-07 // COLD START
+
+AEGIS-07
+(System voice: precise, unhurried, not human, not cold.)
+AEGIS-07. Cold start. [[c5.aegis.boot1]]
+
+[READOUT] REACTOR ........ NOMINAL / HYDRAULICS ..... NOMINAL
+
+AEGIS-07
+Reactor nominal. Hydraulics nominal. [[c5.aegis.boot2]]
+
+[READOUT] PILOT AUTHORIZATION ......
+
+AEGIS-07
+Pilot authorization… rejected. [[c5.aegis.boot3]]
+
+[READOUT, red] PILOT AUTHORIZATION ...... REJECTED
+
+BALLAST
+(Ripping a panel. Manual bypass.)
+Yeah. I figured. [[c5.ballast.bypass]]
+
+[READOUT] …MANUAL
+
+AEGIS-07
+…Manual. [[c5.aegis.boot4]]
+
+[READOUT] AEGIS-07 ONLINE. The cockpit floods with light. Control returns mid-line.
+
+AEGIS-07
+(Control returns mid-line.)
+AEGIS-07 online. [[c5.aegis.boot5]]
+
+AEGIS reports the loadout he found. With the governor:
+
+AEGIS-07
+Flight governor installed. Sustained flight available. [[c5.aegis.governorOk]]
+
+Without it:
+
+AEGIS-07
+Flight governor absent. Jump jets only. [[c5.aegis.governorMissing]]
+
+If he took the missile rack:
+
+AEGIS-07
+Shoulder rack armed. [[c5.aegis.missileOk]]
+
+With the arc blade:
+
+AEGIS-07
+Arc blade armed. [[c5.aegis.bladeOk]]
+
+Without it:
+
+AEGIS-07
+Melee: manipulator shove. [[c5.aegis.noBlade]]
+
+EXT. THE YARD
+
+The first enemy dies within four seconds of control.
+
+BALLAST
+(First enemy dies within four seconds of control.)
+Okay. Okay. I get it now. [[c5.ballast.firstKill]]
+
+A Warden squad arrives. [OBJECTIVE] Erase the Warden squad
+
+BALLAST
+(Predator now.)
+Wardens. I've been hiding from you for two days. [[c5.ballast.wardens]]
+
+SABLE
+That's AEGIS. Who is flying AEGIS? [[sable.warden.aegis]]
+
+[OBJECTIVE] Repair station, then the shelf. At any repair station:
+
+AEGIS-07
+Repair station: armor restored. [[c5.aegis.repair]]
+
+EXT. ICE SHELF
+
+Timed Zone "Shelf Run" begins: 1:30. The shelf breaks up behind him.
+
+AEGIS-07
+(Shelf Run start.)
+Ice integrity failing. Recommend: speed. [[c5.aegis.shelf]]
+
+BALLAST
+Boost. Boost! [[c5.ballast.shelf]]
+
+[OBJECTIVE] Assault boost across the shelf (hold boost) · [PROMPT] Hold Shift — assault boost
+
+If the clock runs out:
+
+BALLAST
+Too slow. [[c5.ballast.shelfFail]]
+
+EXT. MAGNETIC STORM
+
+AEGIS-07
+Magnetic storm. Targeting offline. Manual aim. [[c5.aegis.storm]]
+
+[OBJECTIVE] Survive the storm. When it clears:
+
+AEGIS-07
+Targeting restored. [[c5.aegis.stormEnd]]
+
+[OBJECTIVE] Through the canyon
+
+EXT. CANYON - AMBUSH
+
+Short cinematic: Wardens on the cliff. A hit tears off his left arm.
+
+AEGIS-07
+Left arm lost. Rifle transferred to right mount. [[c5.aegis.armLost]]
+
+BALLAST
+That was my good arm. [[c5.ballast.arm]]
+
+[OBJECTIVE] Repair, then the launch platform
+
+EXT. LAUNCH PLATFORM
+
+Cinematic "The Marshal": the cradle, then his frame, SOVEREIGN. Open channel.
+
+THE MARSHAL (RADIO)
+(Open channel. Professional, tired, respectful.)
+Halcyon. You stole the one thing on this rock I was told to protect. [[c5.marshal.intro1]]
+
+THE MARSHAL (RADIO)
+My people are on that cradle. It lifts on my word. You're not getting on it. [[c5.marshal.intro2]]
+
+BALLAST
+Your people left you here too. [[c5.ballast.marshal1]]
+
+THE MARSHAL (RADIO)
+I know. That's the job. [[c5.marshal.intro3]]
+
+[BOSS] SOVEREIGN
+
+Phase 1. Sometimes, when their blades meet:
+
+THE MARSHAL (RADIO)
+Good. You fly like you mean it. [[c5.marshal.p1]]
+
+Whenever he charges his overcharge beam:
+
+THE MARSHAL (RADIO)
+(Overcharge beam.)
+Hold still. [[c5.marshal.beam]]
+
+UNUSED — written, never triggered:
+
+THE MARSHAL (RADIO)
+There it is. [[c5.marshal.hit]]
+
+Phase 2. The platform ring collapses. Warden support arrives.
+
+THE MARSHAL (RADIO)
+Platform's breaking. Neither of us has long. [[c5.marshal.p2]]
+
+THE MARSHAL (RADIO)
+Wardens, on me. Last time, I promise. [[c5.marshal.p2support]]
+
+Phase 3. He grapples AEGIS and rips the shoulder cannon off.
+
+THE MARSHAL (RADIO)
+(The grapple.)
+Give me that cannon. [[c5.marshal.p3]]
+
+AEGIS-07
+Shoulder cannon lost. [[c5.aegis.cannonLost]]
+
+THE MARSHAL (RADIO)
+Now we're even. [[c5.marshal.p3b]]
+
+EXT. LAUNCH PLATFORM - AFTER
+
+Cinematic "One of Us": SOVEREIGN fallen.
+
+THE MARSHAL (RADIO)
+(Dying, calm.)
+Cradle's yours, Halcyon. [[c5.marshal.death1]]
+
+THE MARSHAL (RADIO)
+(His last line. Acknowledges Ballast as the one who got out.)
+One of us should get out. Go on. Get out. [[c5.marshal.death2]]
+
+BALLAST
+…Thanks. [[c5.ballast.marshalDead]]
+
+AEGIS-07
+Launch cradle locked. Booster armed. [[c5.aegis.cradle]]
+
+[OBJECTIVE] The cradle. He locks in.
+
+FADE OUT.
+
+# Chapter 6 — Ascent
+
+= Core Stability 2% to 0%. Climb, strip, break atmosphere, the planet, Ava, the final line.
+
+>CHAPTER 6 — ASCENT<
+
+EXT. LAUNCH CRADLE
+
+HALCYON SYSTEMS (PA)
+Core Stability: two percent. Halcyon Resource Group thanks you for your service. [[c6.halcyon.core2]]
+
+[OBJECTIVE] Climb
+
+AEGIS-07
+Booster ignition. [[c6.aegis.launch]]
+
+BALLAST
+(Under 4G.)
+Come on. Come on— [[c6.ballast.launch]]
+
+[PROMPT] WASD steer clear of the debris
+
+.THE CLIMB
+
+Debris hits. The frame is too heavy to make orbit.
+
+AEGIS-07
+Hull damage. Mass too high for orbit. [[c6.aegis.damage]]
+
+Jettison 1, at 18% of the climb:
+
+AEGIS-07
+Jettison: weapons. [[c6.aegis.jettisonWeapon]]
+
+BALLAST
+Take it. Take all of it. [[c6.ballast.jettison1]]
+
+Jettison 2, at 38%:
+
+AEGIS-07
+Jettison: shoulder assembly. [[c6.aegis.jettisonShoulder]]
+
+Jettison 3, at 60%:
+
+AEGIS-07
+Jettison: armor. [[c6.aegis.jettisonArmor]]
+
+BALLAST
+(Almost a laugh. He finally owns the name.)
+Dump the weight. That is what I am for. [[c6.ballast.jettison3]]
+
+Jettison 4, at 82%:
+
+AEGIS-07
+Booster stage separation. [[c6.aegis.jettisonBooster]]
+
+Past 96%:
+
+AEGIS-07
+(The last thing before silence.)
+Atmosphere: exited. [[c6.aegis.atmo]]
+
+INT. COCKPIT - ORBIT
+
+Cinematic "You're Late", unskippable. Total silence.
+
+BALLAST
+(In the silence. Barely breath.)
+…Huh. [[c6.ballast.drift]]
+
+Cut to the planet. Ilvane breaks apart. Core Stability: 0%.
+
+Cut to a ship approaching. Ava's.
+
+AVA (RADIO)
+(Live again. Through static. She came back.)
+—allast. Ballast, come in. I've got your beacon. I turned around. [[c6.wren.return]]
+
+Back to the cockpit.
+
+BALLAST
+(Final line. Dry. Exhausted. One take.)
+…You’re late. [[c6.ballast.final]]
+
+If he found all four personal caches, the same line plays as a warmer take (c6.ballast.final.warm).
+
+SMASH CUT TO BLACK.
+
+>THE END<
+
+==
+
+# Sable Barks
+
+= Random per situation, 90-second cooldown per line. Never comic, occasionally human.
+
+.SABLE BARKS - IDLE
+
+SABLE
+Still no seat number. Third night running. [[sable.idle.seats]]
+
+SABLE
+If your name's not on the manifest, you're on the shelf. That's what they said. [[sable.idle.manifest]]
+
+SABLE
+My sister made the second lift. I think. Comms were down. [[sable.idle.sister]]
+
+SABLE
+Last ship goes when the Marshal says. Not before. [[sable.idle.lastship]]
+
+SABLE
+Heard Halcyon left half their people. Heard we're doing the same. [[sable.idle.rumor]]
+
+SABLE
+Can't feel my hands. Can't feel the ground stop shaking either. [[sable.idle.cold]]
+
+SABLE
+They keep doing headcount. Like the number is going to go up. [[sable.idle.count]]
+
+SABLE
+You can see the yard from here. Doesn't look any closer. [[sable.idle.yard]]
+
+SABLE
+They said the next shuttle. That was four days ago. [[sable.idle.shuttle]]
+
+.SABLE BARKS - SUSPICIOUS
+
+SABLE
+What was that? [[sable.sus.what]]
+
+SABLE
+Movement. Hold on. [[sable.sus.movement]]
+
+SABLE
+Checking it. Stay on comms. [[sable.sus.checking]]
+
+SABLE
+…Could be the wind. Could be. [[sable.sus.wind]]
+
+.SABLE BARKS - HUNTED
+
+SABLE
+Contact! Contact! [[sable.hunt.contact]]
+
+SABLE
+Halcyon operative! He's real! [[sable.hunt.halcyon]]
+
+SABLE
+Flank him! Don't let him reach the gate! [[sable.hunt.flank]]
+
+SABLE
+There! On the ice! [[sable.hunt.there]]
+
+.SABLE BARKS - LOST TARGET
+
+SABLE
+Lost him. He's a ghost. [[sable.lost.gone]]
+
+SABLE
+Spread out. He's still here. [[sable.lost.spread]]
+
+SABLE
+We don't have time for this. [[sable.lost.notime]]
+
+.SABLE BARKS - BODY FOUND
+
+SABLE
+Man down! Someone's in the wire! [[sable.body.down]]
+
+SABLE
+That's Okafor. That's— somebody is here. [[sable.body.name]]
+
+.SABLE BARKS - ALARM
+
+SABLE
+Get to the panel! [[sable.alarm.panel]]
+
+SABLE
+Hitting the alarm! [[sable.alarm.hitting]]
+
+.SABLE BARKS - LOCKDOWN
+
+SABLE
+Sector sealed. Nobody leaves. [[sable.lock.sealed]]
+
+SABLE
+Lockdown's live. Nobody leaves. Including us. [[sable.lock.nobody]]
+
+.SABLE BARKS - BACK TO CALM
+
+SABLE
+Nothing. Back to post. [[sable.calm.nothing]]
+
+SABLE
+Planet is making ghosts now. Great. [[sable.calm.ghosts]]
+
+.SABLE BARKS - HURT
+
+SABLE
+I'm hit! [[sable.hurt.hit]]
+
+SABLE
+Medic— we don't have a medic. [[sable.hurt.medic]]
+
+.SABLE BARKS - REINFORCEMENTS
+
+SABLE
+Reinforcements inbound. Last squad we've got. [[sable.reinf.inbound]]
+
+.SABLE BARKS - WARDENS (MECH)
+
+UNUSED in play: barks are off while you are in the mech. Only the AEGIS line is called directly, in Chapter 5.
+
+SABLE
+Warden two, contact. Large frame. [[sable.warden.contact]]
+
+SABLE
+Hold the line. The cradle lifts on schedule. [[sable.warden.hold]]
+

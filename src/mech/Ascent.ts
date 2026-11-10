@@ -14,7 +14,7 @@ const PLANET_R = 60000;
 /**
  * Ascent mode (GDD §4.9): booster climb with steering, debris and AA fire, scripted damage forcing
  * jettisons (weapon → shoulder → armor → booster stage), each a speed burst; then the atmosphere
- * break, the mix drop to silence, the drift, the planet breaking, and Wren's ship.
+ * break, the mix drop to silence, the drift, the planet breaking, and Ava's ship.
  * Altitude is real metres (y), the planet is a sphere below.
  */
 export class Ascent {
@@ -244,7 +244,7 @@ export class Ascent {
     this.w.atmo.breakAmount = amount;
   }
 
-  /** Wren's ship rounds the planet and comes to him. k 0..1. */
+  /** Ava's ship rounds the planet and comes to him. k 0..1. */
   shipApproach(k: number): void {
     const fr = this.w.aegis!.frame;
     this.ship.root.visible = k > 0;

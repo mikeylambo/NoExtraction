@@ -2,7 +2,7 @@ import { Ascent } from '../mech/Ascent';
 import { ASCENT } from '../../data/aegis';
 import type { ChapterScript } from './Script';
 
-/** Chapter 6 — Ascent (2% → 0%). Climb, strip, break atmosphere, the planet, Wren, the final line. */
+/** Chapter 6 — Ascent (2% → 0%). Climb, strip, break atmosphere, the planet, Ava, the final line. */
 export const CH6_SCRIPT: ChapterScript = {
   chapter: { id: 'ch6', title: 'Ascent', beats: [{ id: 'launch', checkpoint: true }, { id: 'climb' }, { id: 'silence' }, { id: 'wren' }, { id: 'end' }] },
   intro: 'c6.launch',
