@@ -22,7 +22,7 @@ missing metalness -> 0, missing roughness -> 0.8 (with a warning).
 Needs Pillow with WebP (`pip install pillow`). The normal and ORM maps are written lossless:
 lossy WebP subsamples chroma, which would bleed the packed channels into each other.
 """
-import argparse, os, re, sys
+import argparse, json, os, re, sys
 from PIL import Image, ImageOps
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,6 +38,7 @@ ROLES = [  # (role, regex on the filename stem's last token(s))
     ('rough', r'(roughness|rough)'),
     ('gloss', r'(glossiness|gloss)'),
     ('metal', r'(metalness|metallic|metal)'),
+    ('opacity', r'(opacity|alpha|mask)'),
 ]
 UE_SHORT = {'d': 'base', 'b': 'base', 'n': 'normal_dx'}
 
@@ -57,30 +58,59 @@ def classify(name):
     return None
 
 
-def surface_ids():
+def manifest_ids(const='SURFACES'):
     src = open(os.path.join(ROOT, 'assets', 'manifest.ts'), encoding='utf8').read()
-    block = src.split('export const SURFACES', 1)[1].split('];', 1)[0]
+    block = src.split(f'export const {const}', 1)[1].split('];', 1)[0]
     return re.findall(r"id:\s*'(\w+)'", block)
 
 
-def gather(inputs):
+def surface_ids():
+    return manifest_ids('SURFACES')
+
+
+def files_in(inputs):
     files = []
     for p in inputs:
         if os.path.isdir(p):
             for d, _, fs in os.walk(p):
-                files += [os.path.join(d, f) for f in fs]
+                files += [os.path.join(d, f) for f in fs if not f.startswith('.')]
         else:
             files.append(p)
+    return files
+
+
+def physical_size(inputs):
+    """Real-world size (w, h) in metres from a Megascans <id>.json next to the maps, or None."""
+    for f in files_in(inputs):
+        if not f.lower().endswith('.json'):
+            continue
+        try:
+            d = json.load(open(f, encoding='utf8'))
+        except (OSError, ValueError):
+            continue
+        if not isinstance(d, dict):
+            continue
+        cands = [d.get('physicalSize')] + [m.get('physicalSize') for m in d.get('maps', []) if isinstance(m, dict)]
+        cands += [m.get('value') for m in d.get('meta', []) if isinstance(m, dict) and m.get('key') == 'scanArea']
+        for ps in cands:
+            mt = re.match(r'^\s*([\d.]+)\s*x\s*([\d.]+)', ps) if isinstance(ps, str) else None
+            if mt:
+                return float(mt.group(1)), float(mt.group(2))
+    return None
+
+
+def gather(inputs):
     found = {}
-    for f in files:
+    for f in files_in(inputs):
         role = classify(f)
         if not role:
             continue
-        # several resolutions in one folder: keep the largest
+        # several resolutions in one folder: keep the largest; on a tie prefer BaseColor over Diffuse
         with Image.open(f) as im:
             px = im.size[0] * im.size[1]
-        if role not in found or px > found[role][1]:
-            found[role] = (f, px)
+        rank = (px, 0 if role == 'base' and 'diffuse' in f.lower() else 1)
+        if role not in found or rank > found[role][1]:
+            found[role] = (f, rank)
     return {r: f for r, (f, _) in found.items()}
 
 
@@ -193,7 +223,12 @@ def main():
 
     for p in written:
         print(f'wrote {os.path.relpath(p, ROOT)}  ({os.path.getsize(p) // 1024} KB, {size[0]}x{size[1]})')
-    print(f'Check `tile` for {a.id!r} in assets/manifest.ts SURFACES matches the scan\'s real-world size (metres).')
+    ps = physical_size(inputs)
+    if ps:
+        print(f'Scan covers {ps[0]:g} x {ps[1]:g} m: set `tile: {ps[0]:g}` for {a.id!r} in assets/manifest.ts SURFACES '
+              '(larger stretches it, which hides repetition on big floors).')
+    else:
+        print(f'Check `tile` for {a.id!r} in assets/manifest.ts SURFACES matches the scan\'s real-world size (metres).')
 
 
 if __name__ == '__main__':

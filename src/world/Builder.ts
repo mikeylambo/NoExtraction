@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { CollisionWorld, makeSolid, type Solid, type SolidKind, type Surface } from './Collision';
-import { worldMat, isTransparent, glowSprite, type MatKey } from './Materials';
+import { worldMat, isTransparent, glowSprite, matSnow, type MatKey } from './Materials';
+import { DecalBatch, scatterDecals, type DecalBox, type DecalFaceDir } from './Decals';
+import { decalTex } from '../render/decals';
 
 export interface BoxOpts {
   mat?: MatKey;
@@ -33,6 +35,11 @@ function hash3(x: number, y: number, z: number): number {
  */
 export class LevelBuilder {
   private batches = new Map<MatKey, THREE.BufferGeometry[]>();
+  /** Static boxes, for the decal pass (targets and occluders). */
+  private decalBoxes: DecalBox[] = [];
+  private decals = new DecalBatch();
+  /** Set false before finish() to skip the scattered decals (hand-placed ones stay). */
+  scatter = true;
   readonly root = new THREE.Group();
   readonly dynamicMeshes: THREE.Mesh[] = [];
 
@@ -52,6 +59,7 @@ export class LevelBuilder {
     for (let i = 0; i < n; i++) { const k = 1 + j; col[i * 3] = k; col[i * 3 + 1] = k; col[i * 3 + 2] = k * (1 + j * 0.15); }
     geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
     let solid: Solid | null = null;
+    if (!o.dynamic) this.decalBoxes.push({ min: min.clone(), max: max.clone(), mat, kind: o.kind ?? 'wall' });
     if (!o.decor) {
       solid = makeSolid(min, max, o.kind ?? 'wall', { surface: o.surface, tag: o.tag, ...o.solid });
       this.world.add(solid);
@@ -137,8 +145,23 @@ export class LevelBuilder {
     const s = glowSprite(color, size, opacity); s.position.set(x, y, z); this.root.add(s); return s;
   }
 
+  /**
+   * Hand-placed decal (data/decals.ts covers the scattered ones). `at` is the centre on the face,
+   * `face` the face's outward direction; floor decals take `rot` (radians). Size in metres; default
+   * is the texture's physical size. No-op when the texture has no packed files.
+   */
+  decal(tex: string, at: [number, number, number], face: DecalFaceDir, o: { cell?: number; size?: [number, number]; rot?: number; flip?: boolean; tint?: number; opacity?: number; on?: MatKey } = {}): void {
+    const t = decalTex(tex);
+    if (!t) return;
+    const [w, h] = o.size ?? [t.size[0] / t.atlas[0], t.size[1] / t.atlas[1]];
+    this.decals.add({ tex, cell: o.cell, at: V(...at), face, w, h, rot: o.rot, flip: o.flip, tint: o.tint, opacity: o.opacity, snow: o.on ? matSnow(o.on) : 0 });
+  }
+
   /** Merge static batches into meshes. Call once after building. */
   finish(): void {
+    if (this.scatter) scatterDecals(this.decalBoxes, this.decals);
+    for (const m of this.decals.build()) this.root.add(m);
+    this.decalBoxes = [];
     for (const [mat, geos] of this.batches) {
       const merged = mergeGeometries(geos, false);
       for (const g of geos) g.dispose();

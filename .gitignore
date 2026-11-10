@@ -6,3 +6,5 @@ artifacts/tmp
 __pycache__
 # raw Megascans/Fab downloads (packed results in public/surfaces are committed)
 assets/surfaces/
+# raw decal downloads/sources (packed results in public/decals are committed)
+assets/decals/

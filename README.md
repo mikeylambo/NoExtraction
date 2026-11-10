@@ -22,6 +22,7 @@ npm run dev        # http://localhost:5190
 | `npm run script:check` / `script:import` / `script:export` | Dialogue script sync (see below) |
 | `npm run lookdev-shots` | Render the lookdev stills (`artifacts/lookdev`) |
 | `python3 tools/pack_surface.py --id <slot>` | Pack a Megascans/PBR download into `public/surfaces/` (ORM, WebP); see ASSET_SPEC §9 |
+| `python3 tools/pack_decal.py --id <decal>` | Pack a decal (Megascans set or transparent PNG/sheet) into `public/decals/`; placement rules in `data/decals.ts`; see ASSET_SPEC §10 |
 
 **Lookdev:** `npm run dev` then open `/lookdev.html`: one night courtyard pushed toward the MGS4-era
 target (keys 1–4 shots, 0 auto, O free cam, P post on/off). Asset contract: `ASSET_SPEC.md`.

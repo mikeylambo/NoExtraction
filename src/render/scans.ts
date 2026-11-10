@@ -6,7 +6,8 @@ import type { QualityTier } from './quality';
 
 const DIR = `${import.meta.env.BASE_URL}surfaces/`;
 
-async function fetchImage(url: string, half: boolean): Promise<ImageBitmap | null> {
+/** Fetch an image as an ImageBitmap (optionally at half size); null when missing. */
+export async function fetchImage(url: string, half: boolean): Promise<ImageBitmap | null> {
   try {
     const r = await fetch(url);
     if (!r.ok || (r.headers.get('content-type') ?? '').includes('html')) return null;
@@ -28,7 +29,8 @@ function setup<T extends THREE.Texture>(t: T, srgb: boolean): T {
   t.needsUpdate = true;
   return t;
 }
-const texture = (img: ImageBitmap, srgb: boolean) => {
+/** Repeat-wrapped, mipmapped, unflipped texture from a bitmap. */
+export const texture = (img: ImageBitmap, srgb: boolean) => {
   const t = setup(new THREE.Texture(img), srgb);
   t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter;
   return t;
@@ -38,7 +40,7 @@ const texture = (img: ImageBitmap, srgb: boolean) => {
 const solid = (r: number, g: number, b: number) => setup(new THREE.DataTexture(new Uint8Array([r, g, b, 255]), 1, 1), false);
 
 /** Mean of a channel expression over a 32×32 downsample (PbrSet.lum / .rough are means). */
-function mean(img: ImageBitmap, f: (r: number, g: number, b: number) => number): number {
+export function mean(img: ImageBitmap, f: (r: number, g: number, b: number) => number): number {
   const c = document.createElement('canvas'); c.width = c.height = 32;
   const g = c.getContext('2d', { willReadFrequently: true })!;
   g.drawImage(img, 0, 0, 32, 32);
@@ -54,6 +56,7 @@ function mean(img: ImageBitmap, f: (r: number, g: number, b: number) => number):
  * request. The low tier loads scans at half size. Must run before the first level is built.
  */
 export async function loadSurfaceScans(tier: QualityTier): Promise<string[]> {
+  if (new URLSearchParams(location.search).get('scans') === '0') return []; // A/B: procedural only
   const half = tier === 'low';
   const found: string[] = [];
   await Promise.all(SURFACES.map(async (s) => {

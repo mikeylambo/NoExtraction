@@ -33,15 +33,54 @@ export type SurfaceSlot = 'snow' | 'packedSnow' | 'concrete' | 'paint' | 'corrug
 export interface SurfaceEntry { id: SurfaceSlot; tile: number; normal?: number; albedo?: number; usedBy: string; search: string }
 
 export const SURFACES: SurfaceEntry[] = [
-  { id: 'snow', tile: 2, usedBy: 'snow floors, drifts/berms, snow cover on every top face', search: 'wind-blown or rippled snow; fresh powder snow' },
+  { id: 'snow', tile: 4, usedBy: 'snow floors, drifts/berms, snow cover on every top face', search: 'wind-blown or rippled snow; fresh powder snow' },
   { id: 'packedSnow', tile: 2, usedBy: '(paths; not assigned to a material yet)', search: 'trampled or dirty snow' },
-  { id: 'concrete', tile: 2, usedBy: 'concrete walls, bunkers, stairs, canvas', search: 'cast concrete with formwork seams; cracked, stained concrete floor' },
+  { id: 'concrete', tile: 3, usedBy: 'concrete walls, bunkers, stairs, canvas', search: 'cast concrete with formwork seams; cracked, stained concrete floor' },
   { id: 'paint', tile: 2, usedBy: 'metal, sable, halcyon, hazard (tinted per material)', search: 'chipped painted steel, neutral grey' },
   { id: 'corrugated', tile: 2, usedBy: 'crates and containers (falls back to paint)', search: 'corrugated sheet metal, painted or weathered' },
   { id: 'rust', tile: 2, usedBy: 'metalDark: high cover, machinery (falls back to paint)', search: 'rusted or oxidised steel' },
   { id: 'rock', tile: 2, usedBy: 'rock walls and boulders', search: 'dark basalt or granite rock face' },
   { id: 'ice', tile: 2, usedBy: 'ice floors, ice walls (Ch4)', search: 'blue glacier ice with cracks' },
   { id: 'grate', tile: 1, usedBy: 'interior floors, catwalks (Ch5)', search: 'steel tread plate or floor grating' },
+];
+
+/**
+ * Decal textures. Packed files live in public/decals/ (built by `python3 tools/pack_decal.py --id <id>`
+ * from a download in assets/decals/<id>/):
+ *   <id>_color.webp  (sRGB colour with opacity in alpha, required)
+ *   <id>_normal.webp (OpenGL / +Y, optional)
+ *   <id>.json        (written by the packer: physical size in metres, mean roughness)
+ * `atlas`: a sheet of cols × rows cells, each used as its own decal (data/decals.ts picks cells).
+ * What goes where (and how often) is data/decals.ts; with no files a decal simply never appears.
+ */
+export interface DecalTexture { id: string; atlas?: [number, number]; source: string }
+
+export const DECAL_TEXTURES: DecalTexture[] = [
+  // Megascans (Fab), 2K texture sets
+  { id: 'crack_branch', source: 'Megascans concrete_crack_sezrfcg' },
+  { id: 'crack_line_a', source: 'Megascans concrete_crack_sfdo1xg' },
+  { id: 'crack_line_b', source: 'Megascans concrete_crack_sfilvlg' },
+  { id: 'crack_h', source: 'Megascans concrete_crack_sfiqk0g' },
+  { id: 'crack_hook', source: 'Megascans concrete_crack_sfcsmqg' },
+  { id: 'crack_seam_a', source: 'Megascans concrete_crack_sfelnxg' },
+  { id: 'crack_seam_b', source: 'Megascans concrete_crack_sfio1qg' },
+  { id: 'crack_web', source: 'Megascans concrete_crack_seznlkg' },
+  { id: 'crack_patch', source: 'Megascans concrete_crack_sdokhyi' },
+  { id: 'asphalt_crack', source: 'Megascans asphalt_crack_umegahkcw' },
+  { id: 'road_crack', source: 'Megascans road_crack_sfisjpg' },
+  { id: 'leak_grime', source: 'Megascans industrial_decal_leak_02_tdlodebc' },
+  { id: 'leak_soot', source: 'Megascans leakage_skphbg3c' },
+  { id: 'leak_rust', source: 'Megascans leakage_tculfhnc' },
+  { id: 'leak_thin', source: 'Megascans leakage_tcumebvc' },
+  { id: 'leak_rust_wide', source: 'Megascans leakage_tdcafitc' },
+  { id: 'leak_run', source: 'Megascans tileable_leakage_tc1fdi2c' },
+  { id: 'rust_spots', source: 'Megascans military_trenches_decal_metal_rust_02_ydzmaf2' },
+  { id: 'tyre_tracks', source: 'Megascans tire_tracks_on_concrete_sfhqelg' },
+  // Generated (GPT_PROMPTS.md §5), transparent PNG sheets
+  { id: 'grime', atlas: [4, 4], source: 'GPT grime and wear atlas' },
+  { id: 'stencils', atlas: [4, 4], source: 'GPT stencil sheet' },
+  { id: 'emblem_sable', source: 'GPT Sable emblem' },
+  { id: 'emblem_halcyon', source: 'GPT Halcyon emblem' },
 ];
 
 export const TEXTURES: { id: string; path: string; note: string }[] = [

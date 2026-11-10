@@ -195,7 +195,32 @@ which generates every surface in code until a scan replaces it. Slots: `assets/m
 The scan's albedo is applied as detail around each material's own colour, so pick neutral scans and
 let the material colour do the faction tint. Snow cover, the visor scan and core glow still layer on top.
 
-## 10. Delivery checklist
+## 10. Decals (Megascans / Fab decals, generated sheets)
+
+Decals are flat textured patches laid over level geometry: cracks, leaks, rust, frost, tracks,
+stencils, faction emblems. Three files decide everything:
+
+| File | What it holds |
+|---|---|
+| `assets/manifest.ts` `DECAL_TEXTURES` | the texture slots (ids), and the grid for sheets (`atlas: [4, 4]`) |
+| `data/decals.ts` `DECAL_SETS` | where they go: which materials, walls or floors, height on the wall, how many per 100 m², size, tint |
+| `public/decals/` | the packed files (`<id>_color.webp`, `<id>_normal.webp`, `<id>.json`) |
+
+1. Download the **2K texture set** (it includes the `_Opacity` map) and unzip it into
+   `assets/decals/<id>/` (git-ignored). For a generated sheet or emblem, drop the transparent PNG there.
+2. `python3 tools/pack_decal.py --id <id>` (add `--max 512` for small decals, `--size-m WxH` when there is
+   no Megascans json). It folds opacity into the colour's alpha, keeps the normal map, and records
+   the physical size and roughness.
+3. Add the id to `DECAL_TEXTURES` and use it in a set in `data/decals.ts` (or hand-place one with
+   `b.decal(id, [x, y, z], 'z+')` in a level).
+4. Boot: the console says `decals: N textures`. Compare with `?decals=0` (and surfaces with `?scans=0`).
+
+Placement is deterministic (same level, same decals) and skips faces hidden by other boxes. Each
+texture is one draw call per level, so prefer a few good textures (or an atlas sheet) over many
+near-duplicates. Decals take snow cover from the surface under them and keep the palette law:
+stencils and emblems are tinted paint, never red.
+
+## 11. Delivery checklist
 
 - [ ] GLB, metres, +Y up, front = Blender Front view, pivot at the base, transforms applied
 - [ ] Within the triangle budget; LODs where listed

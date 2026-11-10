@@ -53,7 +53,7 @@ const cache = new Map<string, THREE.Material>();
  * axis-aligned boxes without UVs, so detail is projected along the face's dominant world axis
  * (exact for boxes, one texture fetch per map).
  */
-export function patchWorld(m: THREE.MeshStandardMaterial, snow: number, core: number, surf?: SurfaceId, sparkle = 0): void {
+export function patchWorld(m: THREE.MeshStandardMaterial, snow: number, core: number, surf?: SurfaceId, sparkle = 0, snowAttr = false): void {
   const det = surf ? surface(surf) : null;
   const cover = surface('snow');
   const detail = det ? {
@@ -65,20 +65,20 @@ export function patchWorld(m: THREE.MeshStandardMaterial, snow: number, core: nu
     Object.assign(shader.uniforms, WORLD_UNIFORMS, { uMatSnow: { value: snow }, uMatCore: { value: core }, uMatSparkle: { value: sparkle } }, detail);
     if (det) shader.defines = { ...shader.defines, USE_DETAIL: '' };
     shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vWPos; varying vec3 vWNorm;')
-      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvWPos = (modelMatrix * vec4(transformed, 1.0)).xyz; vWNorm = normalize(mat3(modelMatrix) * objectNormal);');
+      .replace('#include <common>', `#include <common>\nvarying vec3 vWPos; varying vec3 vWNorm;${snowAttr ? '\nattribute float aSnow; varying float vASnow;' : ''}`)
+      .replace('#include <worldpos_vertex>', `#include <worldpos_vertex>\nvWPos = (modelMatrix * vec4(transformed, 1.0)).xyz; vWNorm = normalize(mat3(modelMatrix) * objectNormal);${snowAttr ? ' vASnow = aSnow;' : ''}`);
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', `#include <common>
 varying vec3 vWPos; varying vec3 vWNorm;
 uniform vec3 uScanOrigin; uniform float uScanRadius; uniform float uScanStrength; uniform vec3 uScanColor;
 uniform float uSnowAmount; uniform vec3 uSnowColor; uniform float uCoreGlow; uniform vec3 uCoreColor; uniform float uTime;
-uniform float uMatSnow; uniform float uMatCore; uniform float uMatSparkle;
+uniform float uMatSnow; uniform float uMatCore; uniform float uMatSparkle;${snowAttr ? ' varying float vASnow;' : ''}
 #ifdef USE_DETAIL
 uniform sampler2D uDetMap; uniform sampler2D uDetNor; uniform sampler2D uDetOrm; uniform sampler2D uCoverMap;
 uniform float uDetTile; uniform float uDetGreen; uniform float uDetLum; uniform float uDetRough; uniform float uDetNormalK; uniform float uDetAlbK; uniform float uCoverLum; uniform float uCoverTile;
 #endif`)
       .replace('#include <color_fragment>', `#include <color_fragment>
-float snowK = smoothstep(0.55, 0.9, vWNorm.y) * uSnowAmount * uMatSnow;
+float snowK = smoothstep(0.55, 0.9, vWNorm.y) * uSnowAmount * ${snowAttr ? 'vASnow' : 'uMatSnow'};
 #ifdef USE_DETAIL
 vec3 an = abs(vWNorm); vec2 dUv; vec3 dT; vec3 dB;
 if (an.y >= an.x && an.y >= an.z) { dUv = vWPos.xz; dT = vec3(1.0, 0.0, 0.0); dB = vec3(0.0, 0.0, 1.0); }
@@ -130,7 +130,7 @@ totalEmissiveRadiance += uCoreColor * coreK * 0.6;`)
   }
 }`);
   };
-  m.customProgramCacheKey = () => `world-${det ? 'detail' : 'flat'}`;
+  m.customProgramCacheKey = () => `world-${det ? 'detail' : 'flat'}${snowAttr ? '-snowattr' : ''}`;
 }
 
 export function worldMat(key: MatKey): THREE.Material {
@@ -148,6 +148,8 @@ export function worldMat(key: MatKey): THREE.Material {
 }
 
 export function isTransparent(key: MatKey): boolean { return !!SPECS[key].transparent; }
+/** How much snow settles on this material's upward faces (decals on it inherit it). */
+export function matSnow(key: MatKey): number { return SPECS[key].snow; }
 
 /** Additive glow sprite texture (radial). */
 let glowTex: THREE.Texture | null = null;
