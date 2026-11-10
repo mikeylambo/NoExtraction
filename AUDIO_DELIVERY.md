@@ -20,7 +20,7 @@ Michael. Dry, professional, then furious, then focused. Helmeted throughout: sli
 |---|---|---|---|---|
 | `c1.ballast.open1` | Not a minute after. | Dry. An old joke between them. | 2.0 s | `assets/vo/ballast/c1.ballast.open1.ogg` |
 | `c1.ballast.hangar1` | Big. | Deadpan. | 1.4 s | `assets/vo/ballast/c1.ballast.hangar1.ogg` |
-| `c1.ballast.sabotage` | Sorry, big guy. | Genuinely a little sorry. GDD-mandated line. | 1.8 s | `assets/vo/ballast/c1.ballast.sabotage.ogg` |
+| `c1.ballast.sabotage` | Sorry, big girl. | Genuinely a little sorry. GDD-mandated line. | 1.8 s | `assets/vo/ballast/c1.ballast.sabotage.ogg` |
 | `c1.ballast.tube` | Policy says a lot of things. |  | 2.8 s | `assets/vo/ballast/c1.ballast.tube.ogg` |
 | `c1.ballast.window` | You've never waited for anyone in your life. |  | 3.5 s | `assets/vo/ballast/c1.ballast.window.ogg` |
 
@@ -118,7 +118,7 @@ Live radio in Chapter 1 only (band-limited radio). Every cache line is a recordi
 | `c1.wren.seen` | They've got you. Break contact. | Sharp. Worried, not panicked. | 2.5 s | `assets/vo/wren/c1.wren.seen.ogg` |
 | `c1.wren.lockdown` | Lockdown. Fast gate's sealed — hack the console or take the long way. |  | 5.6 s | `assets/vo/wren/c1.wren.lockdown.ogg` |
 | `c1.wren.hangar1` | There she is. FLAMINGO-07. | A little awed. | 2.2 s | `assets/vo/wren/c1.wren.hangar1.ogg` |
-| `c1.wren.hangar2` | Sable's planetary defense prototype. Pull the flight governor and it's the most expensive statue on Ilvane. |  | 6.6 s | `assets/vo/wren/c1.wren.hangar2.ogg` |
+| `c1.wren.hangar2` | Sable's planetary defense prototype. Pull the flight governor and she's the most expensive statue on Ilvane. |  | 6.6 s | `assets/vo/wren/c1.wren.hangar2.ogg` |
 | `c1.wren.tube` | Governor goes in the cargo tube. Policy: the part rides separate from the operative. |  | 6.0 s | `assets/vo/wren/c1.wren.tube.ogg` |
 | `c1.wren.window` | Extraction window's open. Eight minutes. Pad's on the cliff. Don't make me wait. | The clock appears on this line. | 5.7 s | `assets/vo/wren/c1.wren.window.ogg` |
 | `c1.wren.window2` | And I'm not starting tonight. Go. |  | 2.9 s | `assets/vo/wren/c1.wren.window2.ogg` |
@@ -164,7 +164,7 @@ Live radio in Chapter 1 only (band-limited radio). Every cache line is a recordi
 
 | ID | Line | Context / performance | Target | File |
 |---|---|---|---|---|
-| `c5.wren.cache4a` | If you made it this far, you found it. They left it behind because it can't fly. Because of you. |  | 8.3 s | `assets/vo/wren/c5.wren.cache4a.ogg` |
+| `c5.wren.cache4a` | If you made it this far, you found her. They left her behind because she can't fly. Because of you. |  | 8.3 s | `assets/vo/wren/c5.wren.cache4a.ogg` |
 | `c5.wren.cache4b` | The yard has one cradle left. Sable's ace is guarding it — they call him the Marshal. You're going to need the frame. |  | 9.4 s | `assets/vo/wren/c5.wren.cache4b.ogg` |
 
 #### Chapter 6 — Ascent

@@ -4,7 +4,7 @@ import { L, P } from './lines';
 export const LINES = [
   L('c5.halcyon.core11', 'halcyon', 'Core Stability: eleven percent.', P.broadcast, 'Nothing else. The script has run out of comfort.'),
   L('c5.ballast.aegis', 'ballast', "They couldn't fly you out. Because of me.", P.reply, 'Hand on the frame.'),
-  L('c5.wren.cache4a', 'wren', "If you made it this far, you found it. They left it behind because it can't fly. Because of you.", P.recording),
+  L('c5.wren.cache4a', 'wren', "If you made it this far, you found her. They left her behind because she can't fly. Because of you.", P.recording),
   L('c5.wren.cache4b', 'wren', "The yard has one cradle left. Sable's ace is guarding it — they call him the Marshal. You're going to need the frame.", P.recording),
   L('c5.ballast.cache4reply', 'ballast', 'I know. I know.', P.reply),
   L('c5.ballast.install', 'ballast', 'Undoing my own work. Great.', P.reply, 'Reinstalling the flight governor.'),
