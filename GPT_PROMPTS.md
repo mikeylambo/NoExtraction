@@ -16,7 +16,7 @@ highest quality setting. Save as `<id>.png` with the ids used below.
 > and cold-white floodlights. Two factions: **Sable** (occupying military: gunmetal and slate paint over
 > steel, chipped edges, frost in seams, hard angles, bolted plates, visor slits; their only bright colour
 > is a red visor or sensor glow) and **Halcyon** (the engineering crew: clean off-white composites,
-> grey panels, cyan information lights). Amber lights belong only to the pilot Wren's ship, violet-white
+> grey panels, cyan information lights). Amber lights belong only to the pilot Ava's ship, violet-white
 > light only to the failing planetary core. Every design must be original: no existing game, film or
 > real-world military insignia, logos, characters or gear. No text anywhere unless I ask for it.
 > Confirm with "Ready" and wait for my requests.
