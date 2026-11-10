@@ -20,6 +20,7 @@ npm run dev        # http://localhost:5190
 | `npm run shots -- artifacts/shots ch1,ch5` | Screenshot tour |
 | `npm run audio-delivery` | Regenerate `AUDIO_DELIVERY.md` |
 | `npm run script:check` / `script:import` / `script:export` | Dialogue script sync (see below) |
+| Production plan | `PRODUCTION_PLAN.md`: milestones, workstreams, owners, status |
 | `npm run lookdev-shots` | Render the lookdev stills (`artifacts/lookdev`) |
 | `python3 tools/pack_surface.py --id <slot>` | Pack a Megascans/PBR download into `public/surfaces/` (ORM, WebP); see ASSET_SPEC §9 |
 | `python3 tools/pack_decal.py --id <decal>` | Pack a decal (Megascans set or transparent PNG/sheet) into `public/decals/`; placement rules in `data/decals.ts`; see ASSET_SPEC §10 |
