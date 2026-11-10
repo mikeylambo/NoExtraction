@@ -103,11 +103,11 @@ Lockdown. Fast gate's sealed — hack the console or take the long way. [[c1.wre
 
 INT. HANGAR - NIGHT
 
-Cinematic "AEGIS-07": reveal of the frame, then its face.
+Cinematic "FLAMINGO-07": reveal of the frame, then its face.
 
 AVA (RADIO)
 (A little awed.)
-There she is. AEGIS-07. [[c1.wren.hangar1]]
+There she is. FLAMINGO-07. [[c1.wren.hangar1]]
 
 BALLAST
 (Deadpan.)
@@ -116,7 +116,7 @@ Big. [[c1.ballast.hangar1]]
 AVA (RADIO)
 Sable's planetary defense prototype. Pull the flight governor and it's the most expensive statue on Ilvane. [[c1.wren.hangar2]]
 
-[OBJECTIVE] Pull the flight governor from AEGIS-07
+[OBJECTIVE] Pull the flight governor from FLAMINGO-07
 
 He pulls the governor. The frame powers down.
 
@@ -500,20 +500,20 @@ INT. FORWARD DEPOT
 Cinematic "The Forward Depot": he looks up.
 
 BALLAST
-(He sees AEGIS-07.)
+(He sees FLAMINGO-07.)
 Forward depot. And— no way. [[c4.ballast.depot]]
 
 FADE OUT.
 
-# Chapter 5 — Aegis
+# Chapter 5 — Flamingo
 
-= Core Stability 11%. AEGIS's voice arrives: the first thing in hours that answers him.
+= Core Stability 11%. Flamingo's voice arrives: the first thing in hours that answers him.
 
->CHAPTER 5 — AEGIS<
+>CHAPTER 5 — FLAMINGO<
 
 INT. FORWARD DEPOT
 
-Cinematic "AEGIS-07": the frame, parked and dead.
+Cinematic "FLAMINGO-07": the frame, parked and dead.
 
 HALCYON SYSTEMS (PA)
 (Nothing else. The script has run out of comfort.)
@@ -536,9 +536,9 @@ The yard has one cradle left. Sable's ace is guarding it — they call him the M
 BALLAST
 I know. I know. [[c5.ballast.cache4reply]]
 
-[OBJECTIVE] Board AEGIS-07
+[OBJECTIVE] Board FLAMINGO-07
 
-INT. AEGIS-07 COCKPIT
+INT. FLAMINGO-07 COCKPIT
 
 Cinematic "Boot-up", unskippable. All audio ducked. His breathing.
 
@@ -548,20 +548,20 @@ BALLAST
 (Reinstalling the flight governor.)
 Undoing my own work. Great. [[c5.ballast.install]]
 
-[READOUT] AEGIS-07 // COLD START
+[READOUT] FLAMINGO-07 // COLD START
 
-AEGIS-07
+FLAMINGO-07
 (System voice: precise, unhurried, not human, not cold.)
-AEGIS-07. Cold start. [[c5.aegis.boot1]]
+FLAMINGO-07. Cold start. [[c5.aegis.boot1]]
 
 [READOUT] REACTOR ........ NOMINAL / HYDRAULICS ..... NOMINAL
 
-AEGIS-07
+FLAMINGO-07
 Reactor nominal. Hydraulics nominal. [[c5.aegis.boot2]]
 
 [READOUT] PILOT AUTHORIZATION ......
 
-AEGIS-07
+FLAMINGO-07
 Pilot authorization… rejected. [[c5.aegis.boot3]]
 
 [READOUT, red] PILOT AUTHORIZATION ...... REJECTED
@@ -572,38 +572,38 @@ Yeah. I figured. [[c5.ballast.bypass]]
 
 [READOUT] …MANUAL
 
-AEGIS-07
+FLAMINGO-07
 …Manual. [[c5.aegis.boot4]]
 
-[READOUT] AEGIS-07 ONLINE. The cockpit floods with light. Control returns mid-line.
+[READOUT] FLAMINGO-07 ONLINE. The cockpit floods with light. Control returns mid-line.
 
-AEGIS-07
+FLAMINGO-07
 (Control returns mid-line.)
-AEGIS-07 online. [[c5.aegis.boot5]]
+FLAMINGO-07 online. [[c5.aegis.boot5]]
 
-AEGIS reports the loadout he found. With the governor:
+Flamingo reports the loadout he found. With the governor:
 
-AEGIS-07
+FLAMINGO-07
 Flight governor installed. Sustained flight available. [[c5.aegis.governorOk]]
 
 Without it:
 
-AEGIS-07
+FLAMINGO-07
 Flight governor absent. Jump jets only. [[c5.aegis.governorMissing]]
 
 If he took the missile rack:
 
-AEGIS-07
+FLAMINGO-07
 Shoulder rack armed. [[c5.aegis.missileOk]]
 
 With the arc blade:
 
-AEGIS-07
+FLAMINGO-07
 Arc blade armed. [[c5.aegis.bladeOk]]
 
 Without it:
 
-AEGIS-07
+FLAMINGO-07
 Melee: manipulator shove. [[c5.aegis.noBlade]]
 
 EXT. THE YARD
@@ -621,18 +621,18 @@ BALLAST
 Wardens. I've been hiding from you for two days. [[c5.ballast.wardens]]
 
 SABLE
-That's AEGIS. Who is flying AEGIS? [[sable.warden.aegis]]
+That's Flamingo. Who is flying Flamingo? [[sable.warden.aegis]]
 
 [OBJECTIVE] Repair station, then the shelf. At any repair station:
 
-AEGIS-07
+FLAMINGO-07
 Repair station: armor restored. [[c5.aegis.repair]]
 
 EXT. ICE SHELF
 
 Timed Zone "Shelf Run" begins: 1:30. The shelf breaks up behind him.
 
-AEGIS-07
+FLAMINGO-07
 (Shelf Run start.)
 Ice integrity failing. Recommend: speed. [[c5.aegis.shelf]]
 
@@ -648,12 +648,12 @@ Too slow. [[c5.ballast.shelfFail]]
 
 EXT. MAGNETIC STORM
 
-AEGIS-07
+FLAMINGO-07
 Magnetic storm. Targeting offline. Manual aim. [[c5.aegis.storm]]
 
 [OBJECTIVE] Survive the storm. When it clears:
 
-AEGIS-07
+FLAMINGO-07
 Targeting restored. [[c5.aegis.stormEnd]]
 
 [OBJECTIVE] Through the canyon
@@ -662,7 +662,7 @@ EXT. CANYON - AMBUSH
 
 Short cinematic: Wardens on the cliff. A hit tears off his left arm.
 
-AEGIS-07
+FLAMINGO-07
 Left arm lost. Rifle transferred to right mount. [[c5.aegis.armLost]]
 
 BALLAST
@@ -713,13 +713,13 @@ Platform's breaking. Neither of us has long. [[c5.marshal.p2]]
 THE MARSHAL (RADIO)
 Wardens, on me. Last time, I promise. [[c5.marshal.p2support]]
 
-Phase 3. He grapples AEGIS and rips the shoulder cannon off.
+Phase 3. He grapples Flamingo and rips the shoulder cannon off.
 
 THE MARSHAL (RADIO)
 (The grapple.)
 Give me that cannon. [[c5.marshal.p3]]
 
-AEGIS-07
+FLAMINGO-07
 Shoulder cannon lost. [[c5.aegis.cannonLost]]
 
 THE MARSHAL (RADIO)
@@ -740,7 +740,7 @@ One of us should get out. Go on. Get out. [[c5.marshal.death2]]
 BALLAST
 …Thanks. [[c5.ballast.marshalDead]]
 
-AEGIS-07
+FLAMINGO-07
 Launch cradle locked. Booster armed. [[c5.aegis.cradle]]
 
 [OBJECTIVE] The cradle. He locks in.
@@ -760,7 +760,7 @@ Core Stability: two percent. Halcyon Resource Group thanks you for your service.
 
 [OBJECTIVE] Climb
 
-AEGIS-07
+FLAMINGO-07
 Booster ignition. [[c6.aegis.launch]]
 
 BALLAST
@@ -773,12 +773,12 @@ Come on. Come on— [[c6.ballast.launch]]
 
 Debris hits. The frame is too heavy to make orbit.
 
-AEGIS-07
+FLAMINGO-07
 Hull damage. Mass too high for orbit. [[c6.aegis.damage]]
 
 Jettison 1, at 18% of the climb:
 
-AEGIS-07
+FLAMINGO-07
 Jettison: weapons. [[c6.aegis.jettisonWeapon]]
 
 BALLAST
@@ -786,12 +786,12 @@ Take it. Take all of it. [[c6.ballast.jettison1]]
 
 Jettison 2, at 38%:
 
-AEGIS-07
+FLAMINGO-07
 Jettison: shoulder assembly. [[c6.aegis.jettisonShoulder]]
 
 Jettison 3, at 60%:
 
-AEGIS-07
+FLAMINGO-07
 Jettison: armor. [[c6.aegis.jettisonArmor]]
 
 BALLAST
@@ -800,12 +800,12 @@ Dump the weight. That is what I am for. [[c6.ballast.jettison3]]
 
 Jettison 4, at 82%:
 
-AEGIS-07
+FLAMINGO-07
 Booster stage separation. [[c6.aegis.jettisonBooster]]
 
 Past 96%:
 
-AEGIS-07
+FLAMINGO-07
 (The last thing before silence.)
 Atmosphere: exited. [[c6.aegis.atmo]]
 
@@ -958,7 +958,7 @@ Reinforcements inbound. Last squad we've got. [[sable.reinf.inbound]]
 
 .SABLE BARKS - WARDENS (MECH)
 
-UNUSED in play: barks are off while you are in the mech. Only the AEGIS line is called directly, in Chapter 5.
+UNUSED in play: barks are off while you are in the mech. Only the Flamingo line is called directly, in Chapter 5.
 
 SABLE
 Warden two, contact. Large frame. [[sable.warden.contact]]

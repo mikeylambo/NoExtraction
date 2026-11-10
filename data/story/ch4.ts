@@ -19,5 +19,5 @@ export const LINES = [
   L('c4.ballast.pc4reply', 'ballast', "…Nobody's called me that in a long time.", P.reply),
   L('c4.ballast.arcBlade', 'ballast', 'Arc blade. Sorry, Sable.', P.reply),
   L('c4.ballast.conduit', 'ballast', 'Here it comes.', P.critical, 'Conduit Flood start.'),
-  L('c4.ballast.depot', 'ballast', 'Forward depot. And— no way.', P.reply, 'He sees AEGIS-07.'),
+  L('c4.ballast.depot', 'ballast', 'Forward depot. And— no way.', P.reply, 'He sees FLAMINGO-07.'),
 ];

@@ -72,7 +72,7 @@ changes (old → new) live in `TUNING_LOG.md`.
 2. **Why the governor is in the shaft.** In Ch1 Ava tells Ballast to drop the pulled governor in the
    Halcyon cargo tube; in Ch3 her cache says the cargo never shipped — it is stuck in the colony lift
    shaft. ("Undoing his own sabotage" stays literal.)
-3. **Why AEGIS is at the forward depot.** Sable could not fly it out without the governor, so they left
+3. **Why Flamingo is at the forward depot.** Sable could not fly it out without the governor, so they left
    it at their forward depot at the end of the conduits. Ava's Ch5 cache says so.
 4. **"The clock appears for the first time" (Ch1).** Implemented as a non-failing narrative
    "Extraction window" clock (8:00) that continues into Ch2; The Pad is the first real Timed Zone.

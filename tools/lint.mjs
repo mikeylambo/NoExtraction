@@ -11,7 +11,7 @@ const fail = (f, line, msg) => errors.push(`${rel(f)}:${line} ${msg}`);
 const lines = (f) => fs.readFileSync(f, 'utf8').split('\n');
 
 // 1. packages are game-agnostic
-const GAME_WORDS = /\b(No ?Extraction|Ballast|Wren|Ava|AEGIS|Aegis|Sable|Marshal|Halcyon|Ilvane|Sovereign)\b/;
+const GAME_WORDS = /\b(No ?Extraction|Ballast|Wren|Ava|Flamingo|AEGIS|Aegis|Sable|Marshal|Halcyon|Ilvane|Sovereign)\b/;
 for (const f of ['narrative', 'mech-frame', 'perception'].flatMap((p) => ts(`packages/${p}/src`))) {
   lines(f).forEach((l, i) => {
     if (/from ['"](\.\.\/)+(src|data)\//.test(l) || /from ['"]@\/|from ['"].*\/src\/game/.test(l)) fail(f, i + 1, 'package imports game code');

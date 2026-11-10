@@ -2,7 +2,7 @@
  * The readability law (GDD §2, §13). Every colour with gameplay meaning comes from here; the lint
  * step fails if these hex values appear anywhere else in src/.
  *   red   — Sable threat only      amber — Ava only      cyan — Ballast's information only
- *   violet-white — the failing core       signal white → red — Aegis HUD as systems fail
+ *   violet-white — the failing core       signal white → red — Flamingo HUD as systems fail
  */
 export const PALETTE = {
   snow: 0xe8eef3,

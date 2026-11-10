@@ -43,7 +43,7 @@ GPT image  ──►  Meshy (image → 3D, PBR)  ──►  Blender cleanup  ─
 |---|---|---|---|
 | Hero character (Ballast) | 25–40k | LOD1 50% | 2048 body + 1024 head + 1024 gear |
 | Enemy character (trooper/spotter/heavy) | 15–25k | LOD1 50%, LOD2 20% | 2048 body + 1024 gear |
-| Player mech (AEGIS-07) | 40–60k | LOD1 50% | 2 × 2048 |
+| Player mech (FLAMINGO-07) | 40–60k | LOD1 50% | 2 × 2048 |
 | Enemy mech (Warden, Sovereign) | 30–50k | LOD1 50%, LOD2 25% | 2 × 2048 |
 | Ship (Ava's) | 30–50k | LOD1 40% | 2 × 2048 |
 | Building module (bunker, shed) | 2–8k | none | 1024 unique + tiling materials |

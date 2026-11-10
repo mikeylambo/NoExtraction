@@ -1,6 +1,6 @@
 import { L, P } from './lines';
 
-/** Chapter 5 — Aegis (11%). AEGIS's system voice arrives: the first thing in hours that answers him. */
+/** Chapter 5 — Flamingo (11%). Flamingo's system voice arrives: the first thing in hours that answers him. */
 export const LINES = [
   L('c5.halcyon.core11', 'halcyon', 'Core Stability: eleven percent.', P.broadcast, 'Nothing else. The script has run out of comfort.'),
   L('c5.ballast.aegis', 'ballast', "They couldn't fly you out. Because of me.", P.reply, 'Hand on the frame.'),
@@ -8,12 +8,12 @@ export const LINES = [
   L('c5.wren.cache4b', 'wren', "The yard has one cradle left. Sable's ace is guarding it — they call him the Marshal. You're going to need the frame.", P.recording),
   L('c5.ballast.cache4reply', 'ballast', 'I know. I know.', P.reply),
   L('c5.ballast.install', 'ballast', 'Undoing my own work. Great.', P.reply, 'Reinstalling the flight governor.'),
-  L('c5.aegis.boot1', 'aegis', 'AEGIS-07. Cold start.', P.aegis, 'System voice: precise, unhurried, not human, not cold.'),
+  L('c5.aegis.boot1', 'aegis', 'FLAMINGO-07. Cold start.', P.aegis, 'System voice: precise, unhurried, not human, not cold.'),
   L('c5.aegis.boot2', 'aegis', 'Reactor nominal. Hydraulics nominal.', P.aegis),
   L('c5.aegis.boot3', 'aegis', 'Pilot authorization… rejected.', P.aegis),
   L('c5.ballast.bypass', 'ballast', 'Yeah. I figured.', P.reply, 'Ripping a panel. Manual bypass.'),
   L('c5.aegis.boot4', 'aegis', '…Manual.', P.aegis),
-  L('c5.aegis.boot5', 'aegis', 'AEGIS-07 online.', P.aegis, 'Control returns mid-line.'),
+  L('c5.aegis.boot5', 'aegis', 'FLAMINGO-07 online.', P.aegis, 'Control returns mid-line.'),
   L('c5.aegis.governorOk', 'aegis', 'Flight governor installed. Sustained flight available.', P.aegis),
   L('c5.aegis.governorMissing', 'aegis', 'Flight governor absent. Jump jets only.', P.aegis),
   L('c5.aegis.missileOk', 'aegis', 'Shoulder rack armed.', P.aegis),

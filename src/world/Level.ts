@@ -100,7 +100,7 @@ export class LevelContext {
     });
   }
 
-  /** AEGIS component pickup (cyan: Ballast's information). */
+  /** Flamingo component pickup (cyan: Ballast's information). */
   component(id: ComponentId, at: Vec3T): void {
     const w = this.w;
     const g = new THREE.Group(); g.position.set(...at);

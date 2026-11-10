@@ -68,9 +68,9 @@ Michael. Dry, professional, then furious, then focused. Helmeted throughout: sli
 | `c4.ballast.pc4reply` | …Nobody's called me that in a long time. |  | 3.6 s | `assets/vo/ballast/c4.ballast.pc4reply.ogg` |
 | `c4.ballast.arcBlade` | Arc blade. Sorry, Sable. |  | 2.3 s | `assets/vo/ballast/c4.ballast.arcBlade.ogg` |
 | `c4.ballast.conduit` | Here it comes. | Conduit Flood start. | 1.7 s | `assets/vo/ballast/c4.ballast.conduit.ogg` |
-| `c4.ballast.depot` | Forward depot. And— no way. | He sees AEGIS-07. | 2.7 s | `assets/vo/ballast/c4.ballast.depot.ogg` |
+| `c4.ballast.depot` | Forward depot. And— no way. | He sees FLAMINGO-07. | 2.7 s | `assets/vo/ballast/c4.ballast.depot.ogg` |
 
-#### Chapter 5 — Aegis
+#### Chapter 5 — Flamingo
 
 | ID | Line | Context / performance | Target | File |
 |---|---|---|---|---|
@@ -117,7 +117,7 @@ Live radio in Chapter 1 only (band-limited radio). Every cache line is a recordi
 | `c1.wren.spotter` | Spotter on the tower. Forty metres of eyes. Break his line, or take him off it. |  | 6.8 s | `assets/vo/wren/c1.wren.spotter.ogg` |
 | `c1.wren.seen` | They've got you. Break contact. | Sharp. Worried, not panicked. | 2.5 s | `assets/vo/wren/c1.wren.seen.ogg` |
 | `c1.wren.lockdown` | Lockdown. Fast gate's sealed — hack the console or take the long way. |  | 5.6 s | `assets/vo/wren/c1.wren.lockdown.ogg` |
-| `c1.wren.hangar1` | There she is. AEGIS-07. | A little awed. | 2.2 s | `assets/vo/wren/c1.wren.hangar1.ogg` |
+| `c1.wren.hangar1` | There she is. FLAMINGO-07. | A little awed. | 2.2 s | `assets/vo/wren/c1.wren.hangar1.ogg` |
 | `c1.wren.hangar2` | Sable's planetary defense prototype. Pull the flight governor and it's the most expensive statue on Ilvane. |  | 6.6 s | `assets/vo/wren/c1.wren.hangar2.ogg` |
 | `c1.wren.tube` | Governor goes in the cargo tube. Policy: the part rides separate from the operative. |  | 6.0 s | `assets/vo/wren/c1.wren.tube.ogg` |
 | `c1.wren.window` | Extraction window's open. Eight minutes. Pad's on the cliff. Don't make me wait. | The clock appears on this line. | 5.7 s | `assets/vo/wren/c1.wren.window.ogg` |
@@ -160,7 +160,7 @@ Live radio in Chapter 1 only (band-limited radio). Every cache line is a recordi
 | `c4.wren.pc4b` | They named you Ballast because you're the weight they drop so the ship can rise. I never called you that. Not once. |  | 8.9 s | `assets/vo/wren/c4.wren.pc4b.ogg` |
 | `c4.wren.pc4c` | Come home, Teo. | Ballast’s real name, said once. | 1.8 s | `assets/vo/wren/c4.wren.pc4c.ogg` |
 
-#### Chapter 5 — Aegis
+#### Chapter 5 — Flamingo
 
 | ID | Line | Context / performance | Target | File |
 |---|---|---|---|---|
@@ -173,17 +173,17 @@ Live radio in Chapter 1 only (band-limited radio). Every cache line is a recordi
 |---|---|---|---|---|
 | `c6.wren.return` | —allast. Ballast, come in. I've got your beacon. I turned around. | Live again. Through static. She came back. | 5.2 s | `assets/vo/wren/c6.wren.return.ogg` |
 
-### AEGIS-07 (24 lines)
+### FLAMINGO-07 (24 lines)
 
-#### Chapter 5 — Aegis
+#### Chapter 5 — Flamingo
 
 | ID | Line | Context / performance | Target | File |
 |---|---|---|---|---|
-| `c5.aegis.boot1` | AEGIS-07. Cold start. | System voice: precise, unhurried, not human, not cold. | 1.8 s | `assets/vo/aegis/c5.aegis.boot1.ogg` |
+| `c5.aegis.boot1` | FLAMINGO-07. Cold start. | System voice: precise, unhurried, not human, not cold. | 1.8 s | `assets/vo/aegis/c5.aegis.boot1.ogg` |
 | `c5.aegis.boot2` | Reactor nominal. Hydraulics nominal. |  | 2.2 s | `assets/vo/aegis/c5.aegis.boot2.ogg` |
 | `c5.aegis.boot3` | Pilot authorization… rejected. |  | 1.8 s | `assets/vo/aegis/c5.aegis.boot3.ogg` |
 | `c5.aegis.boot4` | …Manual. |  | 1.4 s | `assets/vo/aegis/c5.aegis.boot4.ogg` |
-| `c5.aegis.boot5` | AEGIS-07 online. | Control returns mid-line. | 1.4 s | `assets/vo/aegis/c5.aegis.boot5.ogg` |
+| `c5.aegis.boot5` | FLAMINGO-07 online. | Control returns mid-line. | 1.4 s | `assets/vo/aegis/c5.aegis.boot5.ogg` |
 | `c5.aegis.governorOk` | Flight governor installed. Sustained flight available. |  | 2.9 s | `assets/vo/aegis/c5.aegis.governorOk.ogg` |
 | `c5.aegis.governorMissing` | Flight governor absent. Jump jets only. |  | 2.9 s | `assets/vo/aegis/c5.aegis.governorMissing.ogg` |
 | `c5.aegis.missileOk` | Shoulder rack armed. |  | 1.7 s | `assets/vo/aegis/c5.aegis.missileOk.ogg` |
@@ -211,7 +211,7 @@ Live radio in Chapter 1 only (band-limited radio). Every cache line is a recordi
 
 ### THE MARSHAL (12 lines)
 
-#### Chapter 5 — Aegis
+#### Chapter 5 — Flamingo
 
 | ID | Line | Context / performance | Target | File |
 |---|---|---|---|---|
@@ -258,7 +258,7 @@ Automated evacuation broadcast. Calm, polite, corporate. Bleakly funny because i
 |---|---|---|---|---|
 | `c4.halcyon.core24` | Core Stability: twenty-four percent. This is an automated message. There is no one left to receive your call. | Barely audible, through ice. | 7.6 s | `assets/vo/halcyon/c4.halcyon.core24.ogg` |
 
-#### Chapter 5 — Aegis
+#### Chapter 5 — Flamingo
 
 | ID | Line | Context / performance | Target | File |
 |---|---|---|---|---|
@@ -310,7 +310,7 @@ Designed voices. Barks are about their own evacuation — never comic, occasiona
 | `sable.hurt.medic` | Medic— we don't have a medic. |  | 2.9 s | `assets/vo/sable/sable.hurt.medic.ogg` |
 | `sable.reinf.inbound` | Reinforcements inbound. Last squad we've got. |  | 2.9 s | `assets/vo/sable/sable.reinf.inbound.ogg` |
 | `sable.warden.contact` | Warden two, contact. Large frame. |  | 2.7 s | `assets/vo/sable/sable.warden.contact.ogg` |
-| `sable.warden.aegis` | That's AEGIS. Who is flying AEGIS? |  | 2.9 s | `assets/vo/sable/sable.warden.aegis.ogg` |
+| `sable.warden.aegis` | That's Flamingo. Who is flying Flamingo? |  | 2.9 s | `assets/vo/sable/sable.warden.aegis.ogg` |
 | `sable.warden.hold` | Hold the line. The cradle lifts on schedule. |  | 3.6 s | `assets/vo/sable/sable.warden.hold.ogg` |
 
 ## SFX

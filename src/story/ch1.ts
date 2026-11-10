@@ -28,14 +28,14 @@ export const CH1_SCRIPT: ChapterScript = {
       ],
     },
     {
-      id: 'c1.hangar', cinematic: true, skippable: true, replayable: true, title: 'AEGIS-07', duration: 9,
+      id: 'c1.hangar', cinematic: true, skippable: true, replayable: true, title: 'FLAMINGO-07', duration: 9,
       steps: [
         { at: 0, action: { kind: 'shots', blendOut: 0.9, shots: [
           { id: 'reveal', duration: 5, from: { p: [-6, 2, -96], t: [0, 7, -125], fov: 50 }, to: { p: [-3, 1.6, -103], t: [0, 9, -125], fov: 42 }, letterbox: 1 },
           { id: 'face', duration: 4, from: { p: [4, 9, -116], t: [0, 9.5, -125], fov: 38 }, to: { p: [2, 9.5, -117.5], t: [0, 9.5, -125], fov: 34 }, letterbox: 1 },
         ] } },
         { at: 0.2, action: { kind: 'lines', ids: ['c1.wren.hangar1', 'c1.ballast.hangar1', 'c1.wren.hangar2'] } },
-        { at: 0.1, action: { kind: 'objective', text: 'Pull the flight governor from AEGIS-07', at: [0, 1, -132.5] }, essential: true },
+        { at: 0.1, action: { kind: 'objective', text: 'Pull the flight governor from FLAMINGO-07', at: [0, 1, -132.5] }, essential: true },
       ],
     },
     {

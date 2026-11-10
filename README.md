@@ -30,7 +30,7 @@ target (keys 1–4 shots, 0 auto, O free cam, P post on/off). Asset contract: `A
 The dialogue is written in `script/NoExtraction.fountain`, a [Fountain](https://fountain.io) screenplay.
 Open it in Highland, Beat, Slugline, or VS Code with a Fountain extension. Every spoken block ends with
 its line id as a note, `[[c1.wren.open1]]`. The cue is the speaker label from `data/story/lines.ts`
-(BALLAST, AVA, AEGIS-07, THE MARSHAL, HALCYON SYSTEMS, SABLE), and the parenthetical is the line's
+(BALLAST, AVA, FLAMINGO-07, THE MARSHAL, HALCYON SYSTEMS, SABLE), and the parenthetical is the line's
 performance note. Scene headings and action are free text for the writer and never reach the game.
 
 - `npm run script:import` writes script text and parentheticals into `data/story/*.ts` and refreshes
@@ -50,7 +50,7 @@ packages/mech-frame    @slu/mech-frame  AlphaMech movement/lock/camera/vitals/ri
 packages/perception    @slu/perception  sight, hearing, memory, radio propagation, spatial hash
 src/game               App (shell, saves, menus, loop), Session (chapter runtime), World, Input
 src/player             Ballast: controller, camera, weapons, visor
-src/mech               Aegis-07, Ascent mode
+src/mech               Flamingo-07, Ascent mode
 src/ai                 Sable archetypes, alert ladder, Warden frames, The Marshal
 src/world              collision, level DSL, gates, hazards, collapse events, timed zones, atmosphere, FX, levels/ch1..ch6
 src/story              chapter scripts (beats, sequences, triggers)
@@ -64,7 +64,7 @@ assets/manifest.ts     hero assets: drop a GLB at the path to replace the stand-
 ## Controls (defaults, remappable in Options → Controls)
 
 On foot: WASD move · mouse look · Shift sprint · C/Ctrl crouch (slide while sprinting) · Space vault/mantle · E interact · F takedown · RMB aim · LMB fire · R reload · 1–3/wheel swap · G throw · T cycle throwable · Q visor · H stim · V shoulder · Tab objective.
-Aegis: WASD · Shift tap quick boost / hold assault boost · Space jets/flight · C descend · Z/MMB hard lock · LMB rifle · RMB blade/shove · Q missiles · E cannon.
+Flamingo: WASD · Shift tap quick boost / hold assault boost · Space jets/flight · C descend · Z/MMB hard lock · LMB rifle · RMB blade/shove · Q missiles · E cannon.
 Gamepad per GDD §3/§7. Esc/Start pause. Hold Space/Enter/A to skip cinematics. Backtick: dev panel. F3: overlay.
 
 ## Dev hooks (`window.__nx`)

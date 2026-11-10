@@ -5,7 +5,7 @@
 //   npm run script:import           write script text + parentheticals into data/story/*.ts; new ids are appended
 //   npm run script:export           append game lines the script doesn't place yet (creates the script if missing)
 //
-// Cue → speaker by label in data/story/lines.ts (BALLAST, AVA, AEGIS-07, …). The parenthetical is the line's
+// Cue → speaker by label in data/story/lines.ts (BALLAST, AVA, FLAMINGO-07, …). The parenthetical is the line's
 // performance note. Cue extensions are cosmetic, except (RECORDING) picks the recording priority for new lines.
 import fs from 'node:fs';
 import path from 'node:path';

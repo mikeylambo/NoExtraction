@@ -8,13 +8,13 @@ import type { InputFrame } from '../game/Input';
 import type { MechHostile } from '../ai/MechHostile';
 import { applyOverride } from '../world/ModelOverrides';
 
-/** Aegis wears signal white; its HUD shifts to red as systems fail. */
+/** Flamingo wears signal white; its HUD shifts to red as systems fail. */
 export const AEGIS_PALETTE: MechPalette = { armor: 0xe9edf2, armor2: 0x2a3036, dark: 0x15191d, metal: 0x7a838c, joint: 0x23272b, accent: 0xb9c6d2, glow: 0xf4f7ff };
 
 interface Shell { p: THREE.Vector3; v: THREE.Vector3; life: number; mesh: THREE.Mesh; target: MechHostile | null; dmg: number; missile: boolean }
 
 /**
- * Aegis-07: @slu/mech-frame movement/camera/lock (AlphaMech feel) + this game's armor, weapons,
+ * Flamingo-07: @slu/mech-frame movement/camera/lock (AlphaMech feel) + this game's armor, weapons,
  * components and authored systems loss.
  */
 export class Aegis {
@@ -80,7 +80,7 @@ export class Aegis {
     this.applyComponents();
   }
 
-  /** Components decide what works when Aegis boots (GDD §6). */
+  /** Components decide what works when Flamingo boots (GDD §6). */
   applyComponents(): void {
     const flight = this.w.hasComponent('flightGovernor');
     this.frame.caps = { sustainedFlight: flight, hopHeight: 12, airBoost: flight };

@@ -1,5 +1,5 @@
 /**
- * Aegis-07 — GDD §7. Movement, energy and camera feel come from the @slu/mech-frame baseline
+ * Flamingo-07 — GDD §7. Movement, energy and camera feel come from the @slu/mech-frame baseline
  * (AlphaMech); the GDD's energy numbers are recorded as targets in DECISIONS.md. Combat economy
  * (armor, weapons) uses the GDD numbers below.
  */

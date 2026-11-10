@@ -62,7 +62,7 @@ than detail. Save as `target_ch1.png` … `target_ch6.png`.
 > seeping and starting to flood. Oppressive, very dark, crushed blacks, violet rim light on wet metal.
 > 24 mm lens, filmic.
 
-**ch5 — Aegis (ice shelf breakup, magnetic storm, 11%)**
+**ch5 — Flamingo (ice shelf breakup, magnetic storm, 11%)**
 > Cinematic game screenshot, a 10 m signal-white Halcyon combat mech striding across a breaking ice
 > shelf at night, cyan sensor lights, frost on its armour. Huge plates of ice tilting and splitting,
 > cryovolcanic plumes venting violet-lit steam on the horizon, a violent magenta-green aurora storm

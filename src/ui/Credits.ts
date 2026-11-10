@@ -7,7 +7,7 @@ export const CREDITS: CreditsDocument = {
     { section: 'Cast', role: 'Ballast', names: ['Michael'] },
     { section: 'Cast', role: 'Ava', names: ['Scratch voice — to be cast'] },
     { section: 'Cast', role: 'The Marshal', names: ['Scratch voice — to be cast'] },
-    { section: 'Cast', role: 'AEGIS-07 · Halcyon Systems · Sable Accord', names: ['Designed voices'] },
+    { section: 'Cast', role: 'FLAMINGO-07 · Halcyon Systems · Sable Accord', names: ['Designed voices'] },
     { section: 'Development', role: 'Game design, direction', names: ['Michael'] },
     { section: 'Development', role: 'Built with', names: ['SLU Web Shell', '@slu/narrative', '@slu/mech-frame (from BLINKFALL)', '@slu/perception', 'Three.js'] },
   ],
