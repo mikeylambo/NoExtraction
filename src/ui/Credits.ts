@@ -4,7 +4,7 @@ export const CREDITS: CreditsDocument = {
   title: 'NO EXTRACTION',
   entries: [
     { section: 'NO EXTRACTION', role: 'A Soulfire Legends Universe game', names: [] },
-    { section: 'Cast', role: 'Ballast', names: ['Michael'] },
+    { section: 'Cast', role: 'Frank "Ballast"', names: ['Michael'] },
     { section: 'Cast', role: 'Ava', names: ['Scratch voice — to be cast'] },
     { section: 'Cast', role: 'The Marshal', names: ['Scratch voice — to be cast'] },
     { section: 'Cast', role: 'FLAMINGO-07 · Halcyon Systems · Sable Accord', names: ['Designed voices'] },

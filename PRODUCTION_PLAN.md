@@ -53,8 +53,8 @@ Owners are roles until people are named: **Director** (creative + business decis
 | Task | Owner | Status | Depends on |
 |---|---|---|---|
 | Sable trooper (rigged GLB in game) | Char Art | **Done** (first pass) | |
-| Ballast (back silhouette first) | Char Art | Next (M1) | |
-| Sable spotter, Sable heavy | Char Art | M2 / M3 | |
+| Frank "Ballast" (rigged GLB in game, 36k tris; back-unit light not yet emissive) | Char Art | **Done** (first pass) | |
+| Sable spotter, Sable heavy (rigged GLBs in game) | Char Art | **Done** (first pass) | |
 | Ava, the Marshal (cutscene faces, blendshapes) | Char Art | M3 | facial pipeline |
 | FLAMINGO-07 (per-part pieces for the procedural rig) | Char Art | M3 | |
 | Warden, Sovereign, Ava's ship | Char Art | M3 | |

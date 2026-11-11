@@ -1,0 +1,60 @@
+{
+  "schema_version": 2,
+  "project_name": "ballast",
+  "folder": "20261111_035620_ballast_01a1c8bf",
+  "root_task_id": "01a1c8bf-bb19-74e9-beb7-a0e12b4c6bf4",
+  "created_at": "2026-11-11T03:56:20.756Z",
+  "updated_at": "2026-11-11T03:58:47.650Z",
+  "tasks": [
+    {
+      "task_id": "01a1c8bf-bb19-74e9-beb7-a0e12b4c6bf4",
+      "task_type": "multi-image-to-3d",
+      "resource": "multi-image-to-3d",
+      "endpoint": "/openapi/v1/multi-image-to-3d",
+      "stage": "geometry",
+      "parent_task_id": null,
+      "status": "SUCCEEDED",
+      "files": [
+        "model.glb"
+      ],
+      "task_json": "task_01a1c8bf-bb19-74e9-beb7-a0e12b4c6bf4.json",
+      "operation_id": null,
+      "created_at": "2026-11-11T03:57:58.412Z",
+      "updated_at": "2026-11-11T03:58:04.456Z"
+    },
+    {
+      "task_id": "01a1c8bf-bb19-74e9-beb7-a0e12b4c6bf4",
+      "task_type": "multi-image-to-3d",
+      "resource": "multi-image-to-3d",
+      "endpoint": "/openapi/v1/multi-image-to-3d",
+      "stage": "preview",
+      "parent_task_id": null,
+      "status": "SUCCEEDED",
+      "files": [
+        "preview.png"
+      ],
+      "task_json": null,
+      "operation_id": null,
+      "created_at": "2026-11-11T03:58:05.185Z",
+      "updated_at": "2026-11-11T03:58:05.185Z"
+    },
+    {
+      "task_id": "01a1c8c1-a145-71fc-8645-9979f1f8f4ad",
+      "task_type": "rig",
+      "resource": "rigging",
+      "endpoint": "/openapi/v1/rigging",
+      "stage": "rigging",
+      "parent_task_id": "01a1c8bf-bb19-74e9-beb7-a0e12b4c6bf4",
+      "status": "SUCCEEDED",
+      "files": [
+        "rigged.glb",
+        "walking.glb",
+        "running.glb"
+      ],
+      "task_json": "task_01a1c8c1-a145-71fc-8645-9979f1f8f4ad.json",
+      "operation_id": "a8ecd3e2-ce70-4741-9804-0a6f3daefb66",
+      "created_at": "2026-11-11T03:58:18.727Z",
+      "updated_at": "2026-11-11T03:58:47.650Z"
+    }
+  ]
+}

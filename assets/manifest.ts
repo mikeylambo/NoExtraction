@@ -7,7 +7,7 @@
 export interface ModelEntry { id: string; path: string; standIn: string; scale?: number; note: string }
 
 export const MODELS: ModelEntry[] = [
-  { id: 'ballast', path: 'assets/models/ballast.glb', standIn: 'buildHumanoid("ballast")', note: 'Helmeted operative, ~1.8 m, origin at feet, facing −Z' },
+  { id: 'ballast', path: 'assets/models/ballast.glb', standIn: 'buildHumanoid("ballast")', note: 'Frank, callsign Ballast (the player): winter camo, goggles. Rigged GLB present (Meshy multi-view, 36k tris, hero budget)' },
   { id: 'trooper', path: 'assets/models/sable_trooper.glb', standIn: 'buildHumanoid("trooper")', note: 'Sable trooper, red visor slit (threat colour). Rigged GLB present (Meshy; built by tools/build-character.mjs); its skeleton (1.79 m) is the height reference for every Sable model' },
   { id: 'spotter', path: 'assets/models/sable_spotter.glb', standIn: 'buildHumanoid("spotter")', note: 'Sable spotter: hooded long coat, radio pack with antenna. Rigged GLB present (Meshy multi-view, 20.9k tris)' },
   { id: 'heavy', path: 'assets/models/sable_heavy.glb', standIn: 'buildHumanoid("heavy")', note: 'Sable heavy: chest slab, respirator; ~2.05 m via the heavy style scale. Rigged GLB present (Meshy multi-view, 20.9k tris)' },

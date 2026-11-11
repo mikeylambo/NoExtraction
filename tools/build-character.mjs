@@ -1,12 +1,12 @@
 // Packs a Meshy rig + its animation GLBs into one game-ready character GLB.
 //
 //   node tools/build-character.mjs --rig rigged.glb --clip Walk=walking.glb --clip Run=running.glb \
-//     --out public/assets/models/sable_trooper.glb [--emissive red]
+//     --out public/assets/models/sable_trooper.glb [--emissive red|cyan]
 //
 // - Clips are retargeted by joint name onto the rig's skeleton (Meshy exports one full GLB per clip).
 // - Root motion is removed (the game moves characters; clips play in place).
-// - `--emissive red` builds an emissive map from the saturated-red pixels of the base colour, so a
-//   painted visor slit glows without a separate material.
+// - `--emissive red|cyan` builds an emissive map from the saturated red (Sable visors) or cyan
+//   (Halcyon lights) pixels of the base colour, so painted lights glow without a separate material.
 // - Textures: base colour 2048, normal + ORM 1024, WebP. Geometry is quantized.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -19,7 +19,7 @@ const args = process.argv.slice(2);
 const opt = (k) => { const i = args.indexOf(`--${k}`); return i >= 0 ? args[i + 1] : undefined; };
 const all = (k) => args.flatMap((a, i) => (a === `--${k}` ? [args[i + 1]] : []));
 const rigPath = opt('rig'), out = opt('out'), emissive = opt('emissive');
-if (!rigPath || !out) { console.error('usage: --rig <glb> --out <glb> [--clip Name=<glb>]... [--emissive red]'); process.exit(1); }
+if (!rigPath || !out) { console.error('usage: --rig <glb> --out <glb> [--clip Name=<glb>]... [--emissive red|cyan]'); process.exit(1); }
 
 const io = new NodeIO().registerExtensions(ALL_EXTENSIONS);
 const doc = await io.read(rigPath);
@@ -57,13 +57,16 @@ const encode = async (tex, size, quality) => {
   const img = await sharp(tex.getImage()).resize(size, size).webp({ quality }).toBuffer();
   tex.setImage(img).setMimeType('image/webp');
 };
-if (emissive === 'red') {
+if (emissive === 'red' || emissive === 'cyan') {
   const { data, info } = await sharp(mat.getBaseColorTexture().getImage()).resize(1024, 1024).removeAlpha().raw().toBuffer({ resolveWithObject: true });
   const mask = Buffer.alloc(info.width * info.height * 3);
   let lit = 0;
   for (let i = 0; i < info.width * info.height; i++) {
     const r = data[i * 3], g = data[i * 3 + 1], b = data[i * 3 + 2];
-    if (r > 120 && r > g * 2.2 && r > b * 2.2) { mask[i * 3] = 255; mask[i * 3 + 1] = 42; mask[i * 3 + 2] = 58; lit++; }
+    const hit = emissive === 'red'
+      ? r > 120 && r > g * 2.2 && r > b * 2.2
+      : g > 120 && b > 120 && g > r * 1.8 && b > r * 1.8; // cyan: green and blue well above red
+    if (hit) { mask.set(emissive === 'red' ? [255, 42, 58] : [40, 230, 255], i * 3); lit++; }
   }
   const img = await sharp(mask, { raw: { width: info.width, height: info.height, channels: 3 } }).blur(1.2).webp({ quality: 90 }).toBuffer();
   mat.setEmissiveTexture(doc.createTexture('emissive').setImage(img).setMimeType('image/webp')).setEmissiveFactor([1, 1, 1]);
