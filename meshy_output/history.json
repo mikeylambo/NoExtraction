@@ -25,7 +25,16 @@
       "task_type": "multi-image-to-3d",
       "root_task_id": "01a1c8bf-bb19-74e9-beb7-a0e12b4c6bf4",
       "created_at": "2026-11-11T03:56:20.756Z",
-      "updated_at": "2026-11-11T03:58:47.650Z",
+      "updated_at": "2026-11-11T04:03:56.742Z",
+      "task_count": 6
+    },
+    {
+      "folder": "20261111_040154_rifle-sable_01a1c8c4",
+      "prompt": "rifle_sable",
+      "task_type": "image-to-3d",
+      "root_task_id": "01a1c8c4-d68d-7041-9949-0f0551d1e8c0",
+      "created_at": "2026-11-11T04:01:54.004Z",
+      "updated_at": "2026-11-11T04:03:54.969Z",
       "task_count": 3
     }
   ]

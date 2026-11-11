@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { PALETTE } from '../../data/palette';
-import { applyOverride, skinnedOverride } from './ModelOverrides';
+import { applyOverride, modelOverride, skinnedOverride } from './ModelOverrides';
 import { SkinnedHuman } from './SkinnedHuman';
 
 export type HumanStyle = 'ballast' | 'trooper' | 'spotter' | 'heavy';
@@ -88,7 +88,7 @@ export function buildHumanoid(style: HumanStyle): HumanRig {
   const src = skinnedOverride(style) ?? (style !== 'ballast' ? skinnedOverride('trooper') : null);
   let skin: SkinnedHuman | null = null;
   if (src) {
-    skin = new SkinnedHuman(src, { visor: S.visor, visorIntensity: S.visorI * 1.4 });
+    skin = new SkinnedHuman(src, { visor: S.visor, visorIntensity: S.visorI * 1.4, rifleModel: modelOverride('rifle') });
     root.traverse((c) => { if ((c as THREE.Mesh).isMesh) c.visible = false; });
     const facing = new THREE.Group(); facing.rotation.y = Math.PI; facing.add(skin.root); // rigs face −Z, GLBs +Z
     // Meshy rigs to a requested height that includes props (the spotter's antenna), so skeletons

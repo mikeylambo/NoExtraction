@@ -31,7 +31,11 @@ interface RiflePose { pos: [number, number, number]; yaw: number; pitch: number 
 const RIFLE_LOW: RiflePose = { pos: [-0.07, 1.13, 0.24], yaw: 38, pitch: 34 };
 const RIFLE_AIM: RiflePose = { pos: [-0.12, 1.43, 0.2], yaw: 0, pitch: 0 };
 
-export interface SkinnedOptions { visor: number; visorIntensity: number; tint?: number; rifle?: boolean }
+export interface SkinnedOptions {
+  visor: number; visorIntensity: number; tint?: number; rifle?: boolean;
+  /** `rifle_sable.glb` in rifle space (+Z forward, origin at the grip, a `muzzle` node); else the box stand-in. */
+  rifleModel?: THREE.Object3D | null;
+}
 
 /**
  * A skinned character instance. Legs and torso come from the clips (blended by ground speed); the
@@ -60,7 +64,16 @@ export class SkinnedHuman {
       const m = o as THREE.SkinnedMesh; if (!m.isMesh) return;
       m.castShadow = true; m.receiveShadow = true;
       // cull by a fixed sphere roomy enough for any pose, so off-screen troopers cost nothing
-      if (m.isSkinnedMesh) { m.computeBoundingSphere(); m.boundingSphere!.radius *= 1.5; m.computeBoundingBox(); m.boundingBox!.expandByScalar(m.boundingSphere!.radius * 0.5); }
+      // Skinned vertices are already in model metres, but three culls with the mesh node's own
+      // transform too (Meshy's carries a 0.01 scale), which shrank the sphere to ~1.5 cm at the
+      // feet: the body vanished whenever the feet left the frame. Undo that scale on the bounds.
+      if (m.isSkinnedMesh) {
+        m.computeBoundingSphere(); m.computeBoundingBox();
+        const k = 1 / nodeScale(m, this.root);
+        m.boundingSphere!.center.multiplyScalar(k); m.boundingSphere!.radius *= 1.5 * k;
+        m.boundingBox!.min.multiplyScalar(k); m.boundingBox!.max.multiplyScalar(k);
+        m.boundingBox!.expandByScalar(m.boundingSphere!.radius * 0.5);
+      }
       const mat = (m.material as THREE.MeshStandardMaterial).clone();
       if (opts.tint !== undefined) mat.color.set(opts.tint);
       if (mat.emissiveMap) { mat.emissive.set(opts.visor); mat.emissiveIntensity = opts.visorIntensity; }
@@ -74,14 +87,22 @@ export class SkinnedHuman {
     this.capture(LOW_READY, this.low); this.capture(AIM, this.high);
     const spine = this.bones.get('Spine');
     if (opts.rifle !== false && spine) {
-      buildRifle(this.rifle, this.muzzle);
+      let grip = GRIP;
+      if (opts.rifleModel) {
+        this.rifle.add(opts.rifleModel);
+        const tip = opts.rifleModel.getObjectByName('muzzle');
+        this.muzzle.position.copy(tip ? tip.position : new THREE.Vector3(0, 0.05, 0.4));
+        this.rifle.add(this.muzzle);
+        opts.rifleModel.traverse((o) => { if ((o as THREE.Mesh).isMesh) { o.castShadow = true; } });
+        grip = new THREE.Vector3(); // the GLB's origin is its grip
+      } else buildRifle(this.rifle, this.muzzle);
       this.root.add(this.rifle);
       for (const [pose, out, arms] of [[RIFLE_LOW, this.rifleLow, this.low], [RIFLE_AIM, this.rifleHigh, this.high]] as const) {
         this.rifle.position.set(...pose.pos);
         this.rifle.rotation.set(pose.pitch * D, pose.yaw * D, 0, 'YXZ');
         // Seat the grip in the posed right hand, so the rifle fits any body, not just the trooper's.
         const hand = this.handInPose(arms);
-        if (hand) this.rifle.position.copy(hand).sub(GRIP.clone().applyQuaternion(this.rifle.quaternion));
+        if (hand) this.rifle.position.copy(hand).sub(grip.clone().applyQuaternion(this.rifle.quaternion));
         this.rifle.scale.setScalar(1);
         spine.attach(this.rifle); // keeps the model-space placement, now riding the chest
         out.p.copy(this.rifle.position); out.q.copy(this.rifle.quaternion);
@@ -154,9 +175,16 @@ export class SkinnedHuman {
   }
 }
 
-/** Pistol-grip centre in rifle space (see buildRifle), and wrist → palm distance (m). */
+/** Pistol-grip centre of the box stand-in in rifle space (see buildRifle), and wrist → palm distance (m). */
 const GRIP = new THREE.Vector3(0, -0.08, -0.08);
 const PALM = 0.07;
+/** Uniform scale of `o` relative to `root` (the model's own units). */
+function nodeScale(o: THREE.Object3D, root: THREE.Object3D): number {
+  root.updateMatrixWorld(true);
+  const m = new THREE.Matrix4().copy(root.matrixWorld).invert().multiply(o.matrixWorld);
+  return new THREE.Vector3().setFromMatrixScale(m).x || 1;
+}
+
 const TMP_Q = new THREE.Quaternion();
 const X_AXIS = new THREE.Vector3(1, 0, 0);
 

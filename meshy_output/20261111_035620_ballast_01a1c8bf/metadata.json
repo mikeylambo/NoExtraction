@@ -4,7 +4,7 @@
   "folder": "20261111_035620_ballast_01a1c8bf",
   "root_task_id": "01a1c8bf-bb19-74e9-beb7-a0e12b4c6bf4",
   "created_at": "2026-11-11T03:56:20.756Z",
-  "updated_at": "2026-11-11T03:58:47.650Z",
+  "updated_at": "2026-11-11T04:03:56.742Z",
   "tasks": [
     {
       "task_id": "01a1c8bf-bb19-74e9-beb7-a0e12b4c6bf4",
@@ -55,6 +55,52 @@
       "operation_id": "a8ecd3e2-ce70-4741-9804-0a6f3daefb66",
       "created_at": "2026-11-11T03:58:18.727Z",
       "updated_at": "2026-11-11T03:58:47.650Z"
+    },
+    {
+      "task_id": "01a1c8c5-5217-7035-ad90-c654da42d4ab",
+      "task_type": "retexture",
+      "resource": "retexture",
+      "endpoint": "/openapi/v1/retexture",
+      "stage": "retexture",
+      "parent_task_id": "01a1c8bf-bb19-74e9-beb7-a0e12b4c6bf4",
+      "status": "SUCCEEDED",
+      "files": [],
+      "task_json": "task_01a1c8c5-5217-7035-ad90-c654da42d4ab.json",
+      "operation_id": "aa7184da-4aa9-41e5-80e7-9e323f0fc896",
+      "created_at": "2026-11-11T04:02:18.595Z",
+      "updated_at": "2026-11-11T04:03:45.144Z"
+    },
+    {
+      "task_id": "01a1c8c5-5217-7035-ad90-c654da42d4ab",
+      "task_type": "retexture",
+      "resource": "retexture",
+      "endpoint": "/openapi/v1/retexture",
+      "stage": "retex",
+      "parent_task_id": null,
+      "status": "SUCCEEDED",
+      "files": [
+        "retex.glb"
+      ],
+      "task_json": null,
+      "operation_id": null,
+      "created_at": "2026-11-11T04:03:55.997Z",
+      "updated_at": "2026-11-11T04:03:55.997Z"
+    },
+    {
+      "task_id": "01a1c8c5-5217-7035-ad90-c654da42d4ab",
+      "task_type": "retexture",
+      "resource": "retexture",
+      "endpoint": "/openapi/v1/retexture",
+      "stage": "preview",
+      "parent_task_id": null,
+      "status": "SUCCEEDED",
+      "files": [
+        "retex_preview.png"
+      ],
+      "task_json": null,
+      "operation_id": null,
+      "created_at": "2026-11-11T04:03:56.742Z",
+      "updated_at": "2026-11-11T04:03:56.742Z"
     }
   ]
 }
