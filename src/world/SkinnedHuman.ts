@@ -76,9 +76,12 @@ export class SkinnedHuman {
     if (opts.rifle !== false && spine) {
       buildRifle(this.rifle, this.muzzle);
       this.root.add(this.rifle);
-      for (const [pose, out] of [[RIFLE_LOW, this.rifleLow], [RIFLE_AIM, this.rifleHigh]] as const) {
+      for (const [pose, out, arms] of [[RIFLE_LOW, this.rifleLow, this.low], [RIFLE_AIM, this.rifleHigh, this.high]] as const) {
         this.rifle.position.set(...pose.pos);
         this.rifle.rotation.set(pose.pitch * D, pose.yaw * D, 0, 'YXZ');
+        // Seat the grip in the posed right hand, so the rifle fits any body, not just the trooper's.
+        const hand = this.handInPose(arms);
+        if (hand) this.rifle.position.copy(hand).sub(GRIP.clone().applyQuaternion(this.rifle.quaternion));
         this.rifle.scale.setScalar(1);
         spine.attach(this.rifle); // keeps the model-space placement, now riding the chest
         out.p.copy(this.rifle.position); out.q.copy(this.rifle.quaternion);
@@ -86,6 +89,25 @@ export class SkinnedHuman {
       }
       spine.attach(this.rifle);
     } else this.root.add(this.muzzle), this.muzzle.position.set(0, 1.4, 0.6);
+  }
+
+  /**
+   * Model-space palm position with `pose` applied: a little past the wrist joint, along the
+   * forearm. Null without a right arm chain.
+   */
+  private handInPose(pose: Map<THREE.Bone, THREE.Quaternion>): THREE.Vector3 | null {
+    const hand = this.bones.get('RightHand'), fore = this.bones.get('RightForeArm');
+    if (!hand || !fore) return null;
+    const rest = new Map([...pose.keys()].map((b) => [b, b.quaternion.clone()]));
+    for (const [b, q] of pose) b.quaternion.copy(q);
+    this.root.updateMatrixWorld(true);
+    const inv = this.root.matrixWorld.clone().invert();
+    const w = hand.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv);
+    const e = fore.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv);
+    const palm = w.clone().add(w.clone().sub(e).normalize().multiplyScalar(PALM));
+    for (const [b, q] of rest) b.quaternion.copy(q);
+    this.root.updateMatrixWorld(true);
+    return palm;
   }
 
   /** Records the bone-local rotations that produce a model-space pose, then restores the rest pose. */
@@ -132,6 +154,9 @@ export class SkinnedHuman {
   }
 }
 
+/** Pistol-grip centre in rifle space (see buildRifle), and wrist → palm distance (m). */
+const GRIP = new THREE.Vector3(0, -0.08, -0.08);
+const PALM = 0.07;
 const TMP_Q = new THREE.Quaternion();
 const X_AXIS = new THREE.Vector3(1, 0, 0);
 

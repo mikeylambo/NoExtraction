@@ -91,9 +91,29 @@ export function buildHumanoid(style: HumanStyle): HumanRig {
     skin = new SkinnedHuman(src, { visor: S.visor, visorIntensity: S.visorI * 1.4 });
     root.traverse((c) => { if ((c as THREE.Mesh).isMesh) c.visible = false; });
     const facing = new THREE.Group(); facing.rotation.y = Math.PI; facing.add(skin.root); // rigs face −Z, GLBs +Z
+    // Meshy rigs to a requested height that includes props (the spotter's antenna), so skeletons
+    // differ. Fit each to the trooper's skeleton; `body` then applies the style's own scale.
+    facing.scale.setScalar(SKELETON_REF / skeletonTop(src.scene));
     body.add(facing);
   } else applyOverride(root, style);
   return { root, body, hips, torso, head, armL, foreL, armR, foreR, legL, shinL, legR, shinR, gun, visor, muzzle: skin ? skin.muzzle : muzzle, skin, mats: { armor, under, visor: visorM }, headOffset: 1.62 * S.scale };
+}
+
+/** Top joint height (m) of the trooper's skeleton: the reference every Sable model is fitted to. */
+const SKELETON_REF = 1.79;
+const tops = new WeakMap<THREE.Object3D, number>();
+/** Highest bone in rest pose, in the GLB scene's own space (cached per source). */
+function skeletonTop(scene: THREE.Object3D): number {
+  let top = tops.get(scene);
+  if (top === undefined) {
+    scene.updateMatrixWorld(true);
+    const inv = new THREE.Matrix4().copy(scene.matrixWorld).invert(), v = new THREE.Vector3();
+    top = 0;
+    scene.traverse((o) => { if ((o as THREE.Bone).isBone) top = Math.max(top!, v.setFromMatrixPosition(o.matrixWorld).applyMatrix4(inv).y); });
+    if (!(top > 0.5)) top = SKELETON_REF; // no usable skeleton: leave the model as authored
+    tops.set(scene, top);
+  }
+  return top;
 }
 
 export interface HumanPose {

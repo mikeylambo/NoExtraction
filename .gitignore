@@ -8,3 +8,5 @@ __pycache__
 assets/surfaces/
 # raw decal downloads/sources (packed results in public/decals are committed)
 assets/decals/
+meshy_output/**/*.glb
+meshy_output/**/task_*.json

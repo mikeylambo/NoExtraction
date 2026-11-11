@@ -8,9 +8,9 @@ export interface ModelEntry { id: string; path: string; standIn: string; scale?:
 
 export const MODELS: ModelEntry[] = [
   { id: 'ballast', path: 'assets/models/ballast.glb', standIn: 'buildHumanoid("ballast")', note: 'Helmeted operative, ~1.8 m, origin at feet, facing −Z' },
-  { id: 'trooper', path: 'assets/models/sable_trooper.glb', standIn: 'buildHumanoid("trooper")', note: 'Sable trooper, red visor slit (threat colour). Rigged GLB present (Meshy; built by tools/build-character.mjs); spotter and heavy borrow it until theirs exist' },
-  { id: 'spotter', path: 'assets/models/sable_spotter.glb', standIn: 'buildHumanoid("spotter")', note: 'Sable spotter with scoped rifle' },
-  { id: 'heavy', path: 'assets/models/sable_heavy.glb', standIn: 'buildHumanoid("heavy")', note: 'Armoured front, LMG; ~2.05 m' },
+  { id: 'trooper', path: 'assets/models/sable_trooper.glb', standIn: 'buildHumanoid("trooper")', note: 'Sable trooper, red visor slit (threat colour). Rigged GLB present (Meshy; built by tools/build-character.mjs); its skeleton (1.79 m) is the height reference for every Sable model' },
+  { id: 'spotter', path: 'assets/models/sable_spotter.glb', standIn: 'buildHumanoid("spotter")', note: 'Sable spotter: hooded long coat, radio pack with antenna. Rigged GLB present (Meshy multi-view, 20.9k tris)' },
+  { id: 'heavy', path: 'assets/models/sable_heavy.glb', standIn: 'buildHumanoid("heavy")', note: 'Sable heavy: chest slab, respirator; ~2.05 m via the heavy style scale. Rigged GLB present (Meshy multi-view, 20.9k tris)' },
   { id: 'aegis', path: 'assets/models/aegis07.glb', standIn: 'buildPlayerMech(AEGIS_PALETTE)', note: 'FLAMINGO-07, ~10 m, signal white; rig pivots are procedural, GLB is visual only' },
   { id: 'warden', path: 'assets/models/warden_frame.glb', standIn: 'buildStandardMech(SABLE_FRAME_PALETTE)', note: 'Sable Warden frame' },
   { id: 'sovereign', path: 'assets/models/sovereign.glb', standIn: 'buildHeavyMech(SOVEREIGN_PALETTE)', note: "The Marshal's frame" },
