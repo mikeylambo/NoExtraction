@@ -79,12 +79,15 @@ export class SkinnedHuman {
    * `p` palm normal (bone space), `len` that distance in model metres. Meshy palms sit ~12 cm out.
    */
   private readonly handAxes = new Map<THREE.Object3D, { f: THREE.Vector3; p: THREE.Vector3; len: number }>();
+  /** Finger chains (rigs with finger bones): rest rotation and the local axis that curls each joint into the palm. */
+  private readonly fingers: Record<'Left' | 'Right', { b: THREE.Object3D; rest: THREE.Quaternion; axis: THREE.Vector3; thumb: boolean }[]> = { Left: [], Right: [] };
+  private gripL = 0; private gripR = 0;
 
   constructor(src: SkinnedSource, opts: SkinnedOptions) {
     const model = cloneSkinned(src.scene);
     this.root.add(model);
     model.traverse((o) => {
-      if ((o as THREE.Bone).isBone) this.bones.set(o.name, o as THREE.Bone);
+      if ((o as THREE.Bone).isBone) this.bones.set(o.name.replace(/^mixamorig:?/, ''), o as THREE.Bone); // Mixamo prefixes every bone
       const m = o as THREE.SkinnedMesh; if (!m.isMesh) return;
       m.castShadow = true; m.receiveShadow = true;
       // cull by a fixed sphere roomy enough for any pose, so off-screen troopers cost nothing
@@ -220,11 +223,21 @@ export class SkinnedHuman {
     g.add(this.muzzle); this.muzzle.position.copy(this.tips[w]);
   }
 
-  /** Clip mode: animate, then pin the support hand to the rifle's foregrip (two-bone IK on the left arm). */
+  /** Clip mode: animate, seat the hands on the weapon, close the fingers around it. */
   updateClips(dt: number, p: LocoInput): void {
     this.setWeapon(p.weapon);
     this.clips!.update(dt, p);
-    if (this.weapon !== 'rifle' || this.rifle.parent !== this.root) return;
+    const armed = this.weapon === 'rifle' ? this.rifle.parent === this.root : !!this.pistol.parent;
+    if (this.weapon === 'rifle' && armed) this.holdRifle(dt, p); else this.ikW = 0;
+    // right hand never lets go of a drawn weapon; the support hand grips as much as the IK holds it
+    const dead = p.dead > 0.5;
+    const r = armed && !dead ? 1 : 0.25, l = dead ? 0.25 : this.weapon === 'pistol' ? 0.75 : 0.3 + 0.55 * this.ikW;
+    this.gripR += (r - this.gripR) * Math.min(1, dt * 12); this.gripL += (l - this.gripL) * Math.min(1, dt * 12);
+    this.curl('Right', this.gripR, 1.25, 0.55); this.curl('Left', this.gripL, 1.0, 0.35);
+  }
+
+  /** Pin both hands to the rifle (two-bone IK), the support hand on the foregrip. */
+  private holdRifle(dt: number, p: LocoInput): void {
     const busy = this.clips!.handBusy;
     this.ikW += (1 - busy - this.ikW) * Math.min(1, dt * 14);
     this.root.updateMatrixWorld(true);
@@ -323,11 +336,36 @@ export class SkinnedHuman {
       const fw = centre.clone().sub(hw);
       const len = fw.clone().transformDirection(rootInv).length() > 0 ? centre.clone().applyMatrix4(rootInv).distanceTo(hw.clone().applyMatrix4(rootInv)) : PALM;
       fw.normalize();
+      // palm normal: with a thumb bone it's exact (fingers × thumb side), else "palms face the thighs"
+      // (A-pose rigs). Either way it must point down/inward, which is where a resting palm looks.
       const inward = new THREE.Vector3(side === 'Left' ? -1 : 1, 0, 0).transformDirection(this.root.matrixWorld); // character's left is +X
-      const pw = inward.sub(fw.clone().multiplyScalar(inward.dot(fw))).normalize();
+      const downIn = inward.clone().add(new THREE.Vector3(0, -1, 0).transformDirection(this.root.matrixWorld));
+      const thumb = this.bones.get(`${side}HandThumb1`);
+      let pw: THREE.Vector3;
+      if (thumb) { pw = fw.clone().cross(thumb.getWorldPosition(new THREE.Vector3()).sub(hw)).normalize(); if (pw.dot(downIn) < 0) pw.negate(); }
+      else pw = inward.clone();
+      pw.sub(fw.clone().multiplyScalar(pw.dot(fw))).normalize();
       const inv = h.getWorldQuaternion(new THREE.Quaternion()).invert();
-      this.handAxes.set(h, { f: fw.applyQuaternion(inv), p: pw.applyQuaternion(inv), len });
+      this.handAxes.set(h, { f: fw.clone().applyQuaternion(inv), p: pw.clone().applyQuaternion(inv), len });
+      // finger chains: each joint curls about (its own direction × palm normal), toward the palm
+      for (const name of ['Index', 'Middle', 'Ring', 'Pinky', 'Thumb']) {
+        for (let i = 1; i <= 3; i++) {
+          const b = this.bones.get(`${side}Hand${name}${i}`); if (!b) continue;
+          const next = this.bones.get(`${side}Hand${name}${i + 1}`);
+          const bw = b.getWorldPosition(new THREE.Vector3());
+          const dir = (next ? next.getWorldPosition(new THREE.Vector3()).sub(bw) : bw.clone().sub(b.parent!.getWorldPosition(new THREE.Vector3()))).normalize();
+          // the thumb closes across the palm toward the fingers, not straight down into it
+          const toward = name === 'Thumb' ? pw.clone().add(fw).normalize() : pw;
+          const axis = dir.clone().cross(toward).normalize().applyQuaternion(b.getWorldQuaternion(new THREE.Quaternion()).invert());
+          this.fingers[side].push({ b, rest: b.quaternion.clone(), axis, thumb: name === 'Thumb' });
+        }
+      }
     }
+  }
+
+  /** Close `side`'s fingers: `k` 0 open … 1 full grip, `f`/`t` radians per finger / thumb joint at k = 1. */
+  private curl(side: 'Left' | 'Right', k: number, f: number, t: number): void {
+    for (const j of this.fingers[side]) j.b.quaternion.copy(j.rest).multiply(Q0.setFromAxisAngle(j.axis, k * (j.thumb ? t : f)));
   }
 
   /**
@@ -396,6 +434,7 @@ export class SkinnedHuman {
 const V0 = new THREE.Vector3(), V1 = new THREE.Vector3(), V2 = new THREE.Vector3();
 /** Palm centre to palm surface (m). */
 const HAND_HALF_THICK = 0.018;
+const Q0 = new THREE.Quaternion();
 
 /**
  * Analytic two-bone IK (law of cosines) in world space: bend the elbow to the shoulder→target

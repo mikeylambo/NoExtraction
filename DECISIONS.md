@@ -170,6 +170,14 @@ mouse, pad) · reset.
   During reload, throw, melee or full-body actions, the rifle rides the right hand from its last
   solve and the left hand lets go; firing keeps both on. A `foregrip` node in the rifle GLB
   overrides the estimated support-hand point.
+- **Frank on a Mixamo rig with fingers.** The Meshy mesh went through Mixamo's auto-rigger: 34 bones,
+  with thumb and index chains, and the other fingers bound to the index. `tools/build-mixamo-character.mjs`
+  stands him on his feet and matches the old rig's hip height and skeleton top, adding a
+  `HeadTop_End` joint. It also restores the normal, metal/roughness and emissive maps that Mixamo drops.
+  Mesh quantization is skipped because it strips the skin. On rigs with finger bones,
+  `SkinnedHuman` curls each joint about (its direction × palm normal): a full wrap on the drawn
+  weapon's grip, and a C-clamp on the left hand scaled by its IK weight. The palm normal comes from
+  the thumb when there is one.
 - **Sidearm.** Frank carries a second weapon in clip mode: `sidearm.glb` if present, else a code-built
   suppressed pistol. It's mounted from the library pistol stance, and the shared `muzzle` moves to
   whichever weapon is out. A Meshy pistol drops in via `tools/build-weapon.mjs --length 0.3`.

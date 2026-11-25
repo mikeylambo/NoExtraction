@@ -158,5 +158,5 @@ requestAnimationFrame(frame);
     speedNow = Number($<HTMLInputElement>('speed').value); dirNow = THREE.MathUtils.degToRad(Number($<HTMLInputElement>('dir').value));
   },
   step(dt: number, n = 1) { for (let i = 0; i < n; i++) step(dt); },
-  view(y: number, h = 1.5, d = 4) { controls.target.set(0, 0.95, 0); cam.position.set(Math.sin(y) * d, h, Math.cos(y) * d); cam.lookAt(0, 0.95, 0); controls.update(); },
+  view(y: number, h = 1.5, d = 4, ty = 0.95) { controls.target.set(0, ty, 0); cam.position.set(Math.sin(y) * d, h, Math.cos(y) * d); controls.update(); },
 };
