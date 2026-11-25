@@ -74,8 +74,11 @@ export class SkinnedHuman {
   /** Rifle transform relative to the right hand, kept while the hands are busy (reload, throw…). */
   private readonly inHand = new THREE.Matrix4();
   private hasInHand = false;
-  /** Each hand's finger direction and palm normal in its own bone space (from the rest pose). */
-  private readonly handAxes = new Map<THREE.Object3D, { f: THREE.Vector3; p: THREE.Vector3 }>();
+  /**
+   * Each hand, measured from the skinned mesh in the rest pose: `f` wrist → palm centre direction and
+   * `p` palm normal (bone space), `len` that distance in model metres. Meshy palms sit ~12 cm out.
+   */
+  private readonly handAxes = new Map<THREE.Object3D, { f: THREE.Vector3; p: THREE.Vector3; len: number }>();
 
   constructor(src: SkinnedSource, opts: SkinnedOptions) {
     const model = cloneSkinned(src.scene);
@@ -225,7 +228,7 @@ export class SkinnedHuman {
     const busy = this.clips!.handBusy;
     this.ikW += (1 - busy - this.ikW) * Math.min(1, dt * 14);
     this.root.updateMatrixWorld(true);
-    this.placeRifle(this.ikW);
+    this.placeRifle(this.ikW, p.aim);
     if (this.ikW < 0.01) return;
     this.rifle.updateMatrixWorld(true);
     const k = this.root.getWorldScale(V2).x;
@@ -246,13 +249,19 @@ export class SkinnedHuman {
    * Put the rifle where the clip's hands say it is: grip at the right palm, barrel through the left
    * palm, top to the sky. While the hands are busy it rides the right hand from its last solve.
    */
-  private placeRifle(w: number): void {
+  private placeRifle(w: number, aim = 0): void {
     const rh = this.bones.get('RightHand'), rf = this.bones.get('RightForeArm'), lh = this.bones.get('LeftHand'), lf = this.bones.get('LeftForeArm');
     if (!rh || !rf || !lh || !lf) return;
     const inv = this.root.matrixWorld.clone().invert();
-    const palm = (h: THREE.Object3D, f: THREE.Object3D) => { const a = h.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv), b = f.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv); return a.add(a.clone().sub(b).normalize().multiplyScalar(PALM)); };
+    const palm = (h: THREE.Object3D, f: THREE.Object3D) => {
+      const ax = this.handAxes.get(h);
+      if (ax) return h.getWorldPosition(new THREE.Vector3()).add(ax.f.clone().applyQuaternion(h.getWorldQuaternion(new THREE.Quaternion())).multiplyScalar(ax.len * this.root.getWorldScale(V1).x)).applyMatrix4(inv);
+      const a = h.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv), b = f.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv); return a.add(a.clone().sub(b).normalize().multiplyScalar(PALM));
+    };
     const R = palm(rh, rf), L = palm(lh, lf);
     const z = L.sub(R); if (z.z < 0.05) z.z = 0.05; z.normalize();
+    // aiming: the barrel goes level down the sight line, whatever pitch the clip's hands imply
+    z.y *= 1 - 0.85 * THREE.MathUtils.clamp(aim, 0, 1); z.normalize();
     const x = new THREE.Vector3(0, 1, 0).cross(z).normalize(), y = z.clone().cross(x);
     const solved = new THREE.Matrix4().makeBasis(x, y, z);
     solved.setPosition(R.sub(this.gripPt.clone().applyMatrix4(new THREE.Matrix4().extractRotation(solved))));
@@ -275,28 +284,49 @@ export class SkinnedHuman {
     const ax = c && this.handAxes.get(c);
     if (!a || !b || !c || !ax) return;
     P = P.clone().sub(F.clone().multiplyScalar(P.dot(F))).normalize(); // keep the basis square
-    // wrist sits behind the palm centre: back along the fingers, off the surface
-    const wrist = contact.clone().addScaledVector(F, -0.055 * k).addScaledVector(P, -0.03 * k);
-    solveTwoBone(a, b, c, wrist, w);
     const want = basisQuat(F, P).multiply(basisQuat(ax.f, ax.p).invert()); // world hand rotation
+    // the palm centre lands on the surface: wrist = contact − (wrist → centre) − half the hand's thickness
+    const wrist = contact.clone().addScaledVector(F, -ax.len * k).addScaledVector(P, -HAND_HALF_THICK * k);
+    solveTwoBone(a, b, c, wrist, w);
     const pw = c.parent!.getWorldQuaternion(new THREE.Quaternion());
     const local = pw.invert().multiply(want);
     c.quaternion.slerp(local, w);
     c.updateMatrixWorld(true);
   }
 
-  /** Rest pose: fingers run along forearm → hand; palms face the thighs (inward, toward the midline). */
+  /**
+   * Rest pose, from the mesh itself: the palm centre is the mean of the vertices the hand bone owns,
+   * the palm normal faces the thigh (inward). Falls back to the forearm line with no skin data.
+   */
   private captureHandAxes(): void {
     this.root.updateMatrixWorld(true);
+    let mesh: THREE.SkinnedMesh | undefined;
+    this.root.traverse((o) => { if (!mesh && (o as THREE.SkinnedMesh).isSkinnedMesh) mesh = o as THREE.SkinnedMesh; });
+    const rootInv = this.root.matrixWorld.clone().invert();
     for (const side of ['Left', 'Right'] as const) {
       const h = this.bones.get(`${side}Hand`), f = this.bones.get(`${side}ForeArm`);
       if (!h || !f) continue;
-      const inv = h.getWorldQuaternion(new THREE.Quaternion()).invert();
-      const fw = h.getWorldPosition(new THREE.Vector3()).sub(f.getWorldPosition(new THREE.Vector3())).normalize();
-      const rootQ = this.root.getWorldQuaternion(new THREE.Quaternion());
-      const inward = new THREE.Vector3(side === 'Left' ? -1 : 1, 0, 0).applyQuaternion(rootQ); // character's left is +X
+      const hw = h.getWorldPosition(new THREE.Vector3());
+      let centre: THREE.Vector3 | null = null;
+      if (mesh) {
+        const sk = mesh.skeleton, bi = sk.bones.indexOf(h as THREE.Bone);
+        const g = mesh.geometry, pos = g.attributes.position, si = g.attributes.skinIndex, sw = g.attributes.skinWeight;
+        if (bi >= 0 && si && sw) {
+          const sum = new THREE.Vector3(), v = new THREE.Vector3(); let n = 0;
+          for (let i = 0; i < pos.count; i++) for (let j = 0; j < 4; j++) {
+            if (si.getComponent(i, j) === bi && sw.getComponent(i, j) > 0.6) { mesh.getVertexPosition(i, v); sum.add(v.applyMatrix4(mesh.matrixWorld)); n++; break; }
+          }
+          if (n > 20) centre = sum.multiplyScalar(1 / n);
+        }
+      }
+      if (!centre) centre = hw.clone().add(hw.clone().sub(f.getWorldPosition(new THREE.Vector3())).normalize().multiplyScalar(PALM));
+      const fw = centre.clone().sub(hw);
+      const len = fw.clone().transformDirection(rootInv).length() > 0 ? centre.clone().applyMatrix4(rootInv).distanceTo(hw.clone().applyMatrix4(rootInv)) : PALM;
+      fw.normalize();
+      const inward = new THREE.Vector3(side === 'Left' ? -1 : 1, 0, 0).transformDirection(this.root.matrixWorld); // character's left is +X
       const pw = inward.sub(fw.clone().multiplyScalar(inward.dot(fw))).normalize();
-      this.handAxes.set(h, { f: fw.applyQuaternion(inv), p: pw.applyQuaternion(inv) });
+      const inv = h.getWorldQuaternion(new THREE.Quaternion()).invert();
+      this.handAxes.set(h, { f: fw.applyQuaternion(inv), p: pw.applyQuaternion(inv), len });
     }
   }
 
@@ -364,6 +394,8 @@ export class SkinnedHuman {
 }
 
 const V0 = new THREE.Vector3(), V1 = new THREE.Vector3(), V2 = new THREE.Vector3();
+/** Palm centre to palm surface (m). */
+const HAND_HALF_THICK = 0.018;
 
 /**
  * Analytic two-bone IK (law of cosines) in world space: bend the elbow to the shoulder→target

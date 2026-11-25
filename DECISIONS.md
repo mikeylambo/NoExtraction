@@ -162,8 +162,10 @@ mouse, pad) · reset.
      through the left, top up.
   2. Two-bone IK puts each hand on it: right palm against the pistol grip, left in a C-clamp on the
      handguard, fingers toward the muzzle.
-  3. Each wrist is turned to match. Hand axes come from the rest pose: fingers along the forearm,
-     palms facing the thighs.
+  3. Each wrist is turned to match. Hand axes are measured from the skinned mesh: the palm centre is
+     the mean of the vertices the hand bone owns (~12 cm past the wrist on Meshy rigs, double a
+     textbook hand, which is what floated the hands before), and palms face the thighs at rest.
+  4. When aiming, the barrel is levelled down the sight line, whatever pitch the clip's hands imply.
 
   During reload, throw, melee or full-body actions, the rifle rides the right hand from its last
   solve and the left hand lets go; firing keeps both on. A `foregrip` node in the rifle GLB
