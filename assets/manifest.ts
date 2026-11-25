@@ -13,6 +13,7 @@ export const MODELS: ModelEntry[] = [
   { id: 'spotter', path: 'assets/models/sable_spotter.glb', standIn: 'buildHumanoid("spotter")', note: 'Sable spotter: hooded long coat, radio pack with antenna. Rigged GLB present (Meshy multi-view, 20.9k tris)' },
   { id: 'heavy', path: 'assets/models/sable_heavy.glb', standIn: 'buildHumanoid("heavy")', note: 'Sable heavy: chest slab, respirator; ~2.05 m via the heavy style scale. Rigged GLB present (Meshy multi-view, 20.9k tris)' },
   { id: 'rifle', path: 'assets/models/rifle_sable.glb', standIn: 'buildRifle() in SkinnedHuman', note: 'Sable service rifle, bullpup, 0.72 m. Rifle space: +Z forward, origin at the grip, `muzzle` node (tools/build-weapon.mjs). Carried by every skinned character' },
+  { id: 'sidearm', path: 'assets/models/sidearm.glb', standIn: 'buildPistol() in SkinnedHuman', note: "Ballast's suppressed sidearm, ~0.3 m with can. Same space as the rifle (tools/build-weapon.mjs --length 0.3): +Z forward, origin at the grip, `muzzle` node" },
   { id: 'aegis', path: 'assets/models/aegis07.glb', standIn: 'buildPlayerMech(AEGIS_PALETTE)', note: 'FLAMINGO-07, ~10 m, signal white; rig pivots are procedural, GLB is visual only' },
   { id: 'warden', path: 'assets/models/warden_frame.glb', standIn: 'buildStandardMech(SABLE_FRAME_PALETTE)', note: 'Sable Warden frame' },
   { id: 'sovereign', path: 'assets/models/sovereign.glb', standIn: 'buildHeavyMech(SOVEREIGN_PALETTE)', note: "The Marshal's frame" },

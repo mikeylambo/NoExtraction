@@ -156,8 +156,14 @@ mouse, pad) · reset.
 - **Rifle in hand.** In clip mode, `SkinnedHuman` mounts the rifle on the right-hand bone. It's solved
   once from the library aim pose: grip in the palm, barrel toward the support hand. The coded
   low-ready/aim arm poses and Walk/Run stay as the fallback when xbot.glb is absent.
+- **Support hand IK.** Mixamo's rifle clips were made for a longer rifle than the Sable bullpup, so after
+  the clips play, a two-bone IK pins the left hand to the rifle's foregrip. That's a `foregrip` node if
+  the GLB has one, else under the handguard. It fades out while the hand is busy: reload, throw, hit,
+  melee or any full-body action (firing keeps it on).
+- **Sidearm.** Frank carries a second weapon in clip mode: `sidearm.glb` if present, else a code-built
+  suppressed pistol. It's mounted from the library pistol stance, and the shared `muzzle` moves to
+  whichever weapon is out. A Meshy pistol drops in via `tools/build-weapon.mjs --length 0.3`.
 - **Gaps covered without new clips.** Mixamo has no pistol reload, draw or holster. Pistol reload
   is the rifle reload's mag-swap window on the upper body. The strangle pair (17 s) doesn't fit a
   0.55 s takedown, so stab / rifle punch play instead. The strangle stays in the file for cinematics.
-  The pistol stance plays with the rifle mesh until a sidearm GLB exists.
 - **Preview.** `npm run dev`, then `/anim-preview.html?style=ballast|trooper|spotter|heavy`.

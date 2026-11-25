@@ -91,7 +91,7 @@ export function buildHumanoid(style: HumanStyle): HumanRig {
   const src = own ?? skinnedOverride('human');
   let skin: SkinnedHuman | null = null;
   if (src) {
-    skin = new SkinnedHuman(src, { visor: S.visor, visorIntensity: S.visorI * 1.4, rifleModel: modelOverride('rifle'), tint: own ? undefined : S.armor });
+    skin = new SkinnedHuman(src, { visor: S.visor, visorIntensity: S.visorI * 1.4, rifleModel: modelOverride('rifle'), sidearm: style === 'ballast', sidearmModel: modelOverride('sidearm'), tint: own ? undefined : S.armor });
     root.traverse((c) => { if ((c as THREE.Mesh).isMesh) c.visible = false; });
     const facing = new THREE.Group(); facing.rotation.y = Math.PI; facing.add(skin.root); // rigs face −Z, GLBs +Z
     // Meshy rigs to a requested height that includes props (the spotter's antenna), so skeletons
@@ -150,7 +150,7 @@ export class HumanAnimator {
 
   update(dt: number): void {
     const p = this.pose, r = this.rig;
-    if (this.clips) { this.clips.update(dt, p); return; }
+    if (this.clips) { if (r.skin) r.skin.updateClips(dt, p); else this.clips.update(dt, p); return; }
     const s01 = Math.min(1, p.speed / Math.max(0.1, p.maxSpeed));
     const cadence = 1.6 + s01 * 1.6;
     this.phase += dt * cadence * Math.PI * 2 * (p.speed > 0.15 ? 1 : 0);

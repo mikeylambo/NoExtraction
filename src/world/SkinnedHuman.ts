@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js';
-import { ClipAnimator } from './ClipAnimator';
+import { ClipAnimator, type LocoInput, type Weapon } from './ClipAnimator';
 import { canRetarget, clipFor } from './Retarget';
 
 /** A loaded character GLB: one skinned mesh, a humanoid skeleton and `Walk` / `Run` clips. */
@@ -37,6 +37,9 @@ export interface SkinnedOptions {
   visor: number; visorIntensity: number; tint?: number; rifle?: boolean;
   /** `rifle_sable.glb` in rifle space (+Z forward, origin at the grip, a `muzzle` node); else the box stand-in. */
   rifleModel?: THREE.Object3D | null;
+  /** `sidearm.glb`, same convention; else the code-built sidearm. Only characters that switch weapons. */
+  sidearmModel?: THREE.Object3D | null;
+  sidearm?: boolean;
 }
 
 /**
@@ -59,6 +62,13 @@ export class SkinnedHuman {
   private walkW = 0; private runW = 0; private t = 0; private breath = 0;
   /** The Mixamo clip library retargeted to this skeleton (xbot.glb present); else Walk/Run + posed arms. */
   readonly clips: ClipAnimator | null = null;
+  private readonly pistol = new THREE.Group();
+  /** Muzzle tips in each weapon's own space; `muzzle` moves between them on a swap. */
+  private readonly tips = { rifle: new THREE.Vector3(), pistol: new THREE.Vector3() };
+  /** Support-hand point on the rifle (rifle space): a `foregrip` node, else under the handguard. */
+  private readonly foregrip = new THREE.Vector3();
+  private weapon: Weapon = 'rifle';
+  private ikW = 0;
 
   constructor(src: SkinnedSource, opts: SkinnedOptions) {
     const model = cloneSkinned(src.scene);
@@ -90,8 +100,10 @@ export class SkinnedHuman {
     if (canRetarget(src.scene)) {
       this.walk?.stop(); this.run?.stop();
       this.clips = new ClipAnimator(model, src.scene);
-      if (opts.rifle !== false) this.mountRifleInHand(src.scene, opts.rifleModel ?? null);
-      else { this.root.add(this.muzzle); this.muzzle.position.set(0, 1.4, 0.6); }
+      if (opts.rifle !== false) {
+        this.mountRifleInHand(src.scene, opts.rifleModel ?? null);
+        if (opts.sidearm) this.mountPistolInHand(src.scene, opts.sidearmModel ?? null);
+      } else { this.root.add(this.muzzle); this.muzzle.position.set(0, 1.4, 0.6); }
       return;
     }
 
@@ -137,7 +149,10 @@ export class SkinnedHuman {
       this.rifle.add(this.muzzle);
       rifleModel.traverse((o) => { if ((o as THREE.Mesh).isMesh) o.castShadow = true; });
       grip = new THREE.Vector3();
-    } else buildRifle(this.rifle, this.muzzle);
+      const fg = rifleModel.getObjectByName('foregrip');
+      this.foregrip.copy(fg ? fg.position : new THREE.Vector3(0, this.muzzle.position.y * 0.3 - 0.02, this.muzzle.position.z * 0.58));
+    } else { buildRifle(this.rifle, this.muzzle); this.foregrip.set(0, -0.035, 0.3); }
+    this.tips.rifle.copy(this.muzzle.position);
     const hand = this.bones.get('RightHand'), fore = this.bones.get('RightForeArm'), left = this.bones.get('LeftHand');
     const aim = clipFor(scene, 'idle_aim');
     if (!hand || !fore || !left || !aim) { this.root.add(this.rifle); return; }
@@ -153,6 +168,62 @@ export class SkinnedHuman {
     this.root.add(this.rifle);
     hand.attach(this.rifle);
     act.stop(); this.mixer.uncacheAction(aim);
+  }
+
+  /** Sidearm in the right hand, solved from the library pistol stance: barrel along the body's forward. */
+  private mountPistolInHand(scene: THREE.Object3D, model: THREE.Object3D | null): void {
+    let grip = PISTOL_GRIP;
+    const tip = new THREE.Object3D();
+    if (model) {
+      this.pistol.add(model);
+      const m = model.getObjectByName('muzzle'); tip.position.copy(m ? m.position : new THREE.Vector3(0, 0.03, 0.17));
+      model.traverse((o) => { if ((o as THREE.Mesh).isMesh) o.castShadow = true; });
+      grip = new THREE.Vector3();
+    } else buildPistol(this.pistol, tip);
+    this.tips.pistol.copy(tip.position);
+    const hand = this.bones.get('RightHand'), fore = this.bones.get('RightForeArm');
+    const stance = clipFor(scene, 'pistol_idle');
+    this.pistol.visible = false;
+    if (!hand || !fore || !stance) { this.root.add(this.pistol); return; }
+    const act = this.mixer.clipAction(stance); act.play(); act.time = 0.3; this.mixer.update(0);
+    this.root.updateMatrixWorld(true);
+    const inv = this.root.matrixWorld.clone().invert();
+    const w = hand.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv);
+    const palm = w.clone().add(w.clone().sub(fore.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv)).normalize().multiplyScalar(PALM));
+    // the forearm points the gun: barrel continues the wrist line, levelled to the horizon
+    const z = w.clone().sub(fore.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv)); z.y *= 0.3; z.normalize();
+    const x = new THREE.Vector3(0, 1, 0).cross(z).normalize(), y = z.clone().cross(x);
+    this.pistol.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(x, y, z));
+    this.pistol.position.copy(palm).sub(grip.clone().applyQuaternion(this.pistol.quaternion));
+    this.root.add(this.pistol);
+    hand.attach(this.pistol);
+    act.stop(); this.mixer.uncacheAction(stance);
+  }
+
+  /** Show `w` in hand and move the muzzle to it. */
+  setWeapon(w: Weapon): void {
+    if (w === this.weapon || (w === 'pistol' && !this.pistol.parent)) return;
+    this.weapon = w;
+    const g = w === 'pistol' ? this.pistol : this.rifle;
+    this.rifle.visible = w === 'rifle'; this.pistol.visible = w === 'pistol';
+    g.add(this.muzzle); this.muzzle.position.copy(this.tips[w]);
+  }
+
+  /** Clip mode: animate, then pin the support hand to the rifle's foregrip (two-bone IK on the left arm). */
+  updateClips(dt: number, p: LocoInput): void {
+    this.setWeapon(p.weapon);
+    this.clips!.update(dt, p);
+    const want = this.weapon === 'rifle' && this.rifle.parent ? 1 - this.clips!.handBusy : 0;
+    this.ikW += (want - this.ikW) * Math.min(1, dt * 14);
+    if (this.ikW < 0.01) return;
+    const a = this.bones.get('LeftArm'), b = this.bones.get('LeftForeArm'), c = this.bones.get('LeftHand');
+    if (!a || !b || !c) return;
+    this.root.updateMatrixWorld(true);
+    const target = this.rifle.localToWorld(this.foregrip.clone());
+    // the hand bone is the wrist; the palm sits a little past it, so aim the wrist short of the grip
+    const shoulder = a.getWorldPosition(V0);
+    target.addScaledVector(V1.copy(target).sub(shoulder).normalize(), -PALM * this.root.getWorldScale(V2).x);
+    solveTwoBone(a, b, c, target, this.ikW);
   }
 
   /**
@@ -218,6 +289,39 @@ export class SkinnedHuman {
   }
 }
 
+const V0 = new THREE.Vector3(), V1 = new THREE.Vector3(), V2 = new THREE.Vector3();
+
+/**
+ * Analytic two-bone IK (law of cosines) in world space: bend the elbow to the shoulder→target
+ * distance in the arm's current plane, then swing the shoulder onto the target. Blended by `w`.
+ */
+function solveTwoBone(a: THREE.Object3D, b: THREE.Object3D, c: THREE.Object3D, t: THREE.Vector3, w: number): void {
+  const qa = a.quaternion.clone(), qb = b.quaternion.clone();
+  const pa = a.getWorldPosition(new THREE.Vector3()), pb = b.getWorldPosition(new THREE.Vector3()), pc = c.getWorldPosition(new THREE.Vector3());
+  const lab = pb.distanceTo(pa), lcb = pc.distanceTo(pb);
+  const lat = THREE.MathUtils.clamp(t.distanceTo(pa), 0.01, lab + lcb - 1e-3);
+  const ac = pc.clone().sub(pa), ab = pb.clone().sub(pa), ba = pa.clone().sub(pb), bc = pc.clone().sub(pb);
+  const cur0 = ac.angleTo(ab), cur1 = ba.angleTo(bc);
+  const want0 = Math.acos(THREE.MathUtils.clamp((lcb * lcb - lab * lab - lat * lat) / (-2 * lab * lat), -1, 1));
+  const want1 = Math.acos(THREE.MathUtils.clamp((lat * lat - lab * lab - lcb * lcb) / (-2 * lab * lcb), -1, 1));
+  const axis = ac.clone().cross(ab);
+  if (axis.lengthSq() < 1e-10) return; // arm dead straight: no plane to bend in
+  axis.normalize();
+  rotateWorld(a, new THREE.Quaternion().setFromAxisAngle(axis, want0 - cur0));
+  rotateWorld(b, new THREE.Quaternion().setFromAxisAngle(axis, want1 - cur1));
+  a.updateMatrixWorld(true);
+  const pc2 = c.getWorldPosition(new THREE.Vector3());
+  rotateWorld(a, new THREE.Quaternion().setFromUnitVectors(pc2.sub(pa).normalize(), t.clone().sub(pa).normalize()));
+  if (w < 1) { a.quaternion.copy(qa.slerp(a.quaternion, w)); b.quaternion.copy(qb.slerp(b.quaternion, w)); }
+  a.updateMatrixWorld(true);
+}
+/** Apply a world-space rotation to a bone, in its local frame. */
+function rotateWorld(o: THREE.Object3D, q: THREE.Quaternion): void {
+  const pw = o.parent ? o.parent.getWorldQuaternion(new THREE.Quaternion()) : new THREE.Quaternion();
+  o.quaternion.premultiply(pw.clone().invert().multiply(q).multiply(pw));
+  o.updateMatrixWorld(true);
+}
+
 /** Pistol-grip centre of the box stand-in in rifle space (see buildRifle), and wrist → palm distance (m). */
 const GRIP = new THREE.Vector3(0, -0.08, -0.08);
 const PALM = 0.07;
@@ -244,4 +348,23 @@ function buildRifle(g: THREE.Group, muzzle: THREE.Object3D): void {
   box(0.03, 0.035, 0.12, metal, 0, 0.058, 0.05); // optic
   const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.2, 8), metal); barrel.rotation.x = Math.PI / 2; barrel.position.set(0, 0.008, 0.52); barrel.castShadow = true; g.add(barrel);
   muzzle.position.set(0, 0.008, 0.63); g.add(muzzle);
+}
+
+/** Grip centre of the code-built sidearm in its own space (see buildPistol). */
+const PISTOL_GRIP = new THREE.Vector3(0, -0.055, -0.01);
+
+/** Stand-in compact sidearm with suppressor (replaced when `sidearm.glb` exists). Points along +Z. */
+function buildPistol(g: THREE.Group, muzzle: THREE.Object3D): void {
+  const metal = new THREE.MeshStandardMaterial({ color: 0x1c1f23, roughness: 0.4, metalness: 0.75 });
+  const poly = new THREE.MeshStandardMaterial({ color: 0x25292d, roughness: 0.8, metalness: 0.05 });
+  const box = (w: number, h: number, d: number, m: THREE.Material, x: number, y: number, z: number, rx = 0) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); b.position.set(x, y, z); b.rotation.x = rx; b.castShadow = true; g.add(b); return b; };
+  box(0.03, 0.032, 0.19, metal, 0, 0.012, 0.045); // slide
+  box(0.028, 0.022, 0.15, poly, 0, -0.012, 0.035); // frame / dust cover
+  box(0.028, 0.1, 0.045, poly, 0, -0.06, -0.012, -0.22); // grip
+  box(0.022, 0.012, 0.05, poly, 0, -0.03, 0.03); // trigger guard
+  box(0.006, 0.008, 0.012, metal, 0, 0.032, -0.04); // rear sight
+  box(0.004, 0.008, 0.006, metal, 0, 0.032, 0.13); // front sight
+  const can = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.13, 12), metal);
+  can.rotation.x = Math.PI / 2; can.position.set(0, 0.012, 0.2); can.castShadow = true; g.add(can); // suppressor
+  muzzle.position.set(0, 0.012, 0.27); g.add(muzzle);
 }

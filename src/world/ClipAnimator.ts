@@ -122,6 +122,16 @@ export class ClipAnimator {
     if (cue.layer === 'upper') this.upper = shot; else this.full = shot;
   }
 
+  /**
+   * How much the support hand is busy with something other than the gun (0..1): any full-body
+   * one-shot, or an upper-body one that isn't firing. Drives the left-hand IK weight.
+   */
+  get handBusy(): number {
+    const f = this.full?.w ?? 0;
+    const u = this.upper && !/fire/.test(this.upper.cue.clip) ? this.upper.w : 0;
+    return Math.max(f, u, this.dying ? 1 : 0);
+  }
+
   /** End the current full-body one-shot early (e.g. slide cancelled). */
   stopFull(): void { if (this.full) { this.full.done = true; } }
 
