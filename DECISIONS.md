@@ -132,3 +132,31 @@ mouse, pad) · reset.
   GitHub URLs with `GITHUB_TOKEN` per the shell's `docs/PRIVATE-REPO-INSTALLS.md`). **No deploy was
   made from this session**: there are no Vercel credentials here. Connect the repo in Vercel, add
   `GITHUB_TOKEN` (Contents: read on the shell repo), and every push gets a preview deploy.
+
+## 6. Character animation (Mixamo clip rig)
+
+- **One skeleton, one file.** Every on-foot clip (86) sits on the Mixamo X Bot skeleton in
+  `assets/models/xbot.glb` (5.5 MB), built by `tools/build-anims.mjs` from the downloaded packs.
+  FBX2glTF does the conversion because three's FBXLoader can't parse Mixamo's FBX 7.7 binaries.
+  Duplicate clips across packs were dropped (they hash-identical).
+- **Game owns motion.** Mixamo locomotion was downloaded with root motion, so loops have their net
+  drift removed and their ground speed stored in `extras.clipMotion`. The animator phase-locks feet
+  to actual speed, so there's no sliding. One-shots have their hips X/Z pinned, because the game
+  already moves the body for slide, vault, mantle and takedown.
+- **Gameplay sets durations, clips fit them.** `CUES` in `src/world/ClipAnimator.ts` maps game verbs
+  to a clip plus a normalized window, and that window is stretched to the gameplay duration
+  (vault 0.3 s, takedown 0.55 s, reload = weapon reload). Retuning = edit one line.
+- **Layers.** Locomotion first: idle plus 8-way walk/run/sprint/crouch, and a 4-way pistol set.
+  Upper-body overlay on top: fire, reload, throw, hit. Full-body one-shots last: slide, vault,
+  mantle, takedown, stun, death. All actions are driven by hand (timeScale 0) for determinism.
+- **Gaps covered without new clips.** Mixamo has no pistol reload, draw or holster. Pistol reload
+  is the rifle reload's mag-swap window on the upper body. The strangle pair (17 s) doesn't fit a
+  0.55 s takedown, so stab / rifle punch play instead. The strangle stays in the file for cinematics.
+- **Fallback.** With no `xbot.glb`, humanoids keep the procedural pivots, so nothing depends on
+  the asset. Per-style GLBs (`ballast.glb`, `sable_trooper.glb`, …) on the same mixamorig skeleton
+  replace the mesh and keep every clip. Until then the X Bot is tinted per style, with the visor slit
+  on the head bone.
+- **Shipping assets.** Vite only copies `public/`, so before this, no drop-in asset (GLB, audio, LUT)
+  reached `dist/`. A `ship-assets` plugin in `vite.config.ts` now copies `assets/` across.
+- **Preview.** `npm run dev`, then `/anim-preview.html`: sliders for speed, direction, crouch and aim,
+  plus every cue. Use it to retune `CUES`, `GUN_MOUNT` and `VISOR_MOUNT`.

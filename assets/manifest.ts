@@ -7,6 +7,7 @@
 export interface ModelEntry { id: string; path: string; standIn: string; scale?: number; note: string }
 
 export const MODELS: ModelEntry[] = [
+  { id: 'human', path: 'assets/models/xbot.glb', standIn: 'buildHumanoid() pivots', note: 'Shared Mixamo skeleton + every on-foot clip (tools/build-anims.mjs). Drives all humanoids; per-style GLBs below that use the same mixamorig skeleton replace its mesh' },
   { id: 'ballast', path: 'assets/models/ballast.glb', standIn: 'buildHumanoid("ballast")', note: 'Helmeted operative, ~1.8 m, origin at feet, facing −Z' },
   { id: 'trooper', path: 'assets/models/sable_trooper.glb', standIn: 'buildHumanoid("trooper")', note: 'Sable trooper, red visor slit (threat colour)' },
   { id: 'spotter', path: 'assets/models/sable_spotter.glb', standIn: 'buildHumanoid("spotter")', note: 'Sable spotter with scoped rifle' },

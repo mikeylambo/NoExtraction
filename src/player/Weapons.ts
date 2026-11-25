@@ -83,6 +83,7 @@ export class Weapons {
     const a = this.w.inventory.ammo[this.current]!;
     if (this.reloadT > 0 || a.mag >= this.def.mag || a.reserve <= 0) return;
     this.reloadT = this.def.reload;
+    this.p.anim.play(this.current === 'sidearm' ? 'reloadPistol' : 'reloadRifle', this.def.reload);
     this.w.audio?.sfx('reload', this.p.pos, 0.6);
   }
 
@@ -94,6 +95,7 @@ export class Weapons {
     this.cd = def.interval;
     this.fireHeld++;
     this.recentlyFiredT = 1.2;
+    this.p.anim.play(this.current === 'sidearm' ? 'firePistol' : 'fireRifle', Math.max(0.12, Math.min(0.3, def.interval * 1.5)));
     w.counters.shotsFired++;
     const origin = this.p.cam.position.clone();
     const dir = this.aimDir();
@@ -162,6 +164,7 @@ export class Weapons {
     mesh.position.copy(p); w.scene.add(mesh);
     this.thrown.push({ kind: k, p, v: dir.multiplyScalar(def.speed), t: def.fuse, mesh, landed: false, active: 0 });
     w.audio?.sfx('throw', this.p.pos, 0.5);
+    this.p.anim.play('throw', 0.45);
   }
 
   private updateThrown(dt: number): void {

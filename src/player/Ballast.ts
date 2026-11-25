@@ -244,6 +244,7 @@ export class Ballast {
     this.w.audio?.sfx('slide', this.pos, 0.9);
     this.w.fx.snowPuff(this.pos, 1.2);
     this.events.push('slide');
+    this.anim.play('slide', this.dur);
   }
 
   private updateSlide(dt: number, f: InputFrame): void {
@@ -284,6 +285,7 @@ export class Ballast {
           this.from.copy(this.pos); this.to.set(land.x, g.y, land.z); this.toTop = feet + top + 0.25;
           this.w.audio?.sfx('mantle', this.pos, 0.6); this.events.push('vault'); this.emit(PLAYER.noise.mantle);
           this.facing = Math.atan2(-d.x, -d.z);
+          this.anim.play('vault', this.dur);
           return true;
         }
       }
@@ -295,6 +297,7 @@ export class Ballast {
     this.mode = 'mantle'; this.t = 0; this.dur = PLAYER.mantle.duration;
     this.from.copy(this.pos); this.to.set(onTop.x, ob.max.y, onTop.z); this.toTop = ob.max.y + 0.15;
     this.w.audio?.sfx('mantle', this.pos, 0.8); this.events.push('mantle'); this.emit(PLAYER.noise.mantle);
+    this.anim.play('mantle', this.dur);
     this.facing = Math.atan2(-d.x, -d.z);
     return true;
   }
@@ -363,6 +366,7 @@ export class Ballast {
     this.to.copy(e.pos).addScaledVector(useBack ? back : dir, 0.75); this.to.y = e.pos.y;
     this.facing = Math.atan2(-(e.pos.x - this.to.x), -(e.pos.z - this.to.z));
     e.grab();
+    this.anim.play(chain ? 'takedownChain' : 'takedown', this.dur);
     this.w.audio?.sfx('gear.rattle', this.pos, 0.5);
   }
 
@@ -417,6 +421,10 @@ export class Ballast {
     r.rotation.y = this.bodyYaw;
     const p = this.anim.pose;
     p.speed = this.speed;
+    // move direction in body space (rig faces −Z; left = (−cos, +sin))
+    const cy = Math.cos(this.bodyYaw), sy = Math.sin(this.bodyYaw);
+    p.dir = Math.atan2(-this.vel.x * cy + this.vel.z * sy, -this.vel.x * sy - this.vel.z * cy);
+    p.weapon = this.weapons.current === 'sidearm' ? 'pistol' : 'rifle';
     p.crouch += ((this.crouched ? 1 : 0) - p.crouch) * (1 - Math.exp(-12 * dt));
     p.aim += ((this.aiming || this.weapons.recentlyFired ? 1 : 0) - p.aim) * (1 - Math.exp(-14 * dt));
     p.slide += ((this.mode === 'slide' ? 1 : 0) - p.slide) * (1 - Math.exp(-16 * dt));

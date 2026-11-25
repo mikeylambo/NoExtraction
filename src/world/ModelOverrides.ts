@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MODELS } from '../../assets/manifest';
 
 const loaded = new Map<string, THREE.Object3D>();
+const clips = new Map<string, { animations: THREE.AnimationClip[]; userData: Record<string, unknown> }>();
 
 /**
  * At boot, probe each manifest path; any GLB present replaces its procedural stand-in. Missing
@@ -20,11 +21,18 @@ export async function loadModelOverrides(): Promise<string[]> {
       gltf.scene.traverse((o) => { if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).castShadow = true; });
       if (m.scale) gltf.scene.scale.setScalar(m.scale);
       loaded.set(m.id, gltf.scene);
+      if (gltf.animations.length) clips.set(m.id, { animations: gltf.animations, userData: gltf.userData ?? {} });
       found.push(m.id);
     } catch { /* stand-in stays */ }
   }));
   return found;
 }
+
+/** The loaded scene for `id` (not cloned; use SkeletonUtils.clone for skinned rigs). */
+export function overrideSource(id: string): THREE.Object3D | null { return loaded.get(id) ?? null; }
+
+/** Animation clips + glTF root extras shipped with `id`, if any. */
+export function overrideClips(id: string): { animations: THREE.AnimationClip[]; userData: Record<string, unknown> } | null { return clips.get(id) ?? null; }
 
 /** A clone of the override for `id`, or null to use the procedural stand-in. */
 export function modelOverride(id: string): THREE.Object3D | null {

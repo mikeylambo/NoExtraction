@@ -144,7 +144,7 @@ export class Enemy {
   /** Grabbed by a takedown: freeze. */
   grab(): void { this.state = 'grabbed'; this.perceiver.enabled = false; this.vel.set(0, 0, 0); }
 
-  takenDown(): void { this.kill('takedown'); }
+  takenDown(): void { if (this.anim) this.anim.pose.deathHint = 'death_back'; this.kill('takedown'); }
 
   damage(amount: number, o: { from?: THREE.Vector3; loud?: boolean; weapon?: string; mech?: boolean } = {}): void {
     if (!this.alive) return;
@@ -159,6 +159,7 @@ export class Enemy {
     // getting shot means hunted (silent shots: they know roughly where it came from)
     if (o.from) this.w.perception.escalate(this.perceiver, 'hunted', 'loud', o.from);
     this.bark('hurt');
+    this.anim?.play('hit');
   }
 
   kill(by: 'takedown' | 'gun' | 'collapse' | 'mech'): void {
@@ -372,6 +373,7 @@ export class Enemy {
     this.burstT -= dt;
     if (this.burstT > 0) return;
     this.burstT = W.interval; this.burstLeft--;
+    this.anim?.play('fireRifle', Math.max(0.12, Math.min(0.3, W.interval * 1.5)));
     if (this.burstLeft <= 0) this.gapT = W.burstGap * (0.8 + w.rng.next() * 0.5);
     const muzzle = this.muzzlePos();
     const aim = target.clone().setY(target.y + (w.inMech ? 7 : 1.2));
@@ -456,6 +458,8 @@ export class Enemy {
     if (this.anim) {
       const p = this.anim.pose;
       p.speed = this.alive ? Math.hypot(this.vel.x, this.vel.z) : 0;
+      const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw);
+      p.dir = Math.atan2(-this.vel.x * cy + this.vel.z * sy, -this.vel.x * sy - this.vel.z * cy);
       p.aim += ((this.state === 'combat' && this.alive ? 1 : 0) - p.aim) * Math.min(1, dt * 8);
       p.dead += ((this.alive ? 0 : 1) - p.dead) * Math.min(1, dt * (this.killedBy === 'takedown' ? 5 : 8));
       p.stun = this.stunned > 0 ? 1 : 0;

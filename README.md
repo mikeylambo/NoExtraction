@@ -19,6 +19,7 @@ npm run dev        # http://localhost:5190
 | `npm run bot -- ch3 [--loud] [--components=flightGovernor,missileRack,arcBlade]` | Bot run of chosen chapters (`artifacts/bot-*.json`) |
 | `npm run shots -- artifacts/shots ch1,ch5` | Screenshot tour |
 | `npm run audio-delivery` | Regenerate `AUDIO_DELIVERY.md` |
+| `node tools/build-anims.mjs <mixamo-dir>` | Rebuild `assets/models/xbot.glb` from Mixamo FBX packs (one-time: `npm i --no-save fbx2gltf @gltf-transform/core @gltf-transform/functions`). Preview: `/anim-preview.html` in dev |
 
 ## Layout
 

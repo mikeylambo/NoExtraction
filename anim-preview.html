@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Preview</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #14181c; color: #cfd6dc; font: 13px/1.4 system-ui, sans-serif; overflow: hidden; }
+  #ui { position: fixed; top: 8px; left: 8px; z-index: 2; display: flex; flex-wrap: wrap; gap: 6px; max-width: calc(100vw - 16px); }
+  #ui label, #ui select, #ui button { background: #222a31; color: inherit; border: 1px solid #39444e; border-radius: 4px; padding: 4px 8px; }
+  #ui input[type=range] { vertical-align: middle; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<div id="ui">
+  <select id="weapon"><option>rifle</option><option>pistol</option></select>
+  <label>speed <input id="speed" type="range" min="0" max="7.5" step="0.1" value="0"> <span id="sv">0</span></label>
+  <label>dir° <input id="dir" type="range" min="-180" max="180" step="5" value="0"> <span id="dv">0</span></label>
+  <label>crouch <input id="crouch" type="checkbox"></label>
+  <label>aim <input id="aim" type="checkbox"></label>
+  <label>stun <input id="stun" type="checkbox"></label>
+  <label>dead <input id="dead" type="checkbox"></label>
+  <select id="cue"></select><button id="go">Play cue</button>
+</div>
+<script type="module" src="/tools/anim-preview.ts"></script>
+</body>
+</html>
