@@ -156,10 +156,18 @@ mouse, pad) · reset.
 - **Rifle in hand.** In clip mode, `SkinnedHuman` mounts the rifle on the right-hand bone. It's solved
   once from the library aim pose: grip in the palm, barrel toward the support hand. The coded
   low-ready/aim arm poses and Walk/Run stay as the fallback when xbot.glb is absent.
-- **Support hand IK.** Mixamo's rifle clips were made for a longer rifle than the Sable bullpup, so after
-  the clips play, a two-bone IK pins the left hand to the rifle's foregrip. That's a `foregrip` node if
-  the GLB has one, else under the handguard. It fades out while the hand is busy: reload, throw, hit,
-  melee or any full-body action (firing keeps it on).
+- **Weapon-first hands.** Mixamo's rifle clips were made for a longer gun, and Meshy hands have no
+  fingers, so welding the rifle to the wrist left it floating. Instead, each frame:
+  1. The rifle is placed on the line between the animated palms: grip at the right palm, barrel
+     through the left, top up.
+  2. Two-bone IK puts each hand on it: right palm against the pistol grip, left in a C-clamp on the
+     handguard, fingers toward the muzzle.
+  3. Each wrist is turned to match. Hand axes come from the rest pose: fingers along the forearm,
+     palms facing the thighs.
+
+  During reload, throw, melee or full-body actions, the rifle rides the right hand from its last
+  solve and the left hand lets go; firing keeps both on. A `foregrip` node in the rifle GLB
+  overrides the estimated support-hand point.
 - **Sidearm.** Frank carries a second weapon in clip mode: `sidearm.glb` if present, else a code-built
   suppressed pistol. It's mounted from the library pistol stance, and the shared `muzzle` moves to
   whichever weapon is out. A Meshy pistol drops in via `tools/build-weapon.mjs --length 0.3`.

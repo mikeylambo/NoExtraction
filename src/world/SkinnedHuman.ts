@@ -69,6 +69,13 @@ export class SkinnedHuman {
   private readonly foregrip = new THREE.Vector3();
   private weapon: Weapon = 'rifle';
   private ikW = 0;
+  /** Rifle-space pistol-grip point (the right palm's contact). */
+  private readonly gripPt = new THREE.Vector3();
+  /** Rifle transform relative to the right hand, kept while the hands are busy (reload, throw…). */
+  private readonly inHand = new THREE.Matrix4();
+  private hasInHand = false;
+  /** Each hand's finger direction and palm normal in its own bone space (from the rest pose). */
+  private readonly handAxes = new Map<THREE.Object3D, { f: THREE.Vector3; p: THREE.Vector3 }>();
 
   constructor(src: SkinnedSource, opts: SkinnedOptions) {
     const model = cloneSkinned(src.scene);
@@ -99,6 +106,7 @@ export class SkinnedHuman {
 
     if (canRetarget(src.scene)) {
       this.walk?.stop(); this.run?.stop();
+      this.captureHandAxes();
       this.clips = new ClipAnimator(model, src.scene);
       if (opts.rifle !== false) {
         this.mountRifleInHand(src.scene, opts.rifleModel ?? null);
@@ -150,8 +158,9 @@ export class SkinnedHuman {
       rifleModel.traverse((o) => { if ((o as THREE.Mesh).isMesh) o.castShadow = true; });
       grip = new THREE.Vector3();
       const fg = rifleModel.getObjectByName('foregrip');
-      this.foregrip.copy(fg ? fg.position : new THREE.Vector3(0, this.muzzle.position.y * 0.3 - 0.02, this.muzzle.position.z * 0.58));
+      this.foregrip.copy(fg ? fg.position : new THREE.Vector3(0, 0, this.muzzle.position.z * 0.5));
     } else { buildRifle(this.rifle, this.muzzle); this.foregrip.set(0, -0.035, 0.3); }
+    this.gripPt.copy(grip);
     this.tips.rifle.copy(this.muzzle.position);
     const hand = this.bones.get('RightHand'), fore = this.bones.get('RightForeArm'), left = this.bones.get('LeftHand');
     const aim = clipFor(scene, 'idle_aim');
@@ -165,8 +174,7 @@ export class SkinnedHuman {
     const x = new THREE.Vector3(0, 1, 0).cross(z).normalize(), y = z.clone().cross(x);
     this.rifle.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(x, y, z));
     this.rifle.position.copy(palm).sub(grip.clone().applyQuaternion(this.rifle.quaternion));
-    this.root.add(this.rifle);
-    hand.attach(this.rifle);
+    this.root.add(this.rifle); // placed every frame by placeRifle()
     act.stop(); this.mixer.uncacheAction(aim);
   }
 
@@ -213,17 +221,83 @@ export class SkinnedHuman {
   updateClips(dt: number, p: LocoInput): void {
     this.setWeapon(p.weapon);
     this.clips!.update(dt, p);
-    const want = this.weapon === 'rifle' && this.rifle.parent ? 1 - this.clips!.handBusy : 0;
-    this.ikW += (want - this.ikW) * Math.min(1, dt * 14);
-    if (this.ikW < 0.01) return;
-    const a = this.bones.get('LeftArm'), b = this.bones.get('LeftForeArm'), c = this.bones.get('LeftHand');
-    if (!a || !b || !c) return;
+    if (this.weapon !== 'rifle' || this.rifle.parent !== this.root) return;
+    const busy = this.clips!.handBusy;
+    this.ikW += (1 - busy - this.ikW) * Math.min(1, dt * 14);
     this.root.updateMatrixWorld(true);
-    const target = this.rifle.localToWorld(this.foregrip.clone());
-    // the hand bone is the wrist; the palm sits a little past it, so aim the wrist short of the grip
-    const shoulder = a.getWorldPosition(V0);
-    target.addScaledVector(V1.copy(target).sub(shoulder).normalize(), -PALM * this.root.getWorldScale(V2).x);
-    solveTwoBone(a, b, c, target, this.ikW);
+    this.placeRifle(this.ikW);
+    if (this.ikW < 0.01) return;
+    this.rifle.updateMatrixWorld(true);
+    const k = this.root.getWorldScale(V2).x;
+    // gun axes in world: x = gun's left, y = up, z = forward
+    const q = this.rifle.getWorldQuaternion(new THREE.Quaternion());
+    const gx = new THREE.Vector3(1, 0, 0).applyQuaternion(q), gy = new THREE.Vector3(0, 1, 0).applyQuaternion(q), gz = new THREE.Vector3(0, 0, 1).applyQuaternion(q);
+    // right hand: palm against the grip's right side, fingers forward and down along it
+    const rP = gx.clone(), rF = gz.clone().addScaledVector(gy, -0.5).normalize();
+    const rC = this.rifle.localToWorld(this.gripPt.clone()).addScaledVector(gx, -0.022 * k);
+    this.reach('Right', rC, rF, rP, k, this.ikW);
+    // left hand: C-clamp, palm on the handguard's lower left side, fingers along it toward the muzzle
+    const lF = gz.clone(), lP = gx.clone().multiplyScalar(-0.75).addScaledVector(gy, 0.66).normalize();
+    const lC = this.rifle.localToWorld(this.foregrip.clone()).addScaledVector(gx, 0.024 * k).addScaledVector(gy, -0.012 * k);
+    this.reach('Left', lC, lF, lP, k, this.ikW);
+  }
+
+  /**
+   * Put the rifle where the clip's hands say it is: grip at the right palm, barrel through the left
+   * palm, top to the sky. While the hands are busy it rides the right hand from its last solve.
+   */
+  private placeRifle(w: number): void {
+    const rh = this.bones.get('RightHand'), rf = this.bones.get('RightForeArm'), lh = this.bones.get('LeftHand'), lf = this.bones.get('LeftForeArm');
+    if (!rh || !rf || !lh || !lf) return;
+    const inv = this.root.matrixWorld.clone().invert();
+    const palm = (h: THREE.Object3D, f: THREE.Object3D) => { const a = h.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv), b = f.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv); return a.add(a.clone().sub(b).normalize().multiplyScalar(PALM)); };
+    const R = palm(rh, rf), L = palm(lh, lf);
+    const z = L.sub(R); if (z.z < 0.05) z.z = 0.05; z.normalize();
+    const x = new THREE.Vector3(0, 1, 0).cross(z).normalize(), y = z.clone().cross(x);
+    const solved = new THREE.Matrix4().makeBasis(x, y, z);
+    solved.setPosition(R.sub(this.gripPt.clone().applyMatrix4(new THREE.Matrix4().extractRotation(solved))));
+    // carried = right hand (root space) · offset from the last solve
+    const handM = inv.clone().multiply(rh.matrixWorld);
+    let final = solved;
+    if (this.hasInHand && w < 0.999) {
+      const carried = handM.clone().multiply(this.inHand);
+      const pa = new THREE.Vector3(), qa = new THREE.Quaternion(), sa = new THREE.Vector3(), pb = new THREE.Vector3(), qb = new THREE.Quaternion();
+      carried.decompose(pa, qa, sa); solved.decompose(pb, qb, sa);
+      final = new THREE.Matrix4().compose(pa.lerp(pb, w), qa.slerp(qb, w), new THREE.Vector3(1, 1, 1));
+    }
+    final.decompose(this.rifle.position, this.rifle.quaternion, V0); this.rifle.scale.set(1, 1, 1);
+    this.inHand.copy(handM.invert().multiply(final)); this.hasInHand = true;
+  }
+
+  /** Two-bone IK the `side` arm so the palm lands on `contact`, then turn the hand to fingers `F`, palm `P`. */
+  private reach(side: 'Left' | 'Right', contact: THREE.Vector3, F: THREE.Vector3, P: THREE.Vector3, k: number, w: number): void {
+    const a = this.bones.get(`${side}Arm`), b = this.bones.get(`${side}ForeArm`), c = this.bones.get(`${side}Hand`);
+    const ax = c && this.handAxes.get(c);
+    if (!a || !b || !c || !ax) return;
+    P = P.clone().sub(F.clone().multiplyScalar(P.dot(F))).normalize(); // keep the basis square
+    // wrist sits behind the palm centre: back along the fingers, off the surface
+    const wrist = contact.clone().addScaledVector(F, -0.055 * k).addScaledVector(P, -0.03 * k);
+    solveTwoBone(a, b, c, wrist, w);
+    const want = basisQuat(F, P).multiply(basisQuat(ax.f, ax.p).invert()); // world hand rotation
+    const pw = c.parent!.getWorldQuaternion(new THREE.Quaternion());
+    const local = pw.invert().multiply(want);
+    c.quaternion.slerp(local, w);
+    c.updateMatrixWorld(true);
+  }
+
+  /** Rest pose: fingers run along forearm → hand; palms face the thighs (inward, toward the midline). */
+  private captureHandAxes(): void {
+    this.root.updateMatrixWorld(true);
+    for (const side of ['Left', 'Right'] as const) {
+      const h = this.bones.get(`${side}Hand`), f = this.bones.get(`${side}ForeArm`);
+      if (!h || !f) continue;
+      const inv = h.getWorldQuaternion(new THREE.Quaternion()).invert();
+      const fw = h.getWorldPosition(new THREE.Vector3()).sub(f.getWorldPosition(new THREE.Vector3())).normalize();
+      const rootQ = this.root.getWorldQuaternion(new THREE.Quaternion());
+      const inward = new THREE.Vector3(side === 'Left' ? -1 : 1, 0, 0).applyQuaternion(rootQ); // character's left is +X
+      const pw = inward.sub(fw.clone().multiplyScalar(inward.dot(fw))).normalize();
+      this.handAxes.set(h, { f: fw.applyQuaternion(inv), p: pw.applyQuaternion(inv) });
+    }
   }
 
   /**
@@ -315,6 +389,11 @@ function solveTwoBone(a: THREE.Object3D, b: THREE.Object3D, c: THREE.Object3D, t
   if (w < 1) { a.quaternion.copy(qa.slerp(a.quaternion, w)); b.quaternion.copy(qb.slerp(b.quaternion, w)); }
   a.updateMatrixWorld(true);
 }
+/** Rotation taking the standard basis to (F, P, F×P). */
+function basisQuat(F: THREE.Vector3, P: THREE.Vector3): THREE.Quaternion {
+  return new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(F, P, F.clone().cross(P)));
+}
+
 /** Apply a world-space rotation to a bone, in its local frame. */
 function rotateWorld(o: THREE.Object3D, q: THREE.Quaternion): void {
   const pw = o.parent ? o.parent.getWorldQuaternion(new THREE.Quaternion()) : new THREE.Quaternion();
