@@ -176,4 +176,4 @@ mouse, pad) · reset.
 - **Gaps covered without new clips.** Mixamo has no pistol reload, draw or holster. Pistol reload
   is the rifle reload's mag-swap window on the upper body. The strangle pair (17 s) doesn't fit a
   0.55 s takedown, so stab / rifle punch play instead. The strangle stays in the file for cinematics.
-- **Preview.** `npm run dev`, then `/anim-preview.html?style=ballast|trooper|spotter|heavy`.
+- **Motion Lab.** `npm run dev`, then `/anim-preview.html`. It runs the game's animation code with no game around it: all four characters, rifle/sidearm, WASD + Shift/C/RMB movement, a button and key for every cue, slow motion, and a scrolling 1 m floor for judging foot plant. Built with `VITE_MODELS_AS_JSON=1`, it loads `.gltf.json` copies of the models, for hosts that won't serve binary `.glb`.

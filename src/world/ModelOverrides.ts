@@ -17,7 +17,7 @@ export async function loadModelOverrides(): Promise<string[]> {
     try {
       const r = await fetch(m.path, { method: 'HEAD' });
       const type = r.headers.get('content-type') ?? '';
-      if (!r.ok || type.includes('html')) return;
+      if ((!r.ok && r.status !== 405) || type.includes('html')) return; // 405: host refuses HEAD, try the GET
       const gltf = await loader.loadAsync(m.path);
       gltf.scene.traverse((o) => { if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).castShadow = true; });
       if (m.scale) gltf.scene.scale.setScalar(m.scale);
