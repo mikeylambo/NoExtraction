@@ -1,0 +1,74 @@
+{
+  "schema_version": 2,
+  "project_name": "sable_spotter",
+  "folder": "20261111_014627_sable-spotter_01a1c848",
+  "root_task_id": "01a1c848-cc13-758d-bdb7-639a7c1bd652",
+  "created_at": "2026-11-11T01:46:27.969Z",
+  "updated_at": "2026-11-11T01:51:20.004Z",
+  "tasks": [
+    {
+      "task_id": "01a1c848-cc13-758d-bdb7-639a7c1bd652",
+      "task_type": "multi-image-to-3d",
+      "resource": "multi-image-to-3d",
+      "endpoint": "/openapi/v1/multi-image-to-3d",
+      "stage": "geometry",
+      "parent_task_id": null,
+      "status": "SUCCEEDED",
+      "files": [
+        "model.glb"
+      ],
+      "task_json": "task_01a1c848-cc13-758d-bdb7-639a7c1bd652.json",
+      "operation_id": null,
+      "created_at": "2026-11-11T01:48:16.649Z",
+      "updated_at": "2026-11-11T01:48:51.309Z"
+    },
+    {
+      "task_id": "01a1c848-cc13-758d-bdb7-639a7c1bd652",
+      "task_type": "multi-image-to-3d",
+      "resource": "multi-image-to-3d",
+      "endpoint": "/openapi/v1/multi-image-to-3d",
+      "stage": "preview",
+      "parent_task_id": null,
+      "status": "SUCCEEDED",
+      "files": [
+        "preview.png"
+      ],
+      "task_json": null,
+      "operation_id": null,
+      "created_at": "2026-11-11T01:48:52.056Z",
+      "updated_at": "2026-11-11T01:48:52.056Z"
+    },
+    {
+      "task_id": "01a1c84b-6e31-768c-a49b-a186d9ac1c48",
+      "task_type": "remesh",
+      "resource": "remesh",
+      "endpoint": "/openapi/v1/remesh",
+      "stage": "remesh",
+      "parent_task_id": "01a1c848-cc13-758d-bdb7-639a7c1bd652",
+      "status": "SUCCEEDED",
+      "files": [],
+      "task_json": "task_01a1c84b-6e31-768c-a49b-a186d9ac1c48.json",
+      "operation_id": "5b151d61-25ab-4249-8f13-f7a6917a8d88",
+      "created_at": "2026-11-11T01:49:09.132Z",
+      "updated_at": "2026-11-11T01:50:16.108Z"
+    },
+    {
+      "task_id": "01a1c84c-8bf9-7678-8da4-896f73c00046",
+      "task_type": "rig",
+      "resource": "rigging",
+      "endpoint": "/openapi/v1/rigging",
+      "stage": "rigging",
+      "parent_task_id": "01a1c84b-6e31-768c-a49b-a186d9ac1c48",
+      "status": "SUCCEEDED",
+      "files": [
+        "rigged.glb",
+        "walking.glb",
+        "running.glb"
+      ],
+      "task_json": "task_01a1c84c-8bf9-7678-8da4-896f73c00046.json",
+      "operation_id": "089e4ce2-d883-40c5-89d3-9255e572357a",
+      "created_at": "2026-11-11T01:50:25.603Z",
+      "updated_at": "2026-11-11T01:51:20.004Z"
+    }
+  ]
+}

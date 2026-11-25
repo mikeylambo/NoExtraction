@@ -4,7 +4,7 @@ import { buildWrenShip } from '../Ships';
 
 /**
  * Chapter 2 — Left Behind (58%). Motor pool (lockdown lesson, carbine) → optional armory (Missile
- * Rack) → cliff road → The Pad (Timed Zone 1:30 over the bridge) → the pad: Wren's ship climbing.
+ * Rack) → cliff road → The Pad (Timed Zone 1:30 over the bridge) → the pad: Ava's ship climbing.
  */
 export const CH2: LevelDef = {
   id: 'ch2',
@@ -107,7 +107,7 @@ export const CH2: LevelDef = {
     b.rock(-46, -372, 10, 70, 12); b.rock(46, -372, 10, 70, 12);
     ctx.cache('sc1', [0, 0.3, -380]);
     ctx.light([0, 6, -372], 0xdfe8ff, 10, 30);
-    // Wren's ship — already climbing
+    // Ava's ship — already climbing
     const ship = buildWrenShip();
     ship.root.position.set(0, 60, -420); ship.root.visible = false;
     w.scene.add(ship.root);

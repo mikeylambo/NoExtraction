@@ -3,11 +3,11 @@ import { CSS } from '../palette';
 
 export const SPEAKERS: Speaker[] = [
   { id: 'ballast', label: 'BALLAST', color: CSS.cyan, channel: 'live' },
-  { id: 'wren', label: 'WREN', color: CSS.amber, channel: 'radio' },
+  { id: 'wren', label: 'AVA', color: CSS.amber, channel: 'radio' },
   { id: 'halcyon', label: 'HALCYON SYSTEMS', color: '#c8d3dc', channel: 'pa' },
   { id: 'sable', label: 'SABLE', color: CSS.red, channel: 'live' },
   { id: 'marshal', label: 'THE MARSHAL', color: CSS.red, channel: 'radio' },
-  { id: 'aegis', label: 'AEGIS-07', color: CSS.signal, channel: 'system' },
+  { id: 'aegis', label: 'FLAMINGO-07', color: CSS.signal, channel: 'system' },
 ];
 
 /** Priority bands. */

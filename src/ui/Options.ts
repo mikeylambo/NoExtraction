@@ -31,6 +31,7 @@ export const OPTION_DEFS: OptDef[] = [
   { id: 'musicVolume', label: 'Music', kind: 'slider', min: 0, max: 1, step: 0.1, page: 'audio', fmt: pct },
   { id: 'sfxVolume', label: 'SFX', kind: 'slider', min: 0, max: 1, step: 0.1, page: 'audio', fmt: pct },
   { id: 'voVolume', label: 'Voice', kind: 'slider', min: 0, max: 1, step: 0.1, page: 'audio', fmt: pct },
+  { id: 'graphics', label: 'Graphics quality', kind: 'cycle', values: ['auto', 'low', 'high'], page: 'video', fmt: (v) => String(v).replace(/^./, (c) => c.toUpperCase()) },
   { id: 'fov', label: 'Field of view', kind: 'slider', min: 60, max: 100, step: 5, page: 'video', fmt: (v) => `${v}°` },
   { id: 'fullscreen', label: 'Fullscreen', kind: 'bool', page: 'video' },
 ];

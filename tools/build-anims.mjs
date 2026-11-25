@@ -66,9 +66,7 @@ for (const [name,[src,mode]] of Object.entries(MAP)) {
   // Mixamo +Z forward, +X left
   motion[name] = { dur:r(dur), loop: mode==='loop', forward:r(drift[2]), left:r(drift[0]), up:r(drift[1]), speed:r(Math.hypot(drift[0],drift[2])/Math.max(dur,1e-3)) };
 }
-// wrap scene so the rig faces -Z like the stand-ins
-const scene = R.listScenes()[0]; const wrap = base.createNode('xbot_root').setRotation([0,1,0,0]);
-for (const n of scene.listChildren()) { scene.removeChild(n); wrap.addChild(n); } scene.addChild(wrap);
+// faces +Z like the Meshy character GLBs (Humanoid turns every skinned model to −Z)
 R.setExtras({ clipMotion: motion });
 await base.transform(resample({ tolerance: 1e-4 }), dedup(), prune());
 await io.write(outFile, base); fs.rmSync(D, { recursive: true, force: true });

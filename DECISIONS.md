@@ -69,14 +69,14 @@ changes (old → new) live in `TUNING_LOG.md`.
    an optional component (8 combinations must exist). Decision: the lift/bay is the critical path; the
    governor sits in a Halcyon cargo pod off the path behind a weakened door (breacher) or a crawl
    round the back. Taking it costs Timed Zone seconds.
-2. **Why the governor is in the shaft.** In Ch1 Wren tells Ballast to drop the pulled governor in the
+2. **Why the governor is in the shaft.** In Ch1 Ava tells Ballast to drop the pulled governor in the
    Halcyon cargo tube; in Ch3 her cache says the cargo never shipped — it is stuck in the colony lift
    shaft. ("Undoing his own sabotage" stays literal.)
-3. **Why AEGIS is at the forward depot.** Sable could not fly it out without the governor, so they left
-   it at their forward depot at the end of the conduits. Wren's Ch5 cache says so.
+3. **Why Flamingo is at the forward depot.** Sable could not fly it out without the governor, so they left
+   it at their forward depot at the end of the conduits. Ava's Ch5 cache says so.
 4. **"The clock appears for the first time" (Ch1).** Implemented as a non-failing narrative
    "Extraction window" clock (8:00) that continues into Ch2; The Pad is the first real Timed Zone.
-5. **The Pad is a lost cause by design.** Reaching the pad completes the zone; Wren's ship is already
+5. **The Pad is a lost cause by design.** Reaching the pad completes the zone; Ava's ship is already
    climbing in every outcome. Failing the clock restarts at the bridge.
 6. **Mech numbers.** GDD §7 says starting values are targets and AlphaMech's tuned feel wins:
    movement, energy and camera use the AlphaMech baseline (quick boost 20 energy, assault drain 6/s,
@@ -97,16 +97,16 @@ changes (old → new) live in `TUNING_LOG.md`.
     (the hit lands regardless). Ascent jettisons weapons → shoulders → armor → booster.
 12. **Marshal arena shrink.** Phase 2 telegraphs (3 s shelf crack) and drops the outer ring of the
     platform; bounds shrink to two thirds. Twin Wardens join once.
-13. **Ballast's real name** is "Teo", said once by Wren in the last personal cache (pc4). The final
+13. **Ballast's real name** is "Teo", said once by Ava in the last personal cache (pc4). The final
     line has an alternate warmer take when all four personal caches were found (VoiceTrack alt take,
     condition `allPersonalCaches`).
 14. **Readability law in AI visuals.** Enemy muzzle glints, vision cones, drone beams, alarm lamps,
-    tracers and lockdown UI are red; Wren's caches, ship lights and subtitle label are amber (with a
+    tracers and lockdown UI are red; Ava's caches, ship lights and subtitle label are amber (with a
     diamond marker); Ballast's HUD, prompts, takedown prompt and visor are cyan; the core is violet.
     Warm fire-barrel light and white gate trim avoid the three meaning colours. Lint enforces that the
     three hex values only appear in `data/palette.ts`.
 15. **Colourblind modes** remap the three CSS meaning colours (protan/deutan/tritan); shapes carry
-    meaning too (eye icon = threat, diamond = Wren, circle/chevron = Ballast info).
+    meaning too (eye icon = threat, diamond = Ava, circle/chevron = Ballast info).
 16. **Story difficulty** lowers enemy damage/accuracy, lengthens telegraphs and detection fill, raises
     the health regen cap to 100 and boss armor to 60%. Hard shortens telegraphs and fill times
     (constitution §19: information and execution first, damage last).
@@ -133,30 +133,31 @@ mouse, pad) · reset.
   made from this session**: there are no Vercel credentials here. Connect the repo in Vercel, add
   `GITHUB_TOKEN` (Contents: read on the shell repo), and every push gets a preview deploy.
 
-## 6. Character animation (Mixamo clip rig)
+## 6. Character animation (Mixamo clip library, retargeted)
 
-- **One skeleton, one file.** Every on-foot clip (86) sits on the Mixamo X Bot skeleton in
-  `assets/models/xbot.glb` (5.5 MB), built by `tools/build-anims.mjs` from the downloaded packs.
-  FBX2glTF does the conversion because three's FBXLoader can't parse Mixamo's FBX 7.7 binaries.
-  Duplicate clips across packs were dropped (they hash-identical).
-- **Game owns motion.** Mixamo locomotion was downloaded with root motion, so loops have their net
-  drift removed and their ground speed stored in `extras.clipMotion`. The animator phase-locks feet
-  to actual speed, so there's no sliding. One-shots have their hips X/Z pinned, because the game
-  already moves the body for slide, vault, mantle and takedown.
+- **One library, every body.** All 86 on-foot clips live on the Mixamo X Bot skeleton in
+  `public/assets/models/xbot.glb` (5.5 MB), built by `tools/build-anims.mjs` from the downloaded
+  packs. FBX2glTF does the conversion because three's FBXLoader can't parse Mixamo's FBX 7.7. Duplicate
+  clips across packs were dropped.
+- **Retargeted at load** (`src/world/Retarget.ts`) onto any skeleton with Mixamo-style names: Frank,
+  the Sable Meshy rigs, or a future Mixamo-rigged model. Each bone's world rotation is mapped through
+  the two rest poses, with a direction alignment that turns Meshy's A-pose into the library's T-pose.
+  Hips travel is scaled by leg length. Clips bake lazily, once per skeleton: about 0.1 s for the first
+  character of a type, ~12 ms per extra instance, and 0.6 ms/frame for 20 animated troopers.
+- **Game owns motion.** Locomotion loops had their net root drift removed, and their ground speed is
+  kept in `extras.clipMotion`. Feet phase-lock to actual speed, scaled by each skeleton's leg length.
+  One-shots have hips X/Z pinned, because gameplay moves the body.
 - **Gameplay sets durations, clips fit them.** `CUES` in `src/world/ClipAnimator.ts` maps game verbs
   to a clip plus a normalized window, and that window is stretched to the gameplay duration
-  (vault 0.3 s, takedown 0.55 s, reload = weapon reload). Retuning = edit one line.
+  (vault 0.3 s, takedown 0.55 s, reload = weapon reload).
 - **Layers.** Locomotion first: idle plus 8-way walk/run/sprint/crouch, and a 4-way pistol set.
-  Upper-body overlay on top: fire, reload, throw, hit. Full-body one-shots last: slide, vault,
-  mantle, takedown, stun, death. All actions are driven by hand (timeScale 0) for determinism.
+  Upper-body overlay on top: fire, reload, throw, hit. Full-body one-shots last: slide, vault, mantle,
+  takedown, stun, death.
+- **Rifle in hand.** In clip mode, `SkinnedHuman` mounts the rifle on the right-hand bone. It's solved
+  once from the library aim pose: grip in the palm, barrel toward the support hand. The coded
+  low-ready/aim arm poses and Walk/Run stay as the fallback when xbot.glb is absent.
 - **Gaps covered without new clips.** Mixamo has no pistol reload, draw or holster. Pistol reload
   is the rifle reload's mag-swap window on the upper body. The strangle pair (17 s) doesn't fit a
   0.55 s takedown, so stab / rifle punch play instead. The strangle stays in the file for cinematics.
-- **Fallback.** With no `xbot.glb`, humanoids keep the procedural pivots, so nothing depends on
-  the asset. Per-style GLBs (`ballast.glb`, `sable_trooper.glb`, …) on the same mixamorig skeleton
-  replace the mesh and keep every clip. Until then the X Bot is tinted per style, with the visor slit
-  on the head bone.
-- **Shipping assets.** Vite only copies `public/`, so before this, no drop-in asset (GLB, audio, LUT)
-  reached `dist/`. A `ship-assets` plugin in `vite.config.ts` now copies `assets/` across.
-- **Preview.** `npm run dev`, then `/anim-preview.html`: sliders for speed, direction, crouch and aim,
-  plus every cue. Use it to retune `CUES`, `GUN_MOUNT` and `VISOR_MOUNT`.
+  The pistol stance plays with the rifle mesh until a sidearm GLB exists.
+- **Preview.** `npm run dev`, then `/anim-preview.html?style=ballast|trooper|spotter|heavy`.

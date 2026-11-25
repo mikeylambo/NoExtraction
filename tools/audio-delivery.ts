@@ -5,7 +5,7 @@ import { SFX, MUSIC } from '../data/audio';
 import { estimateDurationMs } from '../packages/narrative/src/VoiceTrack';
 
 const order = ['ballast', 'wren', 'aegis', 'marshal', 'halcyon', 'sable'];
-const chapters: [string, string][] = [['ch1', 'Chapter 1 — The Job'], ['ch2', 'Chapter 2 — Left Behind'], ['ch3', 'Chapter 3 — Dead Colony'], ['ch4', 'Chapter 4 — Under the Ice'], ['ch5', 'Chapter 5 — Aegis'], ['ch6', 'Chapter 6 — Ascent'], ['sable', 'Sable barks (all chapters)']];
+const chapters: [string, string][] = [['ch1', 'Chapter 1 — The Job'], ['ch2', 'Chapter 2 — Left Behind'], ['ch3', 'Chapter 3 — Dead Colony'], ['ch4', 'Chapter 4 — Under the Ice'], ['ch5', 'Chapter 5 — Flamingo'], ['ch6', 'Chapter 6 — Ascent'], ['sable', 'Sable barks (all chapters)']];
 const esc = (s: string) => s.replace(/\|/g, '\\|');
 let md = `# NO EXTRACTION — Audio Delivery\n\nEverything to record or produce. Generated from \`data/story/*.ts\` and \`data/audio.ts\` by \`npx tsx tools/audio-delivery.ts\` — edit the data, not this file.\n\n`;
 md += `**Formats:** mono 48 kHz WAV masters; deliver OGG (q6) at the listed path. A file at a listed path replaces the fallback with no code change (missing VO plays as timed subtitles; missing SFX/music use the synth stand-ins).\n\n**Target length** for VO is the reading-time estimate the game currently uses; matching it within ±30% keeps subtitle timing natural (the game re-times to the real file automatically).\n\n`;

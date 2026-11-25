@@ -1,11 +1,11 @@
-/** Wren's caches — GDD §5. Slice: 4 story + 4 personal. */
+/** Ava's caches — GDD §5. Slice: 4 story + 4 personal. */
 export type CacheKind = 'story' | 'personal';
 export interface CacheContents { stims?: number; ammo?: number; flash?: number; decoy?: number; routeMarker?: string }
 export interface CacheDef {
   id: string;
   chapter: string;
   kind: CacheKind;
-  /** Wren recording, then Ballast's reply (played as radio audio while you move). */
+  /** Ava recording, then Ballast's reply (played as radio audio while you move). */
   lines: string[];
   contents: CacheContents;
   hint?: string;

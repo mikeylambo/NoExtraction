@@ -1,4 +1,4 @@
-/** AEGIS components — GDD §6. */
+/** Flamingo components — GDD §6. */
 export type ComponentId = 'flightGovernor' | 'missileRack' | 'arcBlade';
 export interface ComponentDef { id: ComponentId; name: string; chapter: string; found: string; without: string; with: string }
 export const COMPONENTS: Record<ComponentId, ComponentDef> = {

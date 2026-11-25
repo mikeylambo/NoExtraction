@@ -7,7 +7,7 @@ import { HUMAN_SIGHT } from '../../../data/alert';
 
 /**
  * Chapter 1 — The Job. Ridge (onboarding) → first patrol → the pair → courtyard (Fast gate vs the
- * service-yard Long Route, visor) → inner yard (Spotter) → AEGIS hangar (sabotage) → exit.
+ * service-yard Long Route, visor) → inner yard (Spotter) → Flamingo hangar (sabotage) → exit.
  * North is −Z. All on-foot scale.
  */
 export const CH1: LevelDef = {
@@ -103,7 +103,7 @@ export const CH1: LevelDef = {
     ctx.enemy({ id: 'c1-inner', type: 'trooper', at: [-18, 0, -40], area: 'inner', patrol: [{ p: [-18, 0, -40], wait: 3 }, { p: [-18, 0, -80], wait: 3, look: -Math.PI / 2 }, { p: [4, 0, -84], wait: 2 }] });
     lamp(ctx, 0, -88, 7);
 
-    // ---------------------------------------------------------- 6. hangar (AEGIS-07)
+    // ---------------------------------------------------------- 6. hangar (FLAMINGO-07)
     b.building(0, -120, 64, 60, 18, { mat: 'sable', doors: [{ side: 'n', at: 0, width: 9, height: 9 }, { side: 'e', at: 16, width: 3, height: 3 }, { side: 's', at: 0, width: 9, height: 9 }], floorMat: 'concrete' });
     b.at(-24, -132, 6, 14, 4, 0, { mat: 'metalDark', kind: 'wall' });   // service bay
     b.at(22, -100, 8, 4, 2.6, 0, { mat: 'metal', kind: 'cover-high' });
@@ -120,7 +120,7 @@ export const CH1: LevelDef = {
     b.at(-24, -146, 1.6, 1.6, 3, 0, { mat: 'halcyon', kind: 'wall' });
     b.at(-24, -146, 1.8, 1.8, 0.2, 3, { mat: 'glowCyan', decor: true });
 
-    // AEGIS-07, parked in its cradle
+    // FLAMINGO-07, parked in its cradle
     const aegis = buildPlayerMech(AEGIS_PALETTE);
     aegis.mats.glow.emissiveIntensity = 1.2;
     aegis.root.position.set(0, 0.5, -125); aegis.root.rotation.y = 0;

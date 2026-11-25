@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { PALETTE } from '../../data/palette';
-import { applyOverride } from './ModelOverrides';
-import { ClipAnimator, hasClipRig, instantiateRig, type Weapon } from './ClipAnimator';
+import { applyOverride, modelOverride, skinnedOverride } from './ModelOverrides';
+import { SkinnedHuman } from './SkinnedHuman';
+import type { ClipAnimator, Weapon } from './ClipAnimator';
 
 export type HumanStyle = 'ballast' | 'trooper' | 'spotter' | 'heavy';
 
@@ -18,17 +19,12 @@ export interface HumanRig {
   gun: THREE.Group;
   visor: THREE.Mesh;
   muzzle: THREE.Object3D;
+  /** Set when a rigged GLB replaces the box figure; the animator then drives it instead of the pivots. */
+  skin: SkinnedHuman | null;
   mats: { armor: THREE.MeshStandardMaterial; under: THREE.MeshStandardMaterial; visor: THREE.MeshStandardMaterial };
   /** Head sphere for hit tests, local to root. */
   headOffset: number;
-  /** Skinned clip-driven model when assets/models/xbot.glb is present; procedural pivots stay as a fallback. */
-  model?: THREE.Object3D;
 }
-
-/** Gun and visor mounts in Mixamo bone space, solved from the idle_aim pose (barrel toward the
- *  support hand; tools/anim-preview.ts re-derives them if the skeleton changes). */
-export const GUN_MOUNT = { pos: new THREE.Vector3(0, 0.07, 0.02), quat: new THREE.Quaternion(0.527, 0.594, -0.332, 0.509).normalize() };
-export const VISOR_MOUNT = { pos: new THREE.Vector3(0.044, 0.082, 0.121), quat: new THREE.Quaternion(-0.164, -0.983, 0.036, 0.068).normalize() };
 
 const STYLES: Record<HumanStyle, { armor: number; under: number; visor: number; visorI: number; scale: number; bulk: number }> = {
   ballast: { armor: 0x8d99a6, under: 0x3c4650, visor: PALETTE.cyan, visorI: 2.4, scale: 1, bulk: 1 },
@@ -89,24 +85,38 @@ export function buildHumanoid(style: HumanStyle): HumanRig {
   const muzzle = new THREE.Object3D(); muzzle.position.set(0, 0, longGun ? -0.62 : -0.24); gun.add(muzzle);
   if (style === 'heavy') { const drum = part(0.16, 0.16, 0.16, gunM, 0); drum.position.set(0, -0.1, -0.1); gun.add(drum); }
   if (style === 'spotter') { const scope = part(0.05, 0.05, 0.22, visorM, 0); scope.position.set(0, 0.08, -0.2); gun.add(scope); }
-  let model: THREE.Object3D | undefined;
-  if (hasClipRig()) {
-    model = instantiateRig(style)!;
-    body.add(model);
-    hips.traverse((c) => { if ((c as THREE.Mesh).isMesh) c.visible = false; });
-    gun.traverse((c) => { c.visible = true; });
-    visor.visible = true;
-    const hand = model.getObjectByName('mixamorigRightHand'), headBone = model.getObjectByName('mixamorigHead');
-    if (hand) { hand.add(gun); gun.position.copy(GUN_MOUNT.pos); gun.quaternion.copy(GUN_MOUNT.quat); }
-    if (headBone) { headBone.add(visor); visor.position.copy(VISOR_MOUNT.pos); visor.quaternion.copy(VISOR_MOUNT.quat); }
-    // tint the shared mannequin per style so silhouettes still read at a glance
-    model.traverse((c) => {
-      const m = c as THREE.Mesh; if (!m.isMesh || !(m.material as THREE.MeshStandardMaterial).isMeshStandardMaterial) return;
-      const src = m.material as THREE.MeshStandardMaterial; const mat = src.clone();
-      mat.color.setHex(/joint/i.test(src.name) ? S.under : S.armor); m.material = mat;
-    });
+  // Sable variants without their own model wear the trooper's until theirs arrives; with no
+  // character GLBs at all, the clip library's X Bot stands in (tinted per style).
+  const own = skinnedOverride(style) ?? (style !== 'ballast' ? skinnedOverride('trooper') : null);
+  const src = own ?? skinnedOverride('human');
+  let skin: SkinnedHuman | null = null;
+  if (src) {
+    skin = new SkinnedHuman(src, { visor: S.visor, visorIntensity: S.visorI * 1.4, rifleModel: modelOverride('rifle'), tint: own ? undefined : S.armor });
+    root.traverse((c) => { if ((c as THREE.Mesh).isMesh) c.visible = false; });
+    const facing = new THREE.Group(); facing.rotation.y = Math.PI; facing.add(skin.root); // rigs face −Z, GLBs +Z
+    // Meshy rigs to a requested height that includes props (the spotter's antenna), so skeletons
+    // differ. Fit each to the trooper's skeleton; `body` then applies the style's own scale.
+    facing.scale.setScalar(SKELETON_REF / skeletonTop(src.scene));
+    body.add(facing);
   } else applyOverride(root, style);
-  return { model, root, body, hips, torso, head, armL, foreL, armR, foreR, legL, shinL, legR, shinR, gun, visor, muzzle, mats: { armor, under, visor: visorM }, headOffset: 1.62 * S.scale };
+  return { root, body, hips, torso, head, armL, foreL, armR, foreR, legL, shinL, legR, shinR, gun, visor, muzzle: skin ? skin.muzzle : muzzle, skin, mats: { armor, under, visor: visorM }, headOffset: 1.62 * S.scale };
+}
+
+/** Top joint height (m) of the trooper's skeleton: the reference every Sable model is fitted to. */
+const SKELETON_REF = 1.79;
+const tops = new WeakMap<THREE.Object3D, number>();
+/** Highest bone in rest pose, in the GLB scene's own space (cached per source). */
+function skeletonTop(scene: THREE.Object3D): number {
+  let top = tops.get(scene);
+  if (top === undefined) {
+    scene.updateMatrixWorld(true);
+    const inv = new THREE.Matrix4().copy(scene.matrixWorld).invert(), v = new THREE.Vector3();
+    top = 0;
+    scene.traverse((o) => { if ((o as THREE.Bone).isBone) top = Math.max(top!, v.setFromMatrixPosition(o.matrixWorld).applyMatrix4(inv).y); });
+    if (!(top > 0.5)) top = SKELETON_REF; // no usable skeleton: leave the model as authored
+    tops.set(scene, top);
+  }
+  return top;
 }
 
 export interface HumanPose {
@@ -133,7 +143,7 @@ export class HumanAnimator {
   readonly pose: HumanPose = { speed: 0, maxSpeed: 7.5, crouch: 0, aim: 0, slide: 0, mantle: 0, dead: 0, stun: 0, lean: 0, attack: 0, dir: 0, weapon: 'rifle' };
   /** Present when the rig is skinned; otherwise the procedural pose below runs. */
   readonly clips: ClipAnimator | null;
-  constructor(readonly rig: HumanRig) { this.clips = rig.model ? new ClipAnimator(rig.model) : null; }
+  constructor(readonly rig: HumanRig) { this.clips = rig.skin?.clips ?? null; }
 
   /** Fire a clip cue (see CUES in ClipAnimator) over `dur` gameplay seconds. No-op on the procedural rig. */
   play(cue: string, dur?: number): void { this.clips?.play(cue, dur); }
@@ -163,6 +173,7 @@ export class HumanAnimator {
     r.head.rotation.x = aim * 0.05 + p.stun * Math.sin(this.phase * 0.2 + performance.now() * 0.006) * 0.4;
     r.body.rotation.x = -p.dead * 1.45;
     r.body.position.y = p.dead * 0.12;
+    if (r.skin && !this.clips) { r.skin.root.rotation.x = c * 0.3 + p.stun * 0.25; r.skin.update(dt, p.dead > 0.05 ? 0 : p.speed, p.aim * (1 - p.stun)); }
   }
 }
 

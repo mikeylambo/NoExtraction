@@ -28,7 +28,7 @@ GROUPS = [
   ('Chapter 2 — Left Behind (58%)', ['ch2-motor-pool', 'ch2-the-pad-bridge', 'ch2-wren-ship', 'ch2-quake']),
   ('Chapter 3 — Dead Colony (41%)', ['ch3-dead-colony', 'ch3-mast-plaza', 'ch3-freight-lift-flood']),
   ('Chapter 4 — Under the Ice (24%)', ['ch4-dark', 'ch4-visor-in-dark', 'ch4-conduit-flood']),
-  ('Chapter 5 — Aegis (11%)', ['ch5-depot', 'ch5-boot-up', 'ch5-online-mech-hud', 'ch5-wardens', 'ch5-shelf-run', 'ch5-marshal-intro', 'ch5-marshal-fight']),
+  ('Chapter 5 — Flamingo (11%)', ['ch5-depot', 'ch5-boot-up', 'ch5-online-mech-hud', 'ch5-wardens', 'ch5-shelf-run', 'ch5-marshal-intro', 'ch5-marshal-fight']),
   ('Chapter 6 — Ascent (2% → 0%)', ['ch6-launch', 'ch6-climb', 'ch6-silence', 'ch6-planet-breaks', 'ch6-wren']),
 ]
 shots_html = ''

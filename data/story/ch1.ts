@@ -1,6 +1,6 @@
 import { L, P } from './lines';
 
-/** Chapter 1 — The Job (72%). Wren live on the radio: the only time we hear her in real time. */
+/** Chapter 1 — The Job (72%). Ava live on the radio: the only time we hear her in real time. */
 export const LINES = [
   L('c1.halcyon.core72', 'halcyon', 'Halcyon Resource Group. Core Stability: seventy-two percent. All personnel proceed to assigned extraction points. Thank you for your service.', P.broadcast, 'Calm, polite, corporate. Slight PA reverb.'),
   L('c1.wren.open1', 'wren', "That's the broadcast. Seventy-two and falling. I'm holding the pad until oh-four-forty.", P.story, 'Live radio. Brisk, warm under the professionalism.'),
@@ -16,10 +16,10 @@ export const LINES = [
   L('c1.wren.spotter', 'wren', "Spotter on the tower. Forty metres of eyes. Break his line, or take him off it.", P.story),
   L('c1.wren.seen', 'wren', "They've got you. Break contact.", P.critical, 'Sharp. Worried, not panicked.'),
   L('c1.wren.lockdown', 'wren', "Lockdown. Fast gate's sealed — hack the console or take the long way.", P.critical),
-  L('c1.wren.hangar1', 'wren', 'There she is. AEGIS-07.', P.story, 'A little awed.'),
+  L('c1.wren.hangar1', 'wren', 'There she is. FLAMINGO-07.', P.story, 'A little awed.'),
   L('c1.ballast.hangar1', 'ballast', 'Big.', P.reply, 'Deadpan.'),
-  L('c1.wren.hangar2', 'wren', "Sable's planetary defense prototype. Pull the flight governor and it's the most expensive statue on Ilvane.", P.story),
-  L('c1.ballast.sabotage', 'ballast', 'Sorry, big guy.', P.reply, 'Genuinely a little sorry. GDD-mandated line.'),
+  L('c1.wren.hangar2', 'wren', "Sable's planetary defense prototype. Pull the flight governor and she's the most expensive statue on Ilvane.", P.story),
+  L('c1.ballast.sabotage', 'ballast', 'Sorry, big girl.', P.reply, 'Genuinely a little sorry. GDD-mandated line.'),
   L('c1.wren.tube', 'wren', 'Governor goes in the cargo tube. Policy: the part rides separate from the operative.', P.story),
   L('c1.ballast.tube', 'ballast', 'Policy says a lot of things.', P.reply),
   L('c1.wren.window', 'wren', "Extraction window's open. Eight minutes. Pad's on the cliff. Don't make me wait.", P.story, 'The clock appears on this line.'),

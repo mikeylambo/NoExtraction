@@ -23,7 +23,7 @@ the AlphaMech baseline.
 | regenGround / regenAir | 43 / 16 | | focusHeight (FOCUS_H) | 7 |
 | regenDelay | 0.5 | | descentSpeed / ceiling | 130 / 240 |
 
-Unchanged in Aegis. The only edits to extracted behaviour are bug fixes (below), not tuning.
+Unchanged in Flamingo. The only edits to extracted behaviour are bug fixes (below), not tuning.
 
 ## Mech-frame behaviour fixes (not tuning)
 
@@ -37,7 +37,7 @@ Unchanged in Aegis. The only edits to extracted behaviour are bug fixes (below),
 
 | Date | Value | Old → New | Why |
 |---|---|---|---|
-| build | Warden rifle damage | 26 → 12 | Three Wardens killed Aegis in ~30 s in bot runs; GDD calls them "now prey". |
+| build | Warden rifle damage | 26 → 12 | Three Wardens killed Flamingo in ~30 s in bot runs; GDD calls them "now prey". |
 | build | Warden rifle accuracy | 0.45 → 0.35 | Same. |
 | build | Warden burst gap | 1.6 → 2.0 s | Same. |
 | build | Warden rockets | 70 dmg / 7 s → 45 dmg / 9 s | Same; rockets stay telegraphed (lock tone 1.0 s). |
@@ -58,4 +58,4 @@ Unchanged in Aegis. The only edits to extracted behaviour are bug fixes (below),
 | visual | Ballast armor / under colours | 0x4a5560/0x1b2026 → 0x8d99a6/0x3c4650 | Read as a silhouette-only black shape at night. |
 | visual | Tone mapping exposure | 1.05 → 1.25 | Night scenes were crushed; HUD readability unchanged. |
 | visual | Hemisphere fill | ambient×0.9 → ambient×1.3 + 0.15 | Same. |
-| visual | Aegis glow emissive | 3.2 → 1.4 (parked 1.2) | Signal white bloomed into a flare in the dark hangar. |
+| visual | Flamingo glow emissive | 3.2 → 1.4 (parked 1.2) | Signal white bloomed into a flare in the dark hangar. |

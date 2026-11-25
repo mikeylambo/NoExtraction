@@ -35,6 +35,6 @@ export const LINES = [
   b('sable.hurt.medic', "Medic— we don't have a medic."),
   b('sable.reinf.inbound', "Reinforcements inbound. Last squad we've got."),
   b('sable.warden.contact', 'Warden two, contact. Large frame.'),
-  b('sable.warden.aegis', "That's AEGIS. Who is flying AEGIS?"),
+  b('sable.warden.aegis', "That's Flamingo. Who is flying Flamingo?"),
   b('sable.warden.hold', 'Hold the line. The cradle lifts on schedule.'),
 ];

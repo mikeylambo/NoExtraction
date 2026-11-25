@@ -1,7 +1,10 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { CollisionWorld, makeSolid, type Solid, type SolidKind, type Surface } from './Collision';
-import { worldMat, isTransparent, glowSprite, type MatKey } from './Materials';
+import { worldMat, isTransparent, glowSprite, matSnow, type MatKey } from './Materials';
+import { DecalBatch, scatterDecals, type DecalBox, type DecalFaceDir } from './Decals';
+import { dressBoxes } from './Kit';
+import { decalTex } from '../render/decals';
 
 export interface BoxOpts {
   mat?: MatKey;
@@ -32,7 +35,11 @@ function hash3(x: number, y: number, z: number): number {
  * world; static boxes are merged per material into a handful of meshes for the draw-call budget.
  */
 export class LevelBuilder {
-  private batches = new Map<MatKey, THREE.BufferGeometry[]>();
+  /** Static boxes: their render geometry plus what the kit and decal passes need. */
+  private statics: (DecalBox & { geo: THREE.BufferGeometry })[] = [];
+  private decals = new DecalBatch();
+  /** Set false before finish() to skip the scattered decals (hand-placed ones stay). */
+  scatter = true;
   readonly root = new THREE.Group();
   readonly dynamicMeshes: THREE.Mesh[] = [];
 
@@ -66,9 +73,7 @@ export class LevelBuilder {
       if (solid) solid.mesh = mesh;
       else return { id: -1, min, max, kind: 'prop', surface: 'metal', walk: false, sight: false, bullet: false, block: false, mech: false, active: false, mesh } as Solid;
     } else {
-      let arr = this.batches.get(mat);
-      if (!arr) { arr = []; this.batches.set(mat, arr); }
-      arr.push(geo);
+      this.statics.push({ min: min.clone(), max: max.clone(), mat, kind: o.kind ?? 'wall', geo });
     }
     return solid;
   }
@@ -137,9 +142,36 @@ export class LevelBuilder {
     const s = glowSprite(color, size, opacity); s.position.set(x, y, z); this.root.add(s); return s;
   }
 
-  /** Merge static batches into meshes. Call once after building. */
+  /**
+   * Hand-placed decal (data/decals.ts covers the scattered ones). `at` is the centre on the face,
+   * `face` the face's outward direction; floor decals take `rot` (radians). Size in metres; default
+   * is the texture's physical size. No-op when the texture has no packed files.
+   */
+  decal(tex: string, at: [number, number, number], face: DecalFaceDir, o: { cell?: number; size?: [number, number]; rot?: number; flip?: boolean; tint?: number; opacity?: number; on?: MatKey } = {}): void {
+    const t = decalTex(tex);
+    if (!t) return;
+    const [w, h] = o.size ?? [t.size[0] / t.atlas[0], t.size[1] / t.atlas[1]];
+    this.decals.add({ tex, cell: o.cell, at: V(...at), face, w, h, rot: o.rot, flip: o.flip, tint: o.tint, opacity: o.opacity, snow: o.on ? matSnow(o.on) : 0 });
+  }
+
+  /**
+   * Dress boxes with kit meshes (data/kit.ts), scatter decals, then merge the remaining static
+   * boxes per material into a handful of meshes. Call once after building.
+   */
   finish(): void {
-    for (const [mat, geos] of this.batches) {
+    const kit = dressBoxes(this.statics);
+    for (const m of kit.meshes) this.root.add(m);
+    // decals: every static box still occludes; dressed boxes are targets only when their rule allows
+    const targets = this.statics.map((b, i) => (kit.dressed.get(i)?.decals === false ? { ...b, mat: 'black' as MatKey } : b));
+    if (this.scatter) scatterDecals(targets, this.decals);
+    for (const m of this.decals.build()) this.root.add(m);
+    const batches = new Map<MatKey, THREE.BufferGeometry[]>();
+    this.statics.forEach((b, i) => {
+      if (kit.dressed.has(i)) { b.geo.dispose(); return; }
+      let arr = batches.get(b.mat); if (!arr) batches.set(b.mat, arr = []); arr.push(b.geo);
+    });
+    this.statics = [];
+    for (const [mat, geos] of batches) {
       const merged = mergeGeometries(geos, false);
       for (const g of geos) g.dispose();
       if (!merged) continue;
@@ -151,6 +183,5 @@ export class LevelBuilder {
       mesh.renderOrder = isTransparent(mat) ? 2 : 0;
       this.root.add(mesh);
     }
-    this.batches.clear();
   }
 }

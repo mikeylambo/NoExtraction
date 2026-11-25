@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js';
-import { overrideClips, overrideSource } from './ModelOverrides';
+import { clipFor, clipLibrary, strideScale, type ClipMotion } from './Retarget';
 
 /**
  * Mixamo clip animation for every humanoid. The game still owns position, facing and timing;
@@ -11,7 +10,6 @@ import { overrideClips, overrideSource } from './ModelOverrides';
  * (fire, reload, throw, hit) → full-body one-shot (slide, vault, mantle, takedown, stun, death).
  */
 
-export interface ClipMotion { dur: number; loop: boolean; forward: number; left: number; up: number; speed: number }
 export type Weapon = 'rifle' | 'pistol';
 
 /** What the game asks for, by game verb. Window = normalized [start, end] slice of the source clip. */
@@ -42,33 +40,27 @@ export const CUES: Record<string, ClipCue> = {
 const DIRS: [string, number][] = [['forward', 0], ['forward_left', 45], ['left', 90], ['backward_left', 135], ['backward', 180], ['backward_right', -135], ['right', -90], ['forward_right', -45]];
 const PISTOL_DIRS: [string, number][] = [['', 0], ['strafe_left', 90], ['backward', 180], ['strafe_right', -90]];
 const DEATHS = ['death_front', 'death_back', 'death_right', 'death_head_front', 'death_head_back'];
-const UPPER_BONE = /Spine|Neck|Head|Shoulder|Arm|Hand/;
+const UPPER_BONE = /spine|neck|head|shoulder|arm|hand/i;
 
-interface RigAsset { scene: THREE.Object3D; clips: Map<string, THREE.AnimationClip>; upper: Map<string, THREE.AnimationClip>; motion: Record<string, ClipMotion> }
-let asset: RigAsset | null | undefined;
-
-function rigAsset(): RigAsset | null {
-  if (asset !== undefined) return asset;
-  const scene = overrideSource('human'), data = overrideClips('human');
-  if (!scene || !data) return (asset = null);
-  const clips = new Map(data.animations.map((c) => [c.name, c] as const));
-  asset = { scene, clips, upper: new Map(), motion: (data.userData.clipMotion ?? {}) as Record<string, ClipMotion> };
-  return asset;
+/** Clips retargeted to one skeleton, plus the library's motion data. Shared by every instance of it. */
+interface ClipSet { get(name: string): THREE.AnimationClip | null; upper(name: string): THREE.AnimationClip | null; motion: Record<string, ClipMotion> }
+const sets = new WeakMap<THREE.Object3D, ClipSet>();
+function clipSet(source: THREE.Object3D): ClipSet {
+  let s = sets.get(source);
+  if (!s) {
+    const up = new Map<string, THREE.AnimationClip | null>();
+    s = {
+      motion: clipLibrary()?.motion ?? {},
+      get: (n) => clipFor(source, n),
+      upper: (n) => {
+        if (!up.has(n)) { const c = clipFor(source, n); up.set(n, c && new THREE.AnimationClip(`${n}__upper`, c.duration, c.tracks.filter((t) => UPPER_BONE.test(t.name.split('.')[0]!) && !/hips/i.test(t.name)))); }
+        return up.get(n)!;
+      },
+    };
+    sets.set(source, s);
+  }
+  return s;
 }
-
-/** True when the shared skinned rig loaded (otherwise humanoids keep the procedural pose). */
-export function hasClipRig(): boolean { return rigAsset() !== null; }
-
-/** A fresh skinned instance of the shared rig, or null. Optionally swaps in a per-style mesh. */
-export function instantiateRig(styleId?: string): THREE.Object3D | null {
-  const a = rigAsset(); if (!a) return null;
-  const styled = styleId ? overrideSource(styleId) : null;
-  const src = styled && hasSkin(styled) ? styled : a.scene;
-  const o = cloneSkinned(src);
-  o.traverse((c) => { const m = c as THREE.SkinnedMesh; if (m.isMesh) { m.castShadow = true; m.frustumCulled = false; } });
-  return o;
-}
-function hasSkin(o: THREE.Object3D): boolean { let s = false; o.traverse((c) => { if ((c as THREE.SkinnedMesh).isSkinnedMesh) s = true; }); return s; }
 
 interface Shot { cue: ClipCue; action: THREE.AnimationAction; t0: number; t1: number; dur: number; elapsed: number; w: number; done: boolean }
 
@@ -95,27 +87,31 @@ export class ClipAnimator {
   private fading: Shot[] = [];
   private dying = false;
   private stunShot: Shot | null = null;
-  private readonly a: RigAsset;
+  private readonly a: ClipSet;
+  /** Library speeds are X Bot metres; this character's legs differ (measured on first update). */
+  private stride = 0;
 
-  constructor(readonly model: THREE.Object3D) {
-    this.a = rigAsset()!;
+  /** `model`: a skinned instance; `source`: the GLB scene it was cloned from (keys the retarget cache). */
+  constructor(readonly model: THREE.Object3D, source: THREE.Object3D) {
+    this.a = clipSet(source);
     this.mixer = new THREE.AnimationMixer(model);
     for (const [name, m] of Object.entries(this.a.motion)) {
       if (!m.loop) continue;
-      const act = this.mixer.clipAction(this.a.clips.get(name)!);
+      const clip = this.a.get(name); if (!clip) continue;
+      const act = this.mixer.clipAction(clip);
       act.play(); act.setEffectiveTimeScale(0); act.setEffectiveWeight(0);
       this.loco.set(name, act);
     }
   }
 
-  /** Has `clip` (lets callers fall back gracefully if a clip is missing from the GLB). */
-  has(clip: string): boolean { return this.a.clips.has(clip); }
+  /** Has `clip` (lets callers fall back gracefully if a clip is missing from the library). */
+  has(clip: string): boolean { return !!this.a.get(clip); }
 
   /** Play a cue (key of CUES) or a raw clip name over `dur` gameplay seconds (default: clip length). */
   play(cueOrClip: string, dur?: number): void {
     const cue = CUES[cueOrClip] ?? { clip: cueOrClip };
-    const src = this.a.clips.get(cue.clip); if (!src) return;
-    const clip = cue.layer === 'upper' ? this.upperClip(cue.clip, src) : src;
+    const src = this.a.get(cue.clip); if (!src) return;
+    const clip = cue.layer === 'upper' ? this.a.upper(cue.clip)! : src;
     const [s, e] = cue.window ?? [0, 1];
     const t0 = s * src.duration, t1 = e * src.duration;
     const action = this.mixer.clipAction(clip);
@@ -130,10 +126,18 @@ export class ClipAnimator {
   stopFull(): void { if (this.full) { this.full.done = true; } }
 
   update(dt: number, p: LocoInput): void {
+    if (!this.stride) {
+      let hips: THREE.Object3D | undefined;
+      this.model.traverse((o) => { if (!hips && (o as THREE.Bone).isBone && /hips$/i.test(o.name)) hips = o; });
+      this.model.updateWorldMatrix(true, true);
+      const y0 = this.model.getWorldPosition(new THREE.Vector3()).y;
+      this.stride = hips ? strideScale(hips.getWorldPosition(new THREE.Vector3()).y - y0) : 1;
+      if (!(this.stride > 0.2 && this.stride < 5)) this.stride = 1;
+    }
     // ---- deaths and stun are state, not events
     if (p.dead > 0.02 && !this.dying) {
       this.dying = true;
-      const hint = p.deathHint && this.a.clips.has(p.deathHint) ? p.deathHint : p.crouch > 0.5 ? 'death_crouch' : DEATHS[(Math.random() * DEATHS.length) | 0]!;
+      const hint = p.deathHint && this.has(p.deathHint) ? p.deathHint : p.crouch > 0.5 ? 'death_crouch' : DEATHS[(Math.random() * DEATHS.length) | 0]!;
       this.play(hint); this.full!.cue = { clip: hint, hold: true, fadeIn: 0.08 };
       this.upper = null;
     } else if (p.dead <= 0.02 && this.dying) { this.dying = false; if (this.full) this.full.done = true; }
@@ -153,7 +157,7 @@ export class ClipAnimator {
     const w = new Map<string, number>();
     const add = (k: string, v: number) => { if (v > 1e-3) w.set(k, (w.get(k) ?? 0) + v); };
     const M = this.a.motion;
-    const s = p.speed;
+    const s = p.speed / this.stride; // in library metres
     const moving = THREE.MathUtils.smoothstep(s, 0.08, 0.7);
     const crouch = THREE.MathUtils.clamp(p.crouch, 0, 1);
     const pistol = p.weapon === 'pistol';
@@ -230,9 +234,4 @@ export class ClipAnimator {
     return s.w;
   }
 
-  private upperClip(name: string, src: THREE.AnimationClip): THREE.AnimationClip {
-    let c = this.a.upper.get(name);
-    if (!c) { c = new THREE.AnimationClip(`${name}__upper`, src.duration, src.tracks.filter((t) => UPPER_BONE.test(t.name.split('.')[0]!))); this.a.upper.set(name, c); }
-    return c;
-  }
 }

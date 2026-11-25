@@ -46,7 +46,7 @@ export const CH2_SCRIPT: ChapterScript = {
         { at: 15, action: { kind: 'shake', amount: 0.35 } },
         { at: 15, action: { kind: 'call', fn: 'quake' }, essential: true },
         { at: 17, action: { kind: 'line', id: 'c2.ballast.quake' } },
-        { at: 21, action: { kind: 'objective', text: 'The amber light — Wren left something', at: [0, 0.3, -380] }, essential: true },
+        { at: 21, action: { kind: 'objective', text: 'The amber light — Ava left something', at: [0, 0.3, -380] }, essential: true },
         { at: 21, action: { kind: 'checkpoint', id: 'pad' }, essential: true },
       ],
     },

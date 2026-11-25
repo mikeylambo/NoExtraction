@@ -1,6 +1,6 @@
 /**
  * Dev page for the clip rig: `npm run dev`, open /anim-preview.html. Drive locomotion with the
- * sliders and fire any CUES entry; used to tune GUN_MOUNT and the cue windows. window.__anim exposes
+ * sliders and fire any CUES entry; used to tune the cue windows. ?style=ballast|trooper|spotter|heavy window.__anim exposes
  * the animator for headless checks.
  */
 import * as THREE from 'three';
@@ -56,7 +56,7 @@ requestAnimationFrame(frame);
 
 /** Headless hook: stop the RAF clock and step deterministically. */
 (window as unknown as { __anim: unknown }).__anim = {
-  anim, rig, cam, ready: !!rig.model,
+  anim, rig, cam, ready: !!rig.skin?.clips,
   manual(on: boolean) { state.manual = on; },
   set(o: Partial<Record<string, number | string | boolean>>) {
     for (const [k, v] of Object.entries(o)) { const el = $<HTMLInputElement>(k); if (el.type === 'checkbox') el.checked = !!v; else el.value = String(v); }

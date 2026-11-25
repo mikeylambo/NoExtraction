@@ -9,3 +9,4 @@ export * from './SequenceDirector';
 export * from './CinematicCamera';
 export * from './Subtitles';
 export * from './StoryCheckpoint';
+export * from './Fountain';

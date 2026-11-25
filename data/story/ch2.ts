@@ -11,7 +11,7 @@ export const LINES = [
   L('c2.wren.window', 'wren', "Ballast, the window's closing. Where are you?", P.critical, 'First crack of real worry.'),
   L('c2.ballast.bridge', 'ballast', 'Bridge. Ninety seconds. Hold it.', P.reply, 'Running, breathing hard.'),
   L('c2.wren.climbing', 'wren', "I can't. The window's closed. I'm lifting. Ballast, I'm— policy. I'm sorry.", P.critical, 'She hates every word.'),
-  L('c2.ballast.wait', 'ballast', 'Wren. Wren! I am on the bridge!', P.critical, 'Furious. Breathless.'),
+  L('c2.ballast.wait', 'ballast', 'Ava. Ava! I am on the bridge!', P.critical, 'Furious. Breathless.'),
   L('c2.halcyon.revoke', 'halcyon', 'Operative designation Ballast: credentials revoked. Evacuation complete. Personnel losses are within acceptable parameters. Thank you for your service.', P.broadcast, 'Bleakly funny. Do not play it funny.'),
   L('c2.ballast.pad1', 'ballast', 'Four minutes. I was four minutes late.', P.reply, 'Quiet. Disbelief.'),
   L('c2.ballast.pad2', 'ballast', 'Acceptable parameters. Sure.', P.reply, 'Talking back to the PA.'),

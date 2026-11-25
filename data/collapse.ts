@@ -21,5 +21,5 @@ export const COLLAPSE: Record<CollapseKind, CollapseDef> = {
   steam: { kind: 'steam', name: 'Steam vent', telegraph: 1.2, telegraphCue: 'Hiss + frost plume', effect: 'Blocks vision; enemies cannot see through it', duration: 9, radius: 5 },
 };
 
-/** Mech-scale multipliers for collapse damage when Aegis is the target. */
+/** Mech-scale multipliers for collapse damage when Flamingo is the target. */
 export const MECH_COLLAPSE_DAMAGE_SCALE = 4;

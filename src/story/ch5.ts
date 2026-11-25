@@ -26,13 +26,13 @@ function repairStation(ctx: ScriptContext, id: string, at: [number, number, numb
   });
 }
 
-/** Chapter 5 — Aegis (11%). Boot-up, Warden squad erase, Shelf Run, magnetic storm, arm loss, THE MARSHAL. */
+/** Chapter 5 — Flamingo (11%). Boot-up, Warden squad erase, Shelf Run, magnetic storm, arm loss, THE MARSHAL. */
 export const CH5_SCRIPT: ChapterScript = {
-  chapter: { id: 'ch5', title: 'Aegis', beats: [{ id: 'depot', checkpoint: true }, { id: 'boot' }, { id: 'wardens', checkpoint: true }, { id: 'shelf', checkpoint: true }, { id: 'storm', checkpoint: true }, { id: 'ambush', checkpoint: true }, { id: 'marshal', checkpoint: true }, { id: 'cradle' }] },
+  chapter: { id: 'ch5', title: 'Flamingo', beats: [{ id: 'depot', checkpoint: true }, { id: 'boot' }, { id: 'wardens', checkpoint: true }, { id: 'shelf', checkpoint: true }, { id: 'storm', checkpoint: true }, { id: 'ambush', checkpoint: true }, { id: 'marshal', checkpoint: true }, { id: 'cradle' }] },
   intro: 'c5.intro',
   sequences: [
     {
-      id: 'c5.intro', cinematic: true, skippable: true, replayable: true, title: 'AEGIS-07', duration: 8,
+      id: 'c5.intro', cinematic: true, skippable: true, replayable: true, title: 'FLAMINGO-07', duration: 8,
       steps: [
         { at: 0, action: { kind: 'core', pct: 11 }, essential: true },
         { at: 0, action: { kind: 'shots', blendOut: 1, shots: [{ id: 'frame', duration: 7, from: { p: [-10, 3, 6], t: [0, 8, -34], fov: 50 }, to: { p: [-5, 2, -2], t: [0, 9, -34], fov: 44 }, letterbox: 1 }] } },
@@ -49,7 +49,7 @@ export const CH5_SCRIPT: ChapterScript = {
         { at: 0, action: { kind: 'mix', preset: 'duckAll' } },
         { at: 0.2, action: { kind: 'sfx', id: 'cockpit.breath' } },
         { at: 0.4, action: { kind: 'call', fn: 'governor' } },
-        { at: 1.6, action: { kind: 'call', fn: 'bootLine', arg: 'AEGIS-07 // COLD START' } },
+        { at: 1.6, action: { kind: 'call', fn: 'bootLine', arg: 'FLAMINGO-07 // COLD START' } },
         { at: 1.6, action: { kind: 'line', id: 'c5.aegis.boot1' } },
         { at: 2.6, action: { kind: 'sfx', id: 'gate.slam' } },
         { at: 3.2, action: { kind: 'call', fn: 'bootLine', arg: 'REACTOR ........ NOMINAL' } },
@@ -63,7 +63,7 @@ export const CH5_SCRIPT: ChapterScript = {
         { at: 8.6, action: { kind: 'sfx', id: 'gear.rattle' } },
         { at: 9.4, action: { kind: 'call', fn: 'bootLine', arg: '…MANUAL' } },
         { at: 9.6, action: { kind: 'line', id: 'c5.aegis.boot4' } },
-        { at: 11.0, action: { kind: 'call', fn: 'bootLine', arg: 'AEGIS-07 ONLINE' } },
+        { at: 11.0, action: { kind: 'call', fn: 'bootLine', arg: 'FLAMINGO-07 ONLINE' } },
         { at: 11.0, action: { kind: 'line', id: 'c5.aegis.boot5' } },
         { at: 11.1, action: { kind: 'call', fn: 'online' }, essential: true },
         { at: 11.1, action: { kind: 'music', cue: 'aegis' } },
@@ -179,7 +179,7 @@ export const CH5_SCRIPT: ChapterScript = {
     (hooks as Record<string, unknown>)['pose:fallenPose'] = () => { const m = w.mechHostiles.find((x) => x instanceof Marshal); const p = m ? m.rig.root.position : a.frame.pos; return { position: { x: p.x - 30, y: p.y + 14, z: p.z + 30 }, target: { x: p.x, y: p.y + 4, z: p.z }, fov: 42 }; };
 
     // depot: cache, then board
-    w.on('cache', (id) => { if (id === 'sc4') { const t0 = w.simTime; const off = w.on('line:end', (l) => { if (l === 'c5.ballast.cache4reply') { off(); w.state.set('c5.canBoard'); ctx.objective('Board AEGIS-07', [0, 0, -30]); } }); w.onStep('c5.boardFallback', () => { if (w.simTime - t0 > 40) { w.state.set('c5.canBoard'); w.offStep('c5.boardFallback'); } }); } });
+    w.on('cache', (id) => { if (id === 'sc4') { const t0 = w.simTime; const off = w.on('line:end', (l) => { if (l === 'c5.ballast.cache4reply') { off(); w.state.set('c5.canBoard'); ctx.objective('Board FLAMINGO-07', [0, 0, -30]); } }); w.onStep('c5.boardFallback', () => { if (w.simTime - t0 > 40) { w.state.set('c5.canBoard'); w.offStep('c5.boardFallback'); } }); } });
     w.on('c5.board', () => { ctx.beat('boot'); ctx.play('c5.boot'); });
 
     // first contact: a Warden in service, right outside — first kill within seconds of control

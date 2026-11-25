@@ -13,11 +13,11 @@ export interface ChapterDef {
 }
 
 export const CHAPTERS: ChapterDef[] = [
-  { id: 'ch1', number: 1, title: 'The Job', minutes: 10, introduces: 'Movement, takedown, chains, visor, alert ladder, Fast vs Long Route', setPiece: 'Silent sabotage of AEGIS-07', core: 72, onFoot: true, par: { seconds: 600, takedownsForS: 6 } },
+  { id: 'ch1', number: 1, title: 'The Job', minutes: 10, introduces: 'Movement, takedown, chains, visor, alert ladder, Fast vs Long Route', setPiece: 'Silent sabotage of FLAMINGO-07', core: 72, onFoot: true, par: { seconds: 600, takedownsForS: 6 } },
   { id: 'ch2', number: 2, title: 'Left Behind', minutes: 8, introduces: 'Lockdown, carbine, first Timed Zone, first story cache', setPiece: 'The Pad', core: 58, onFoot: true, par: { seconds: 480, takedownsForS: 5 } },
   { id: 'ch3', number: 3, title: 'Dead Colony', minutes: 12, introduces: 'Shotgun, alternate routes, collapse events as tools, personal caches', setPiece: 'Freight Lift', core: 41, onFoot: true, par: { seconds: 720, takedownsForS: 6 } },
   { id: 'ch4', number: 4, title: 'Under the Ice', minutes: 8, introduces: 'Darkness + visor reliance, Heavies, water hazards', setPiece: 'Conduit Flood', core: 24, onFoot: true, par: { seconds: 480, takedownsForS: 4 } },
-  { id: 'ch5', number: 5, title: 'Aegis', minutes: 15, introduces: 'Mech boot-up and full mech kit', setPiece: 'The Marshal', core: 11, onFoot: false, par: { seconds: 900, takedownsForS: 0 } },
+  { id: 'ch5', number: 5, title: 'Flamingo', minutes: 15, introduces: 'Mech boot-up and full mech kit', setPiece: 'The Marshal', core: 11, onFoot: false, par: { seconds: 900, takedownsForS: 0 } },
   { id: 'ch6', number: 6, title: 'Ascent', minutes: 7, introduces: 'Ascent flight, jettison', setPiece: 'Break atmosphere', core: 2, onFoot: false, par: { seconds: 420, takedownsForS: 0 } },
 ];
 

@@ -3,7 +3,7 @@ import { wallLine, crates, rocks, prng } from './kit';
 import { MARSHAL } from '../../../data/bosses/marshal';
 
 /**
- * Chapter 5 — Aegis (11%). Forward depot (on foot → board) → depot yard (Warden squad) → the shelf
+ * Chapter 5 — Flamingo (11%). Forward depot (on foot → board) → depot yard (Warden squad) → the shelf
  * (Shelf Run, 1:30) → Sable's outer yard (magnetic storm) → the canyon (Warden ambush: left arm) →
  * the launch platform (The Marshal). Mech scale: AlphaMech movement values, so distances are big.
  */
@@ -32,7 +32,7 @@ export const CH5: LevelDef = {
     crates(ctx, -22, 4, 6, 81); crates(ctx, 18, 8, 5, 82); b.at(-24, -40, 10, 14, 5, 0, { mat: 'metalDark', kind: 'wall' });
     ctx.cache('sc4', [6, 0, -36]);
     ctx.light([0, 18, -20], 0xdfe8ff, 10, 50, 1);
-    ctx.use('c5.board', [0, 0, -30], 'Board AEGIS-07', 1.2, () => w.emit('c5.board'), () => !w.state.has('c5.boarded') && w.state.has('c5.canBoard'));
+    ctx.use('c5.board', [0, 0, -30], 'Board FLAMINGO-07', 1.2, () => w.emit('c5.board'), () => !w.state.has('c5.boarded') && w.state.has('c5.canBoard'));
 
     // ------------------------------------------------ depot yard (Warden squad)
     b.floor(0, -420, 900, 700, 0, { mat: 'snow', surface: 'snow' });

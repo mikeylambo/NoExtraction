@@ -19,7 +19,34 @@ npm run dev        # http://localhost:5190
 | `npm run bot -- ch3 [--loud] [--components=flightGovernor,missileRack,arcBlade]` | Bot run of chosen chapters (`artifacts/bot-*.json`) |
 | `npm run shots -- artifacts/shots ch1,ch5` | Screenshot tour |
 | `npm run audio-delivery` | Regenerate `AUDIO_DELIVERY.md` |
-| `node tools/build-anims.mjs <mixamo-dir>` | Rebuild `assets/models/xbot.glb` from Mixamo FBX packs (one-time: `npm i --no-save fbx2gltf @gltf-transform/core @gltf-transform/functions`). Preview: `/anim-preview.html` in dev |
+| `node tools/build-anims.mjs <mixamo-dir>` | Rebuild `public/assets/models/xbot.glb` from Mixamo FBX packs (one-time: `npm i --no-save fbx2gltf @gltf-transform/core @gltf-transform/functions`). Preview: `/anim-preview.html` in dev |
+| `npm run script:check` / `script:import` / `script:export` | Dialogue script sync (see below) |
+| Production plan | `PRODUCTION_PLAN.md`: milestones, workstreams, owners, status |
+| Benchmark (real hardware) | `npm run dev`, open `http://localhost:5190/?bench` (or `?bench=ch1,ch5`, `&q=low`), click Start: ~2 min, then Copy/Download the report |
+| `npm run lookdev-shots` | Render the lookdev stills (`artifacts/lookdev`) |
+| `python3 tools/pack_surface.py --id <slot>` | Pack a Megascans/PBR download into `public/surfaces/` (ORM, WebP); see ASSET_SPEC §9 |
+| `python3 tools/pack_decal.py --id <decal>` | Pack a decal (Megascans set or transparent PNG/sheet) into `public/decals/`; placement rules in `data/decals.ts`; see ASSET_SPEC §10 |
+| `npm run kit-templates` | Write code-built stand-ins (exact bounds) for every environment kit piece to `public/assets/kit/`; rules in `data/kit.ts`; see ASSET_SPEC §11. `?kit=0` turns the kit off |
+
+**Lookdev:** `npm run dev` then open `/lookdev.html`: one night courtyard pushed toward the MGS4-era
+target (keys 1–4 shots, 0 auto, O free cam, P post on/off). Asset contract: `ASSET_SPEC.md`.
+
+## Writing dialogue
+
+The dialogue is written in `script/NoExtraction.fountain`, a [Fountain](https://fountain.io) screenplay.
+Open it in Highland, Beat, Slugline, or VS Code with a Fountain extension. Every spoken block ends with
+its line id as a note, `[[c1.wren.open1]]`. The cue is the speaker label from `data/story/lines.ts`
+(BALLAST, AVA, FLAMINGO-07, THE MARSHAL, HALCYON SYSTEMS, SABLE), and the parenthetical is the line's
+performance note. Scene headings and action are free text for the writer and never reach the game.
+
+- `npm run script:import` writes script text and parentheticals into `data/story/*.ts` and refreshes
+  `AUDIO_DELIVERY.md`. A block with a new id is appended to its chapter's data file; it plays once a
+  chapter script in `src/story` says it.
+- `npm run script:check` fails if the script and the game data disagree (part of `check` and `check:fast`).
+- `npm run script:export` appends game lines the script doesn't place yet to the end of the script.
+
+The parser is game-agnostic (`parseFountain`, `fountainDialogue` in `@slu/narrative`), so other SLU games
+can reuse it.
 
 ## Layout
 
@@ -29,7 +56,7 @@ packages/mech-frame    @slu/mech-frame  AlphaMech movement/lock/camera/vitals/ri
 packages/perception    @slu/perception  sight, hearing, memory, radio propagation, spatial hash
 src/game               App (shell, saves, menus, loop), Session (chapter runtime), World, Input
 src/player             Ballast: controller, camera, weapons, visor
-src/mech               Aegis-07, Ascent mode
+src/mech               Flamingo-07, Ascent mode
 src/ai                 Sable archetypes, alert ladder, Warden frames, The Marshal
 src/world              collision, level DSL, gates, hazards, collapse events, timed zones, atmosphere, FX, levels/ch1..ch6
 src/story              chapter scripts (beats, sequences, triggers)
@@ -43,7 +70,7 @@ assets/manifest.ts     hero assets: drop a GLB at the path to replace the stand-
 ## Controls (defaults, remappable in Options → Controls)
 
 On foot: WASD move · mouse look · Shift sprint · C/Ctrl crouch (slide while sprinting) · Space vault/mantle · E interact · F takedown · RMB aim · LMB fire · R reload · 1–3/wheel swap · G throw · T cycle throwable · Q visor · H stim · V shoulder · Tab objective.
-Aegis: WASD · Shift tap quick boost / hold assault boost · Space jets/flight · C descend · Z/MMB hard lock · LMB rifle · RMB blade/shove · Q missiles · E cannon.
+Flamingo: WASD · Shift tap quick boost / hold assault boost · Space jets/flight · C descend · Z/MMB hard lock · LMB rifle · RMB blade/shove · Q missiles · E cannon.
 Gamepad per GDD §3/§7. Esc/Start pause. Hold Space/Enter/A to skip cinematics. Backtick: dev panel. F3: overlay.
 
 ## Dev hooks (`window.__nx`)
