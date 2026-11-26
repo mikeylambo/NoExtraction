@@ -67,6 +67,8 @@ export class SkinnedHuman {
   private readonly tips = { rifle: new THREE.Vector3(), pistol: new THREE.Vector3() };
   /** Support-hand point on the rifle (rifle space): a `foregrip` node, else under the handguard. */
   private readonly foregrip = new THREE.Vector3();
+  /** Handguard span (rifle-space z) the support hand may slide along, and the clip's live hand span. */
+  private guard = [0.2, 0.3]; private span = 0.3;
   private weapon: Weapon = 'rifle';
   private ikW = 0;
   /** Rifle-space pistol-grip point (the right palm's contact). */
@@ -157,15 +159,22 @@ export class SkinnedHuman {
   private mountRifleInHand(scene: THREE.Object3D, rifleModel: THREE.Object3D | null): void {
     let grip = GRIP;
     if (rifleModel) {
-      this.rifle.add(rifleModel);
+      // Stretch forward of the grip only: a full-length carbine puts the support hand where Mixamo's
+      // rifle clips reach (~0.4 m out), so the arms keep the clip's shape instead of folding in.
+      const tip0 = rifleModel.getObjectByName('muzzle');
+      const reach0 = tip0 ? tip0.position.z : 0.4;
+      const S = Math.max(1, RIFLE_REACH / reach0);
+      const fwd = new THREE.Group(); fwd.scale.set(1, 1, S); fwd.add(rifleModel);
+      this.rifle.add(fwd);
       const tip = rifleModel.getObjectByName('muzzle');
-      this.muzzle.position.copy(tip ? tip.position : new THREE.Vector3(0, 0.05, 0.4));
+      this.muzzle.position.copy(tip ? tip.position : new THREE.Vector3(0, 0.05, 0.4)).multiply(fwd.scale);
       this.rifle.add(this.muzzle);
       rifleModel.traverse((o) => { if ((o as THREE.Mesh).isMesh) o.castShadow = true; });
       grip = new THREE.Vector3();
       const fg = rifleModel.getObjectByName('foregrip');
-      this.foregrip.copy(fg ? fg.position : new THREE.Vector3(0, 0, this.muzzle.position.z * 0.5));
-    } else { buildRifle(this.rifle, this.muzzle); this.foregrip.set(0, -0.035, 0.3); }
+      this.foregrip.copy(fg ? fg.position.clone().multiply(fwd.scale) : new THREE.Vector3(0, 0, this.muzzle.position.z * 0.62));
+      this.guard = [this.muzzle.position.z * 0.45, this.muzzle.position.z * 0.78];
+    } else { buildRifle(this.rifle, this.muzzle); this.foregrip.set(0, -0.035, 0.3); this.guard = [0.24, 0.36]; }
     this.gripPt.copy(grip);
     this.tips.rifle.copy(this.muzzle.position);
     const hand = this.bones.get('RightHand'), fore = this.bones.get('RightForeArm'), left = this.bones.get('LeftHand');
@@ -254,7 +263,9 @@ export class SkinnedHuman {
     this.reach('Right', rC, rF, rP, k, this.ikW);
     // left hand: C-clamp, palm on the handguard's lower left side, fingers along it toward the muzzle
     const lF = gz.clone(), lP = gx.clone().multiplyScalar(-0.75).addScaledVector(gy, 0.66).normalize();
-    const lC = this.rifle.localToWorld(this.foregrip.clone()).addScaledVector(gx, 0.024 * k).addScaledVector(gy, -0.012 * k);
+    // the support hand slides along the handguard to where the clip put it: no arm folding or over-reach
+    const fg = this.foregrip.clone(); fg.z = THREE.MathUtils.clamp(this.span - 0.02, this.guard[0], this.guard[1]);
+    const lC = this.rifle.localToWorld(fg).addScaledVector(gx, 0.024 * k).addScaledVector(gy, -0.012 * k);
     this.reach('Left', lC, lF, lP, k, this.ikW);
   }
 
@@ -272,6 +283,7 @@ export class SkinnedHuman {
       const a = h.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv), b = f.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv); return a.add(a.clone().sub(b).normalize().multiplyScalar(PALM));
     };
     const R = palm(rh, rf), L = palm(lh, lf);
+    this.span += (L.distanceTo(R) - this.span) * 0.2;
     const z = L.sub(R); if (z.z < 0.05) z.z = 0.05; z.normalize();
     // aiming: the barrel goes level down the sight line, whatever pitch the clip's hands imply
     z.y *= 1 - 0.85 * THREE.MathUtils.clamp(aim, 0, 1); z.normalize();
@@ -475,6 +487,8 @@ function rotateWorld(o: THREE.Object3D, q: THREE.Quaternion): void {
 /** Pistol-grip centre of the box stand-in in rifle space (see buildRifle), and wrist → palm distance (m). */
 const GRIP = new THREE.Vector3(0, -0.08, -0.08);
 const PALM = 0.07;
+/** Grip → muzzle on a carbine (m): the rifle model is stretched forward to this. */
+const RIFLE_REACH = 0.56;
 /** Uniform scale of `o` relative to `root` (the model's own units). */
 function nodeScale(o: THREE.Object3D, root: THREE.Object3D): number {
   root.updateMatrixWorld(true);
