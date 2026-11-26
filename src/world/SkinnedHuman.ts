@@ -172,8 +172,9 @@ export class SkinnedHuman {
       rifleModel.traverse((o) => { if ((o as THREE.Mesh).isMesh) o.castShadow = true; });
       grip = new THREE.Vector3();
       const fg = rifleModel.getObjectByName('foregrip');
-      this.foregrip.copy(fg ? fg.position.clone().multiply(fwd.scale) : new THREE.Vector3(0, 0, this.muzzle.position.z * 0.62));
-      this.guard = [this.muzzle.position.z * 0.45, this.muzzle.position.z * 0.78];
+      // handguard: under the barrel line, from just ahead of the magazine to ~60% of the reach
+      this.foregrip.copy(fg ? fg.position.clone().multiply(fwd.scale) : new THREE.Vector3(0, this.muzzle.position.y * 0.55, this.muzzle.position.z * 0.55));
+      this.guard = [this.muzzle.position.z * 0.32, this.muzzle.position.z * 0.62];
     } else { buildRifle(this.rifle, this.muzzle); this.foregrip.set(0, -0.035, 0.3); this.guard = [0.24, 0.36]; }
     this.gripPt.copy(grip);
     this.tips.rifle.copy(this.muzzle.position);
