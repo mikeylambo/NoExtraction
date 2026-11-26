@@ -112,7 +112,9 @@ function skeletonTop(scene: THREE.Object3D): number {
     scene.updateMatrixWorld(true);
     const inv = new THREE.Matrix4().copy(scene.matrixWorld).invert(), v = new THREE.Vector3();
     top = 0;
-    scene.traverse((o) => { if ((o as THREE.Bone).isBone) top = Math.max(top!, v.setFromMatrixPosition(o.matrixWorld).applyMatrix4(inv).y); });
+    // Mixamo builds record the reference skeleton's top (tools/build-mixamo-character.mjs)
+    scene.traverse((o) => { if (typeof o.userData.skeletonTop === 'number') top = Math.max(top!, o.userData.skeletonTop); });
+    if (top === 0) scene.traverse((o) => { if ((o as THREE.Bone).isBone) top = Math.max(top!, v.setFromMatrixPosition(o.matrixWorld).applyMatrix4(inv).y); });
     if (!(top > 0.5)) top = SKELETON_REF; // no usable skeleton: leave the model as authored
     tops.set(scene, top);
   }

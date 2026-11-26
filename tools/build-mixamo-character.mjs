@@ -56,7 +56,13 @@ root.setScale([s, s, s]).setTranslation([0, -minY * s, 0]).setRotation(backwards
 const skin = R.listSkins()[0];
 const head = node(doc, /(^|:)Head$/);
 const headScale = head.getWorldMatrix()[5]; // uniform-ish: world Y scale of the head frame
-const tip = doc.createNode('mixamorig:HeadTop_End').setTranslation([0, (refTop - worldY(head)) / headScale, 0]);
+// Never below the head: Mixamo's head joint can sit higher than the reference skeleton's top, and a
+// tip under the head makes the retarget aim the head down into the chest. The game sizes from
+// `extras.skeletonTop` (the reference top), so a taller tip doesn't change the character's size.
+const refHead = worldY(node(ref, /(^|:)Head$/));
+const tipY = Math.max(refTop, worldY(head) + Math.max(0.08, refTop - refHead));
+const tip = doc.createNode('mixamorig:HeadTop_End').setTranslation([0, (tipY - worldY(head)) / headScale, 0]);
+root.setExtras({ ...root.getExtras(), skeletonTop: refTop });
 head.addChild(tip);
 const ibm = skin.getInverseBindMatrices();
 // glTF skinning: world = jointWorld · IBM · v. The root scale moves joints and bind alike, so the
