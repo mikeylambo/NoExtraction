@@ -39,6 +39,8 @@ export interface SkinnedOptions {
   rifleModel?: THREE.Object3D | null;
   /** `sidearm.glb`, same convention; else the code-built sidearm. Only characters that switch weapons. */
   sidearmModel?: THREE.Object3D | null;
+  /** Clip mode: rifle hold offset (m, body space: +y up, +z forward) for bodies the shared clips crowd. */
+  holdOffset?: [number, number, number];
   sidearm?: boolean;
 }
 
@@ -85,7 +87,9 @@ export class SkinnedHuman {
   private readonly fingers: Record<'Left' | 'Right', { b: THREE.Object3D; rest: THREE.Quaternion; axis: THREE.Vector3; thumb: boolean }[]> = { Left: [], Right: [] };
   private gripL = 0; private gripR = 0;
 
+  private readonly holdOffset = new THREE.Vector3();
   constructor(src: SkinnedSource, opts: SkinnedOptions) {
+    if (opts.holdOffset) this.holdOffset.fromArray(opts.holdOffset);
     const model = cloneSkinned(src.scene);
     this.root.add(model);
     model.traverse((o) => {
@@ -283,7 +287,7 @@ export class SkinnedHuman {
       if (ax) return h.getWorldPosition(new THREE.Vector3()).add(ax.f.clone().applyQuaternion(h.getWorldQuaternion(new THREE.Quaternion())).multiplyScalar(ax.len * this.root.getWorldScale(V1).x)).applyMatrix4(inv);
       const a = h.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv), b = f.getWorldPosition(new THREE.Vector3()).applyMatrix4(inv); return a.add(a.clone().sub(b).normalize().multiplyScalar(PALM));
     };
-    const R = palm(rh, rf), L = palm(lh, lf);
+    const R = palm(rh, rf).add(this.holdOffset), L = palm(lh, lf).add(this.holdOffset);
     this.span += (L.distanceTo(R) - this.span) * 0.2;
     const z = L.sub(R); if (z.z < 0.05) z.z = 0.05; z.normalize();
     // aiming: the barrel goes level down the sight line, whatever pitch the clip's hands imply

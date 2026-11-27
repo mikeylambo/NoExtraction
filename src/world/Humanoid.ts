@@ -91,7 +91,7 @@ export function buildHumanoid(style: HumanStyle): HumanRig {
   const src = own ?? skinnedOverride('human');
   let skin: SkinnedHuman | null = null;
   if (src) {
-    skin = new SkinnedHuman(src, { visor: S.visor, visorIntensity: S.visorI * 1.4, rifleModel: modelOverride('rifle'), sidearm: style === 'ballast', sidearmModel: modelOverride('sidearm'), tint: own ? undefined : S.armor });
+    skin = new SkinnedHuman(src, { visor: S.visor, visorIntensity: S.visorI * 1.4, rifleModel: modelOverride('rifle'), sidearm: style === 'ballast', sidearmModel: modelOverride('sidearm'), holdOffset: style === 'heavy' ? HEAVY_HOLD : undefined, tint: own ? undefined : S.armor });
     root.traverse((c) => { if ((c as THREE.Mesh).isMesh) c.visible = false; });
     const facing = new THREE.Group(); facing.rotation.y = Math.PI; facing.add(skin.root); // rigs face −Z, GLBs +Z
     // Meshy rigs to a requested height that includes props (the spotter's antenna), so skeletons
@@ -101,6 +101,9 @@ export function buildHumanoid(style: HumanStyle): HumanRig {
   } else applyOverride(root, style);
   return { root, body, hips, torso, head, armL, foreL, armR, foreR, legL, shinL, legR, shinR, gun, visor, muzzle: skin ? skin.muzzle : muzzle, skin, mats: { armor, under, visor: visorM }, headOffset: 1.62 * S.scale };
 }
+
+/** The heavy's armour is deeper than the clips' chest: carry the rifle forward and a touch lower. */
+const HEAVY_HOLD: [number, number, number] = [0, -0.04, 0.10];
 
 /** Top joint height (m) of the trooper's skeleton: the reference every Sable model is fitted to. */
 const SKELETON_REF = 1.79;
